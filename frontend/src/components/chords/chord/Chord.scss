@@ -1,0 +1,55 @@
+.chord-grid {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  background-color: #080808;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgb(26, 26, 26);
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  align-items: center;
+  font-size: 14px;
+
+  .start-fret {
+    font-size: 12px;
+  }
+}
+
+.fret-row {
+  display: grid;
+  grid-template-columns: 1fr repeat(6, 32px);
+  align-items: center;
+}
+
+.fret-number {
+  font-size: 12px;
+  padding-right: 10px;
+  position: relative;
+  left: -4px;
+}
+
+.cell {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.dot,
+.open {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  left: -16px;
+  z-index: 2;
+  border-radius: 50%;
+  background: white;
+}

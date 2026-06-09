@@ -1,0 +1,39 @@
+@use "../../scss/mixins" as mix;
+
+.chords {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+  flex-direction: column;
+  color: white;
+  @include mix.contentWidth();
+  margin: 0 auto;
+  margin-top: 1rem;
+  
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  gap: 3px;
+
+  span {
+    color: lightgray;
+  }
+}
+
+.chord-row {
+  display: flex;
+  width: 100%;
+  gap: 0rem;
+  justify-content: space-between;
+}
+
+.show-all-btn {
+ all: unset;
+}
+
+
+
+
