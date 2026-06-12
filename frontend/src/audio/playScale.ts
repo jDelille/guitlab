@@ -10,8 +10,7 @@ export async function playScale(
 ): Promise<() => void> {
   const instrument = await getInstrument();
 
-  const timers: number[] = [];
-  const interval = 60000 / bpm;
+  const interval = 60 / bpm; // seconds
 
   const orderedNotes =
     direction === "desc"
@@ -20,22 +19,26 @@ export async function playScale(
         ? [...notes, ...[...notes].reverse().slice(1)]
         : notes;
 
+  const timers: number[] = [];
+  const intervalMs = interval * 1000;
+
   orderedNotes.forEach((note, i) => {
     const timer = window.setTimeout(() => {
-      instrument.play(note.midi);
+      instrument.start({ note: note.midi });
       onNote?.({ string: note.string, fret: note.fret });
-    }, i * interval);
+    }, i * intervalMs);
     timers.push(timer);
   });
 
   const clearTimer = window.setTimeout(() => {
     onNote?.(null);
     onComplete?.();
-  }, orderedNotes.length * interval);
+  }, orderedNotes.length * intervalMs);
   timers.push(clearTimer);
 
   return () => {
     timers.forEach(clearTimeout);
+    instrument.stop();
     onNote?.(null);
   };
 }

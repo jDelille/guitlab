@@ -34,6 +34,29 @@
  all: unset;
 }
 
+.chords-header {
+  display: flex;
+  align-items: center;
+}
+
+.play-chord-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: white;
+  font-size: 12px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: #252525;
+  }
+}
+
 
 
 

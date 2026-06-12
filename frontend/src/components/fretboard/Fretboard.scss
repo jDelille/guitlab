@@ -122,6 +122,10 @@
   flex-direction: row-reverse;
 }
 
+.fretNumbersFlipped {
+  flex-direction: row-reverse;
+}
+
 .fretNumbers {
   display: flex;
   align-items: center;

@@ -32,7 +32,7 @@ const MIDI_TUNING = [64, 59, 55, 50, 45, 40];
 
 async function playNote(string: number, fret: number) {
   const instrument = await getInstrument();
-  instrument.play(MIDI_TUNING[string] + fret);
+  instrument.start({ note: MIDI_TUNING[string] + fret });
 }
 
 function getNoteName(string: number, fret: number) {
@@ -206,7 +206,7 @@ const Fretboard = ({
           </div>
         ))}
       </div>
-      <FretNumbers numberOfFrets={21} startFret={0} />
+      <FretNumbers numberOfFrets={21} startFret={0} flipped={settings.flipFretboard} />
     </>
   );
 };
