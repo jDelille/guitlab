@@ -27,7 +27,8 @@ export interface ChordNote {
   note?: NoteName | null;
   isRoot: boolean;
   isMuted: boolean;
-  degree?: number | string | null
+  degree?: number | string | null;
+  isOctaveExtension?: boolean;
 }
 
 export interface Barre {

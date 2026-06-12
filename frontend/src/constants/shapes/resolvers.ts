@@ -43,17 +43,38 @@ const OPEN_STRINGS: Record<number, number> = {
   0: 4, // E
 };
 
+/**
+ * Shifts a note name up by the given number of semitones, wrapping around the chromatic scale.
+ * @param note - The starting note name.
+ * @param semitones - Number of semitones to transpose up.
+ * @returns The transposed note name.
+ */
 function transposeNote(note: NoteName, semitones: number): NoteName {
   const index = CHROMATIC.indexOf(note);
   return CHROMATIC[(index + semitones) % 12] as NoteName;
 }
 
+/**
+ * Determines whether a fret position represents a true open string after applying a key offset.
+ * @param string - The string index (0 = high e, 5 = low E).
+ * @param fret - The fret number in the shape pattern.
+ * @param offset - The semitone offset for the target key.
+ * @returns True if the note would be played as an open string in the target key.
+ */
 function isOpenString(string: number, fret: number, offset: number): boolean {
   // A fret is "truly open" if it would still be fret 0 after shifting
   // i.e. the note matches what the open string produces at the target key
   return fret - offset === 0;
 }
 
+/**
+ * Transposes all patterns in a CAGED shape from its base key (C) to the given target key.
+ * Each note's fret number and note name are shifted by the key's semitone offset.
+ * Muted or null notes are passed through unchanged.
+ * @param base - The shape patterns defined in the key of C.
+ * @param key - The target key to transpose to (e.g. "G", "F#", "Bb").
+ * @returns A new ShapePatterns object with all notes transposed to the target key.
+ */
 export function resolveShapeForKey(
   base: ShapePatterns,
   key: string,

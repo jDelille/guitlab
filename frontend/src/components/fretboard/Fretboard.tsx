@@ -2,6 +2,8 @@
 
 import { useMemo } from "react";
 import { useGuitarStore } from "../../store/store";
+import type { ChordNote } from "../../constants/CagedChords";
+import { getInstrument } from "../../audio/soundfont";
 import {
   getShapesForKey,
   withAlpha,
@@ -17,12 +19,21 @@ interface FretboardProps {
   keyName: string;
   scale: string;
   cagedChord: string;
-  showAll: boolean;
   showChordTones: boolean;
+  settings: any;
+  activePosition?: { string: number; fret: number } | null;
+  lickNotes?: ChordNote[] | null;
 }
 
 const NOTES = GuitarConstants.notesSharp;
 const STANDARD_TUNING = GuitarConstants.tunings[0].tuning;
+const TRIAD_DEGREES = ["R", 3, 5];
+const MIDI_TUNING = [64, 59, 55, 50, 45, 40];
+
+async function playNote(string: number, fret: number) {
+  const instrument = await getInstrument();
+  instrument.play(MIDI_TUNING[string] + fret);
+}
 
 function getNoteName(string: number, fret: number) {
   const open = STANDARD_TUNING[string];
@@ -33,11 +44,11 @@ const Fretboard = ({
   keyName,
   scale,
   cagedChord,
-  showAll,
   showChordTones,
+  settings,
+  activePosition,
+  lickNotes,
 }: FretboardProps) => {
-  const { isStringsFlipped, isFretboardFlipped } = useGuitarStore();
-
   const shape = getShapesForKey(keyName)[cagedChord as ShapeName];
 
   const color = SHAPE_COLORS[shape.shape];
@@ -68,13 +79,22 @@ const Fretboard = ({
       (typeof shape)[Scales][0] & { isChordTone: boolean }
     >();
 
-    shape[scale as Scales].forEach((note) => {
+    const scaleNotes = shape[scale as Scales];
+
+    const filteredNotes = settings.showTriads
+      ? scaleNotes.filter((n) => TRIAD_DEGREES.includes(n.degree as any))
+      : scaleNotes;
+
+    filteredNotes.forEach((note) => {
       const key = `${note.string}-${note.fret}`;
+
       map.set(key, {
         ...note,
         isChordTone: chordToneKeys.has(key),
       });
     });
+
+
 
     return map;
   }, [shape, scale, chordToneKeys]);
@@ -103,54 +123,81 @@ const Fretboard = ({
     return map;
   }, [keyName, scale]);
 
-  const activeMap = showAll ? allShapesNoteMap : noteMap;
+  const lickNoteMap = useMemo(() => {
+    const map = new Map<string, ChordNote>();
+    if (!lickNotes) return map;
+    lickNotes.filter(n => n.fret !== null).forEach(n => map.set(`${n.string}-${n.fret}`, n));
+    return map;
+  }, [lickNotes]);
 
-  console.log("chord tones:", [...chordToneKeys]);
-  console.log(
-    "scale notes:",
-    shape[scale as Scales].map((n) => `${n.string}-${n.fret}`),
-  );
+  const showAll = settings.showAllCagedScales;
+
+  const activeMap = showAll ? allShapesNoteMap : noteMap;
 
   return (
     <>
-      <div className={!isStringsFlipped ? "fretboard" : "fretboardFlipped"}>
+      <div className={!settings.flipStrings ? "fretboard" : "fretboardFlipped"}>
         {strings.map((stringNumber) => (
           <div
             key={stringNumber}
-            className={!isFretboardFlipped ? "string" : "stringsFlipped"}
+            className={!settings.flipFretboard ? "string" : "stringsFlipped"}
           >
             {frets.map((fret) => {
               const key = `${stringNumber}-${fret}`;
               const activeNote = activeMap.get(key);
               const isActive = !!activeNote;
 
+              const lickNote = lickNoteMap.get(key);
+              const isLickNote = !!lickNote;
               const noteName = getNoteName(stringNumber, fret);
-
               const noteData = showAll ? (activeNote as any)?.note : activeNote;
               const noteColor = showAll ? (activeNote as any)?.color : color;
               const noteDimColor = showAll
                 ? (activeNote as any)?.dimColor
                 : dimColor;
 
+              const displayValue = isLickNote && !isActive
+                ? (settings.showIntervals ? lickNote!.degree : settings.showNotes ? noteName : "")
+                : isActive
+                  ? settings.showIntervals
+                    ? noteData?.degree
+                    : settings.showNotes
+                      ? noteName
+                      : ""
+                  : noteName;
+
               return (
                 <div className="fret" key={key}>
                   <div className="noteBackground">
                     <div
-                      className={noteData?.degree ? "note" : "ghost-note"}
+                      className={noteData?.degree || (isLickNote && !isActive) ? "note" : "ghost-note"}
+                      onClick={() => playNote(stringNumber, fret)}
                       style={{
-                        backgroundColor: isActive
-                          ? noteData?.isRoot
-                            ? noteColor
-                            : noteDimColor
-                          : "#080808",
+                        backgroundColor: isLickNote && !isActive
+                          ? "rgba(251,191,36,0.15)"
+                          : isActive
+                            ? noteData?.isRoot
+                              ? noteColor
+                              : noteDimColor
+                            : "#080808",
                         outline:
-                          isActive && showChordTones && noteData?.isChordTone
-                            ? `2px solid white`
-                            : "none",
+                          isLickNote
+                            ? "2px solid #fbbf24"
+                            : isActive && showChordTones && noteData?.isChordTone
+                              ? "2px solid white"
+                              : "none",
                         outlineOffset: "2px",
+                        cursor: "pointer",
+                        boxShadow:
+                          (isActive || isLickNote) &&
+                          activePosition != null &&
+                          stringNumber === activePosition.string &&
+                          fret === activePosition.fret
+                            ? "0 0 0 2px white, 0 0 10px 2px rgba(255,255,255,0.6)"
+                            : "none",
                       }}
                     >
-                      {isActive ? noteData?.degree : noteName}
+                      {displayValue}
                     </div>
                   </div>
                 </div>

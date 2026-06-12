@@ -5,8 +5,10 @@ import TuningControl from "./TuningControl";
 import FretNumberControl from "./FretNumberControl";
 import OverlayControls from "./OverlayControls";
 import FlipFretboardControl from "./FlipFretboardControl";
+import LickControl from "./LickControl";
 import "./Controls.scss";
 import PlayScale from "./PlayScale";
+import type { ShapeName } from "../../constants/CagedChords";
 const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 const SCALES = ["arpeggio", "majorPentatonic", "majorScale"];
@@ -41,6 +43,9 @@ interface FretifyControlsState {
 interface ControlsProps {
   settings: any;
   setSettings: any;
+  cagedChord: ShapeName;
+  selectedLickId: string | null;
+  setSelectedLickId: (id: string | null) => void;
 }
 
 interface DividerProps {
@@ -56,7 +61,7 @@ const constrained: React.CSSProperties = {
   padding: "0 32px",
 };
 
-export function Divider({height = 40} : DividerProps) {
+export function Divider({ height = 40 }: DividerProps) {
   return (
     <div
       style={{
@@ -71,7 +76,7 @@ export function Divider({height = 40} : DividerProps) {
   );
 }
 
-export default function Controls({ settings, setSettings }: ControlsProps) {
+export default function Controls({ settings, setSettings, cagedChord, selectedLickId, setSelectedLickId }: ControlsProps) {
   const [state, setState] = useState<FretifyControlsState>({
     key: "C",
     scale: "Major",
@@ -116,15 +121,30 @@ export default function Controls({ settings, setSettings }: ControlsProps) {
 
         <Divider />
 
-        <PlayScale />
-      </div>
-
-      <div className="row">
-        <OverlayControls state={state} set={set} />
+        <PlayScale settings={settings} setSettings={setSettings} />
 
         <Divider />
 
-        <FlipFretboardControl state={state} set={set} />
+        {/* <LickControl
+          shape={cagedChord}
+          scale={settings.scale}
+          keyName={settings.key}
+          selectedLickId={selectedLickId}
+          onSelect={setSelectedLickId}
+        /> */}
+      </div>
+
+      <div className="row">
+        <OverlayControls
+          state={state}
+          set={set}
+          settings={settings}
+          setSettings={setSettings}
+        />
+
+        <Divider />
+
+        <FlipFretboardControl settings={settings} setSettings={setSettings} />
       </div>
     </div>
   );

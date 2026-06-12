@@ -47,7 +47,7 @@ export const G_SHAPE_BASE: ShapePatterns = {
 
 
     { string: 0, fret: 5, degree: 6, isRoot: false, isMuted: false },
-    { string: 0, fret: 6, degree: 7, isRoot: false, isMuted: false },
+    { string: 0, fret: 7, degree: 7, isRoot: false, isMuted: false },
     { string: 0, fret: 8, degree: "R", isRoot: true, isMuted: false },
   ],
 

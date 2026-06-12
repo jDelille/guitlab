@@ -36,7 +36,7 @@ export function buildCagedShape(
       .forEach((n) => {
         notes.push(n);
         if (n.fret + 12 <= 20) {
-          notes.push({ ...n, fret: n.fret + 12 });
+          notes.push({ ...n, fret: n.fret + 12, isOctaveExtension: true });
         }
       });
 

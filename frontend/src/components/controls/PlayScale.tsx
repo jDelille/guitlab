@@ -1,29 +1,44 @@
 import ControlGroup from "./ControlGroup";
 import { FaPlay, FaStop } from "react-icons/fa";
 import { Divider } from "./Controls";
-import { useState } from "react";
 
 type Direction = "asc" | "desc" | "both";
 
-const PlayScale = () => {
-  const [bpm, setBpm] = useState(120);
-  const [direction, setDirection] = useState<Direction>("asc");
-  const [play, setPlay] = useState(false);
+interface PlayScaleSettings {
+  playScale: boolean;
+  playScaleBpm: number;
+  playScaleDirection: Direction;
+}
+
+interface PlayScaleProps {
+  settings: PlayScaleSettings;
+  setSettings: React.Dispatch<React.SetStateAction<any>>;
+}
+
+const DIRECTIONS: { label: string; value: Direction }[] = [
+  { label: "Asc", value: "asc" },
+  { label: "Desc", value: "desc" },
+  { label: "Both", value: "both" },
+];
+
+const PlayScale = ({ settings, setSettings }: PlayScaleProps) => {
+  const set = (patch: Partial<PlayScaleSettings>) =>
+    setSettings((s: any) => ({ ...s, ...patch }));
 
   return (
     <ControlGroup label="Play Scale">
       <div className="play">
-        {!play ? (
-          <FaPlay
-            color="white"
-            className="play-btn"
-            onClick={() => setPlay(true)}
-          />
-        ) : (
+        {settings.playScale ? (
           <FaStop
             color="white"
             className="play-btn"
-            onClick={() => setPlay(false)}
+            onClick={() => set({ playScale: false })}
+          />
+        ) : (
+          <FaPlay
+            color="white"
+            className="play-btn"
+            onClick={() => set({ playScale: true })}
           />
         )}
 
@@ -32,33 +47,24 @@ const PlayScale = () => {
             type="range"
             min={40}
             max={240}
-            value={bpm}
-            onChange={(e) => setBpm(Number(e.target.value))}
+            value={settings.playScaleBpm}
+            onChange={(e) => set({ playScaleBpm: Number(e.target.value) })}
           />
-          <p>{bpm} BPM</p>
+          <p>{settings.playScaleBpm} BPM</p>
         </div>
 
-        <Divider height={20}/>
+        <Divider height={20} />
 
         <div className="audio-controls">
-          <button
-            className={direction === "asc" ? "active" : ""}
-            onClick={() => setDirection("asc")}
-          >
-            Asc
-          </button>
-          <button
-            className={direction === "desc" ? "active" : ""}
-            onClick={() => setDirection("desc")}
-          >
-            Desc
-          </button>
-          <button
-            className={direction === "both" ? "active" : ""}
-            onClick={() => setDirection("both")}
-          >
-            Both
-          </button>
+          {DIRECTIONS.map(({ label, value }) => (
+            <button
+              key={value}
+              className={settings.playScaleDirection === value ? "active" : ""}
+              onClick={() => set({ playScaleDirection: value })}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </div>
     </ControlGroup>

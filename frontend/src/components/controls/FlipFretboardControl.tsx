@@ -1,24 +1,36 @@
-import React from "react";
 import ControlGroup from "./ControlGroup";
 import Toggle from "../toggle/Toggle";
 
 interface FlipFretboardControlProps {
-  state: any;
-  set: any;
+  settings: any;
+  setSettings: any;
 }
 
-const FlipFretboardControl = ({state, set}: FlipFretboardControlProps) => {
+const FlipFretboardControl = ({
+  setSettings,
+  settings,
+}: FlipFretboardControlProps) => {
   return (
     <ControlGroup label="View">
       <Toggle
-        label={state.flipped ? "⇅ Flipped" : "Flip Board"}
-        active={state.flipped}
-        onClick={() => set({ flipped: !state.flipped })}
+        label={settings.flipFretboard ? "⇅ Flipped" : "Flip Board"}
+        active={settings.flipFretboard}
+        onClick={() =>
+          setSettings((s: any) => ({
+            ...s,
+            flipFretboard: !s.flipFretboard,
+          }))
+        }
       />
       <Toggle
-        label={state.flipped ? "⇅ Flipped Strings" : "Flip Strings"}
-        active={state.flipped}
-        onClick={() => set({ flipped: !state.flipped })}
+        label={settings.flipStrings ? "⇅ Flipped Strings" : "Flip Strings"}
+        active={settings.flipStrings}
+        onClick={() =>
+          setSettings((s: any) => ({
+            ...s,
+            flipStrings: !s.flipStrings,
+          }))
+        }
       />
     </ControlGroup>
   );

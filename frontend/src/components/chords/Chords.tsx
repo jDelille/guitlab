@@ -6,34 +6,25 @@ import "./Chords.scss";
 interface ChordsProps {
   keyName: string;
   cagedChord: string;
-  setCagedChord: (chord: string) => void;
+  setCagedChord: React.Dispatch<React.SetStateAction<ShapeName>>;
   showAll: boolean;
   setShowAll: (val: boolean) => void;
+  showAllCagedScales: boolean;
+  setSettings: any;
 }
 
 const Chords = ({
   cagedChord,
   setCagedChord,
   keyName,
-  showAll,
-  setShowAll,
+  setSettings,
+  showAllCagedScales,
 }: ChordsProps) => {
   const [active, setActive] = useState<ShapeName>("C");
   const shapes = getShapesForKey(keyName); // was hardcoded "C"
 
   return (
     <div className="chords">
-      {/* <div className="section-label">
-        <p>CAGED Shapes -</p>
-
-        <button
-          className={`show-all-btn ${showAll ? "activeBtn" : ""}`}
-          onClick={() => setShowAll(!showAll)}
-        >
-          {showAll ? "Show Shape" : "Show All"}
-        </button>
-      </div> */}
-
       <div className="chord-row">
         {Object.values(shapes).map((shape) => (
           <Chord
@@ -41,6 +32,8 @@ const Chords = ({
             shape={shape}
             active={cagedChord}
             setActive={setCagedChord}
+            showAllCagedScales={showAllCagedScales}
+            setSettings={setSettings}
           />
         ))}
       </div>

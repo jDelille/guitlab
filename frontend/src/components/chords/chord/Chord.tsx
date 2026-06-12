@@ -11,15 +11,22 @@ interface ChordProps {
   shape: ChordShape;
   active: string;
   setActive: (shape: ShapeName) => void;
+  showAllCagedScales: boolean;
+  setSettings: any;
 }
 
-export default function Chord({ shape, active, setActive }: ChordProps) {
+export default function Chord({
+  shape,
+  active,
+  setActive,
+  showAllCagedScales,
+  setSettings,
+}: ChordProps) {
   const DISPLAY_FRETS = 5;
 
   const color = SHAPE_COLORS[shape.shape];
   const dimColor = withAlpha(color, 0.55);
 
-  // ✅ properly narrow to fretted notes only
   const fretted = shape.notes.filter(
     (n): n is ChordNote & { fret: number } => n.fret !== null,
   );
@@ -45,13 +52,22 @@ export default function Chord({ shape, active, setActive }: ChordProps) {
 
   const isActive = active === shape.shape;
 
+  const handleChordClick = (shape: ShapeName) => {
+    setActive(shape);
+    setSettings((s: any) => ({
+      ...s,
+      showAllCagedScales: false,
+    }));
+  };
+
   return (
     <div
       className="chord-grid"
-      onClick={() => setActive(shape.shape)}
+      onClick={() => handleChordClick(shape.shape)}
       style={{
-        outline: isActive ? `2px solid ${color}` : undefined,
-        opacity: isActive ? 1 : 0.4,
+        outline:
+          !showAllCagedScales && isActive ? `2px solid ${color}` : undefined,
+        opacity: showAllCagedScales ? 1 : isActive ? 1 : 0.4,
       }}
     >
       <div className="title">
