@@ -136,6 +136,8 @@ const Fretboard = ({
 
   return (
     <>
+      <FretNumbers numberOfFrets={21} startFret={0} flipped={settings.flipFretboard} />
+
       <div className={!settings.flipStrings ? "fretboard" : "fretboardFlipped"}>
         {strings.map((stringNumber) => (
           <div
@@ -206,7 +208,6 @@ const Fretboard = ({
           </div>
         ))}
       </div>
-      <FretNumbers numberOfFrets={21} startFret={0} flipped={settings.flipFretboard} />
     </>
   );
 };

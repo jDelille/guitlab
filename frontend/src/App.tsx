@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Scale } from "tonal";
 import Fretboard from "./components/fretboard/Fretboard";
 import Navbar from "./components/navbar/Navbar";
 import Chords from "./components/chords/Chords";
@@ -8,6 +9,19 @@ import { getShapesForKey, type ShapeName } from "./constants/CagedChords";
 import type { Scales } from "./types/Scales";
 import { chordNotesToPlayNotes, lickToPlayNotes } from "./audio/utils";
 import { getLicksForShape } from "./constants/licks";
+import PlayScale from "./components/controls/PlayScale";
+
+const SCALE_DISPLAY: Record<string, string> = {
+  majorPentatonic: "Major Pentatonic",
+  majorScale: "Major Scale",
+  arpeggio: "Arpeggio",
+};
+
+const SCALE_TONAL: Record<string, string> = {
+  majorPentatonic: "major pentatonic",
+  majorScale: "major",
+  arpeggio: "major",
+};
 
 type NotePosition = { string: number; fret: number } | null;
 
@@ -39,10 +53,11 @@ function App() {
     setShowAllScales(val);
   };
 
+  const shapeData = getShapesForKey(settings.key)[cagedChord];
+  const scaleNotes = shapeData[settings.scale as Scales].filter((n) => !n.isOctaveExtension);
+
   useEffect(() => {
     if (!settings.playScale) return;
-
-    const shapeData = getShapesForKey(settings.key)[cagedChord];
 
     const activeLick = selectedLickId
       ? getLicksForShape(cagedChord, settings.scale as Scales, settings.key)
@@ -51,9 +66,7 @@ function App() {
 
     const notes = activeLick
       ? lickToPlayNotes(activeLick.notes)
-      : chordNotesToPlayNotes(
-          shapeData[settings.scale as Scales].filter((n) => !n.isOctaveExtension),
-        );
+      : chordNotesToPlayNotes(scaleNotes);
 
     const direction = activeLick ? "asc" : settings.playScaleDirection;
 
@@ -87,13 +100,20 @@ function App() {
       <div className="layout">
         <div className="page-content">
           <Navbar />
-          <Controls
+          {/* <Controls
             settings={settings}
             setSettings={setSettings}
             cagedChord={cagedChord}
             selectedLickId={selectedLickId}
             setSelectedLickId={setSelectedLickId}
-          />
+          /> */}
+          <div className="active">
+            <h2>{settings.key} {SCALE_DISPLAY[settings.scale] ?? settings.scale}</h2>
+            <p>{Scale.get(`${settings.key} ${SCALE_TONAL[settings.scale]}`).notes.join(" · ")}</p>
+          </div>
+
+          {/* <PlayScale settings={settings} setSettings={setSettings} /> */}
+
           <Fretboard
             keyName={settings.key}
             scale={settings.scale}

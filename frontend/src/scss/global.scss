@@ -18,7 +18,7 @@ ul {
 .page {
   width: 100%;
   min-height: 100vh;
-  background-color: #0D0D0D;
+  background-color: #0d0d0d;
   display: flex;
   justify-content: center;
 
@@ -38,15 +38,31 @@ ul {
       flex-direction: column;
       gap: 10px;
       color: white;
+      align-items: center;
+      margin-top: 2rem;
 
       h2 {
-        font-weight: 600;
-        font-size: 25px;
+        font-weight: 500;
+        font-size: 32px;
       }
 
       p {
-        font-size: 14px;
+        font-size: 16px;
       }
+    }
+
+    .play-scale {
+      border: 1px solid gray;
+      width: 350px;
+      height: 50px;
+      margin: 0 auto;
+      border-radius: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      margin-bottom: 2.5rem;
+      margin-top: 1rem;
     }
   }
 }
