@@ -12,16 +12,16 @@ function Select({
   return (
     <div className="select-wrapper">
       <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="select"
-    >
-      {options.map((o) => (
-        <option key={o} value={o}>
-          {o}
-        </option>
-      ))}
-    </select>
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="select"
+      >
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }

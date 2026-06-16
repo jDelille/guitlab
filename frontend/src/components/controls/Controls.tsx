@@ -1,14 +1,14 @@
 import { useState } from "react";
-import KeyControl from "./KeyControl";
-import ScaleControl from "./ScaleControl";
-import TuningControl from "./TuningControl";
+import KeyControl from "./key-control/KeyControl";
+import ScaleControl from "./scale-control/ScaleControl";
+import TuningControl from "./tuning-control/TuningControl";
 import FretNumberControl from "./FretNumberControl";
-import OverlayControls from "./OverlayControls";
+import OverlayControls from "./overlay-controls/OverlayControls";
 import FlipFretboardControl from "./FlipFretboardControl";
-import LickControl from "./LickControl";
-import "./Controls.scss";
-import PlayScale from "./PlayScale";
+import PlayScale from "./play-scale/PlayScale";
 import type { ShapeName } from "../../constants/CagedChords";
+import "./Controls.scss";
+
 const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 const SCALES = ["arpeggio", "majorPentatonic", "majorScale"];
@@ -52,15 +52,6 @@ interface DividerProps {
   height?: number;
 }
 
-// Constrained content width — matches your existing navbar
-const CONTENT_WIDTH = 1268;
-
-const constrained: React.CSSProperties = {
-  maxWidth: CONTENT_WIDTH,
-  margin: "0 auto",
-  padding: "0 32px",
-};
-
 export function Divider({ height = 40 }: DividerProps) {
   return (
     <div
@@ -76,7 +67,7 @@ export function Divider({ height = 40 }: DividerProps) {
   );
 }
 
-export default function Controls({ settings, setSettings, cagedChord, selectedLickId, setSelectedLickId }: ControlsProps) {
+export default function Controls({ settings, setSettings }: ControlsProps) {
   const [state, setState] = useState<FretifyControlsState>({
     key: "C",
     scale: "Major",
@@ -94,24 +85,7 @@ export default function Controls({ settings, setSettings, cagedChord, selectedLi
 
   return (
     <div className="controls">
-      <div className="row">
-        <KeyControl
-          notes={NOTES}
-          settings={settings}
-          setSettings={setSettings}
-        />
-
-        <Divider />
-
-        <ScaleControl
-          scales={SCALES}
-          settings={settings}
-          setSettings={setSettings}
-        />
-
-        <TuningControl state={state} tunings={TUNINGS} set={set} />
-
-        <Divider />
+      {/* <div className="row">
 
         <FretNumberControl
           state={state}
@@ -122,30 +96,34 @@ export default function Controls({ settings, setSettings, cagedChord, selectedLi
         <Divider />
 
         <PlayScale settings={settings} setSettings={setSettings} />
-
-        <Divider />
-
-        {/* <LickControl
-          shape={cagedChord}
-          scale={settings.scale}
-          keyName={settings.key}
-          selectedLickId={selectedLickId}
-          onSelect={setSelectedLickId}
-        /> */}
-      </div>
+      </div> */}
 
       <div className="row">
-        <OverlayControls
-          state={state}
-          set={set}
+        <KeyControl
+          notes={NOTES}
+          settings={settings}
+          setSettings={setSettings}
+        />
+      </div>
+
+      <div className="flex">
+        <ScaleControl
+          scales={SCALES}
           settings={settings}
           setSettings={setSettings}
         />
 
-        <Divider />
+        <TuningControl state={state} tunings={TUNINGS} set={set} />
 
-        <FlipFretboardControl settings={settings} setSettings={setSettings} />
+        <PlayScale settings={settings} setSettings={setSettings} />
       </div>
+
+      {/* <OverlayControls
+        state={state}
+        set={set}
+        settings={settings}
+        setSettings={setSettings}
+      /> */}
     </div>
   );
 }

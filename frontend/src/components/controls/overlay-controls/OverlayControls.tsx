@@ -1,5 +1,5 @@
-import ControlGroup from "./ControlGroup";
-import Toggle from "../toggle/Toggle";
+import Toggle from "../../toggle/Toggle";
+import "./OverlayControls.scss";
 
 interface OverlayControlsProps {
   state: any;
@@ -15,7 +15,7 @@ const OverlayControls = ({
   setSettings,
 }: OverlayControlsProps) => {
   return (
-    <ControlGroup label="Overlays">
+    <div className="overlay-controls">
       <Toggle
         label="Note Names"
         active={settings.showNotes}
@@ -54,7 +54,7 @@ const OverlayControls = ({
         active={state.showTriads}
         onClick={() => set({ showTriads: !state.showTriads })}
       />
-    </ControlGroup>
+    </div>
   );
 };
 

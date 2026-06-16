@@ -9,7 +9,7 @@ import { getShapesForKey, type ShapeName } from "./constants/CagedChords";
 import type { Scales } from "./types/Scales";
 import { chordNotesToPlayNotes, lickToPlayNotes } from "./audio/utils";
 import { getLicksForShape } from "./constants/licks";
-import PlayScale from "./components/controls/PlayScale";
+import PlayScale from "./components/controls/play-scale/PlayScale";
 
 const SCALE_DISPLAY: Record<string, string> = {
   majorPentatonic: "Major Pentatonic",
@@ -54,14 +54,19 @@ function App() {
   };
 
   const shapeData = getShapesForKey(settings.key)[cagedChord];
-  const scaleNotes = shapeData[settings.scale as Scales].filter((n) => !n.isOctaveExtension);
+  const scaleNotes = shapeData[settings.scale as Scales].filter(
+    (n) => !n.isOctaveExtension,
+  );
 
   useEffect(() => {
     if (!settings.playScale) return;
 
     const activeLick = selectedLickId
-      ? getLicksForShape(cagedChord, settings.scale as Scales, settings.key)
-          .find((l) => l.id === selectedLickId)
+      ? getLicksForShape(
+          cagedChord,
+          settings.scale as Scales,
+          settings.key,
+        ).find((l) => l.id === selectedLickId)
       : null;
 
     const notes = activeLick
@@ -70,12 +75,19 @@ function App() {
 
     const direction = activeLick ? "asc" : settings.playScaleDirection;
 
-    const onComplete = () => setSettings((s: any) => ({ ...s, playScale: false }));
+    const onComplete = () =>
+      setSettings((s: any) => ({ ...s, playScale: false }));
 
     let cancel: (() => void) | undefined;
     let cleaned = false;
 
-    playScale(notes, settings.playScaleBpm, direction, setActivePosition, onComplete).then((stop) => {
+    playScale(
+      notes,
+      settings.playScaleBpm,
+      direction,
+      setActivePosition,
+      onComplete,
+    ).then((stop) => {
       if (cleaned) stop();
       else cancel = stop;
     });
@@ -83,7 +95,6 @@ function App() {
     return () => {
       cleaned = true;
       cancel?.();
-      
     };
   }, [
     settings.playScale,
@@ -100,17 +111,17 @@ function App() {
       <div className="layout">
         <div className="page-content">
           <Navbar />
-          {/* <Controls
+          <Controls
             settings={settings}
             setSettings={setSettings}
             cagedChord={cagedChord}
             selectedLickId={selectedLickId}
             setSelectedLickId={setSelectedLickId}
-          /> */}
-          <div className="active">
+          />
+          {/* <div className="active">
             <h2>{settings.key} {SCALE_DISPLAY[settings.scale] ?? settings.scale}</h2>
             <p>{Scale.get(`${settings.key} ${SCALE_TONAL[settings.scale]}`).notes.join(" · ")}</p>
-          </div>
+          </div> */}
 
           {/* <PlayScale settings={settings} setSettings={setSettings} /> */}
 
@@ -123,8 +134,11 @@ function App() {
             activePosition={activePosition}
             lickNotes={
               selectedLickId
-                ? getLicksForShape(cagedChord, settings.scale as Scales, settings.key)
-                    .find((l) => l.id === selectedLickId)?.notes ?? null
+                ? (getLicksForShape(
+                    cagedChord,
+                    settings.scale as Scales,
+                    settings.key,
+                  ).find((l) => l.id === selectedLickId)?.notes ?? null)
                 : null
             }
           />

@@ -4,7 +4,7 @@
 
 .fretboard,
 .fretboardFlipped {
-  width: 100%;
+  width: calc(100% - 4rem);
   display: flex;
   flex-direction: column;
   border-radius: 4px;
@@ -13,6 +13,7 @@
   background-color: #080808;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 20px;
   margin-bottom: 2rem;
+  margin: 0 auto;
   .string,
   .stringsFlipped {
     width: 100%;

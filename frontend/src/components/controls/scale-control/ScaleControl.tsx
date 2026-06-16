@@ -1,5 +1,5 @@
-import ControlGroup from "./ControlGroup";
-import Select from "../select/Select";
+import Select from "../../select/Select";
+import "./ScaleControl.scss";
 
 interface ScaleControl {
   scales: any;
@@ -13,7 +13,7 @@ const ScaleControl = ({
   setSettings,
 }: ScaleControl) => {
   return (
-    <ControlGroup label="Scale">
+    <div className="select-control">
       <Select
         value={settings.scale}
         options={scales}
@@ -25,7 +25,7 @@ const ScaleControl = ({
         }
         minWidth={165}
       />
-    </ControlGroup>
+    </div>
   );
 };
 

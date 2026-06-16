@@ -1,6 +1,5 @@
-import React from "react";
-import ControlGroup from "./ControlGroup";
-import Select from "../select/Select";
+import Select from "../../select/Select";
+import "./TuningControl.scss";
 
 interface TuningControl {
   state: any;
@@ -8,16 +7,16 @@ interface TuningControl {
   set: any;
 }
 
-const TuningControl = ({state, tunings, set}: TuningControl) => {
+const TuningControl = ({ state, tunings, set }: TuningControl) => {
   return (
-    <ControlGroup label="Tuning">
+    <div className="tuning-control">
       <Select
         value={state.tuning}
         options={tunings}
         onChange={(v) => set({ tuning: v })}
         minWidth={185}
       />
-    </ControlGroup>
+    </div>
   );
 };
 

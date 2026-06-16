@@ -1,11 +1,10 @@
-@use '../../scss/mixins' as mix;
+@use "../../scss/mixins" as mix;
 
 .navbar {
   min-height: 55px;
   display: flex;
   align-items: center;
   color: white;
- 
   width: 100%;
   margin: 0 auto;
   padding: 1rem 6rem;
@@ -15,7 +14,7 @@
     margin: 0 auto;
     display: flex;
     width: 100%;
-     @include mix.contentWidth();
+    @include mix.contentWidth();
   }
   .logo {
     display: flex;
@@ -32,7 +31,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     margin-left: auto;
     li {
       font-size: 14px;

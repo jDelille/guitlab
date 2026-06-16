@@ -29,7 +29,7 @@ const Chords = ({
 
   return (
     <div className="chords">
-      <div className="chords-header">
+      {/* <div className="chords-header">
         <button
           className="play-chord-btn"
           onClick={() => playChord(activeShape.notes)}
@@ -37,7 +37,7 @@ const Chords = ({
           <FaPlay size={10} />
           Play Chord
         </button>
-      </div>
+      </div> */}
       <div className="chord-row">
         {Object.values(shapes).map((shape) => (
           <Chord

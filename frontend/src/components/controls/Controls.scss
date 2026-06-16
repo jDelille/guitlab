@@ -1,4 +1,4 @@
-@use "../../scss/mixins" as mix;
+﻿@use "../../scss/mixins" as mix;
 
 .controls {
   width: 100%;
@@ -15,156 +15,17 @@
     display: flex;
     gap: 2rem;
     align-items: center;
+    border: 1px solid #2a2a2a;
+    background-color: #111;
+    height: 50px;
+    border-radius: 6px;
+    padding: 5px 10px;
+    position: relative;
   }
 
-  .control {
+  .flex {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    .select {
-      background-color: #111;
-      color: #ccc;
-      border: 1px solid #2a2a2a;
-      border-radius: 8px;
-      flex: 1;
-      font-size: 13px;
-      cursor: pointer;
-      height: 52px;
-    }
-
-    .play {
-      background-color: #111;
-      border: 1px solid #2a2a2a;
-      padding: 10px;
-      border-radius: 6px;
-      width: fit-content;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      height: 52px;
-
-      .group {
-        display: flex;
-        gap: 1rem;
-        color: lightgray;
-        font-size: 14px;
-        align-items: center;
-        width: 240px;
-      }
-
-      .play-btn {
-        cursor: pointer;
-      }
-
-      input[type="range"] {
-        appearance: none;
-        width: 160px;
-        height: 6px;
-        border-radius: 999px;
-        background: #2a2a2a;
-      }
-
-      input[type="range"]::-webkit-slider-thumb {
-        appearance: none;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: #fff;
-      }
-
-      input[type="range"]::-moz-range-thumb {
-        width: 14px;
-        height: 14px;
-        border: none;
-        border-radius: 50%;
-        background: #fff;
-      }
-
-      .audio-controls {
-        display: flex;
-        gap: 5px;
-        button {
-          all: unset;
-          cursor: pointer;
-          color: lightgray;
-          padding: 5px 10px;
-          font-size: 14px;
-          border-radius: 6px;
-          background-color: #2a2a2a;
-        }
-
-        .active {
-          background-color: #0f6e56;
-        }
-      }
-    }
-  }
-}
-
-.play {
-  // background-color: #111;
-  border: 1px solid #2a2a2a;
-  padding: 10px;
-  border-radius: 6px;
-  width: fit-content;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  height: 52px;
-
-  .group {
-    display: flex;
-    gap: 1rem;
-    color: lightgray;
-    font-size: 14px;
     align-items: center;
-    width: 240px;
-  }
-
-  .play-btn {
-    cursor: pointer;
-  }
-
-  input[type="range"] {
-    appearance: none;
-    width: 160px;
-    height: 6px;
-    border-radius: 999px;
-    background: #2a2a2a;
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    appearance: none;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #fff;
-  }
-
-  input[type="range"]::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-    border: none;
-    border-radius: 50%;
-    background: #fff;
-  }
-
-  .audio-controls {
-    display: flex;
-    gap: 5px;
-    button {
-      all: unset;
-      cursor: pointer;
-      color: lightgray;
-      padding: 5px 10px;
-      font-size: 14px;
-      border-radius: 6px;
-      background-color: #2a2a2a;
-    }
-
-    .activeBtn {
-      background-color: #0f6e56;
-    }
+    gap: 1rem;
   }
 }
