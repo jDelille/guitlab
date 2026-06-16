@@ -1,59 +1,35 @@
-import Toggle from "../../toggle/Toggle";
 import "./OverlayControls.scss";
 
 interface OverlayControlsProps {
-  state: any;
-  set: any;
   settings: any;
   setSettings: any;
 }
 
-const OverlayControls = ({
-  state,
-  set,
-  settings,
-  setSettings,
-}: OverlayControlsProps) => {
+const CONTROLS = [
+  { label: "Note Names", key: "showNotes" },
+  { label: "Intervals", key: "showIntervals" },
+  { label: "Triads", key: "showTriads" },
+  { label: "All Notes", key: "showAllCagedScales"},
+  { label: "3nps", key: "show3Nps"}
+  // { label: "Flip Fretboard", key: "flipFretboard" },
+  // { label: "Flip Strings", key: "flipStrings" },
+];
+
+const OverlayControls = ({ settings, setSettings }: OverlayControlsProps) => {
+  const toggle = (key: string) =>
+    setSettings((s: any) => ({ ...s, [key]: !s[key] }));
+
   return (
     <div className="overlay-controls">
-      <Toggle
-        label="Note Names"
-        active={settings.showNotes}
-        onClick={() =>
-          setSettings((s: any) => ({
-            ...s,
-            showNotes: true,
-            showIntervals: false,
-          }))
-        }
-      />
-
-      <Toggle
-        label="Intervals"
-        active={settings.showIntervals}
-        onClick={() =>
-          setSettings((s: any) => ({
-            ...s,
-            showNotes: false,
-            showIntervals: true,
-          }))
-        }
-      />
-      <Toggle
-        label="All Notes"
-        active={settings.showAllCagedScales}
-        onClick={() =>
-          setSettings((s: any) => ({
-            ...s,
-            showAllCagedScales: !s.showAllCagedScales,
-          }))
-        }
-      />
-      <Toggle
-        label="Triads"
-        active={state.showTriads}
-        onClick={() => set({ showTriads: !state.showTriads })}
-      />
+      {CONTROLS.map(({ label, key }) => (
+        <button
+          key={key}
+          className={settings[key] ? "activeBtn" : ""}
+          onClick={() => toggle(key)}
+        >
+          {label}
+        </button>
+      ))}
     </div>
   );
 };

@@ -131,7 +131,9 @@
   display: flex;
   align-items: center;
   height: 50px;
-  width: 100%;
+    width: calc(100% - 4rem);
+    margin: 0 auto;
+
   position: relative;
 
   .fretNumber {
@@ -145,6 +147,7 @@
     font-size: 14px;
     gap: 5px;
     position: relative;
+
     &:nth-of-type(1) {
       max-width: 75px;
       min-width: 75px;

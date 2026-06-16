@@ -18,37 +18,20 @@ ul {
 .page {
   width: 100%;
   min-height: 100vh;
-  background-color: #0d0d0d;
+  background-color: $primaryDark;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
 
   .layout {
     display: flex;
+    flex-direction: column;
     width: 100%;
+    flex: 1;
   }
 
   .page-content {
     width: 100%;
     display: flex;
     flex-direction: column;
-    .active {
-      @include contentWidth();
-      margin: 1rem auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      color: white;
-      align-items: center;
-      margin-top: 2rem;
-
-      h2 {
-        font-weight: 500;
-        font-size: 32px;
-      }
-
-      p {
-        font-size: 16px;
-      }
-    }
   }
 }

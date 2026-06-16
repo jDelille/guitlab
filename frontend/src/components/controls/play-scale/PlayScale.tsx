@@ -42,20 +42,18 @@ const PlayScale = ({ settings, setSettings }: PlayScaleProps) => {
           value={settings.playScaleBpm}
           onChange={(e) => set({ playScaleBpm: Number(e.target.value) })}
         />
-        <span>{settings.playScaleBpm} BPM</span>
+        <span >{settings.playScaleBpm} BPM</span>
       </div>
 
-      <div className="play-scale__directions">
+      <select
+        className="play-scale__direction-select"
+        value={settings.playScaleDirection}
+        onChange={(e) => set({ playScaleDirection: e.target.value as Direction })}
+      >
         {DIRECTIONS.map(({ label, value }) => (
-          <button
-            key={value}
-            className={`play-scale__dir-btn ${settings.playScaleDirection === value ? "play-scale__dir-btn--active" : ""}`}
-            onClick={() => set({ playScaleDirection: value })}
-          >
-            {label}
-          </button>
+          <option key={value} value={value}>{label}</option>
         ))}
-      </div>
+      </select>
     </div>
   );
 };

@@ -1,4 +1,15 @@
+@use '../../scss/variables' as var;
+
 .footer {
-    height: 65px;
-    background-color: orange;
+  height: 65px;
+  background-color: var.$primaryDark;
+  border-top: var.$border;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+
+  p {
+    color: #444;
+    font-size: 13px;
+  }
 }

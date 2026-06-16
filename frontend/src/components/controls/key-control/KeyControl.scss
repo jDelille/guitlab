@@ -1,3 +1,5 @@
+@use '../../../scss/variables' as var;
+
 .key-control {
   display: flex;
   align-items: center;
@@ -18,18 +20,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
   background-color: #1e1e1e;
 
   &:hover {
-    background-color: #1e1e1e;
+    background-color: #2e2e2e;
     color: #fff;
   }
 
   &--active {
-    background-color: #1a3d32;
-    color: #4ade80;
+    background-color: var.$accent !important;
+    color: white;
   }
 }

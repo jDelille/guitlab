@@ -1,4 +1,5 @@
 @use "../../scss/mixins" as mix;
+@use "../../scss/variables" as var;
 
 .navbar {
   min-height: 55px;
@@ -8,8 +9,8 @@
   width: 100%;
   margin: 0 auto;
   padding: 1rem 6rem;
-  background-color: #0d0d0d;
-  border-bottom: 1px solid rgb(26, 26, 26);
+  background-color: var.$primaryDark;
+  border-bottom: var.$border;
   .content {
     margin: 0 auto;
     display: flex;
@@ -37,6 +38,16 @@
       font-size: 14px;
       padding: 10px;
       text-align: center;
+
+      a {
+        color: white;
+        text-decoration: none;
+        transition: var.$transition;
+
+        &:hover {
+          color: var.$accent;
+        }
+      }
     }
   }
 
@@ -46,5 +57,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .user-email {
+      font-size: 13px;
+      color: #888;
+    }
   }
 }

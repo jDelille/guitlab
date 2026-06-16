@@ -1,0 +1,92 @@
+@use "../scss/variables" as var;
+@use "../scss/mixins" as mix;
+
+.drill-page {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 4rem;
+
+  .back {
+    @include mix.contentWidth();
+    margin: 0 auto;
+    display: block;
+    font-size: 13px;
+    color: #888;
+    text-decoration: none;
+    transition: var.$transition;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    &:hover { color: white; }
+  }
+
+  .drill-header {
+    @include mix.contentWidth();
+    margin: 0 auto;
+    color: white;
+    margin-bottom: 2rem;
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    p {
+      font-size: 14px;
+      color: #888;
+
+      strong { color: white; }
+    }
+  }
+
+  .drill-actions {
+    @include mix.contentWidth();
+    margin: 0.5rem auto;
+    display: flex;
+    align-items: center;
+
+    .submit-btn {
+      background-color: var.$accent;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.6rem 1.5rem;
+      font-size: 14px;
+      cursor: pointer;
+      transition: var.$transition;
+
+      &:hover { opacity: 0.85; }
+      &:disabled { opacity: 0.4; cursor: not-allowed; }
+    }
+
+    .drill-result {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      color: white;
+
+      .score {
+        font-size: 32px;
+        font-weight: 700;
+        color: var.$accent;
+      }
+
+      p {
+        font-size: 14px;
+        color: #888;
+      }
+
+      .retry-btn {
+        background: none;
+        border: 1px solid #333;
+        color: white;
+        border-radius: 6px;
+        padding: 0.5rem 1rem;
+        font-size: 13px;
+        cursor: pointer;
+        transition: var.$transition;
+
+        &:hover { border-color: white; }
+      }
+    }
+  }
+}

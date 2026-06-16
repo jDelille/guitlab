@@ -1,14 +1,17 @@
+@use "../../../scss/variables" as var;
+
 .play-scale {
   height: 100%;
   display: flex;
   align-items: center;
   gap: 8px;
   flex: 1;
-  background-color: #1e1e1e;
+  border: var.$border;
+  background-color: var.$secondaryDark;
   color: #fff;
-  outline: 1px solid #2a2a2a;
   border-radius: 6px;
   padding: 0 10px;
+  height: 50px;
   &__btn {
     all: unset;
     cursor: pointer;
@@ -59,34 +62,30 @@
       border-radius: 50%;
       background: #fff;
     }
+
+    span {
+      width: 59px;
+    }
   }
 
-  &__directions {
-    display: flex;
-    gap: 4px;
-  }
-
-  &__dir-btn {
-    all: unset;
-    cursor: pointer;
-    color: #888;
+  &__direction-select {
+    appearance: none;
+    background-color: #2a2a2a;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
     font-size: 13px;
     font-weight: 500;
     padding: 5px 10px;
-    border-radius: 5px;
-    background-color: #1e1e1e;
-    transition:
-      background-color 0.15s ease,
-      color 0.15s ease;
+    cursor: pointer;
+    outline: none;
 
     &:hover {
-      color: #fff;
-      background-color: #2a2a2a;
+      background-color: #333;
     }
 
-    &--active {
-      background-color: #0f6e56;
-      color: #fff;
+    option {
+      background-color: #1e1e1e;
     }
   }
 }

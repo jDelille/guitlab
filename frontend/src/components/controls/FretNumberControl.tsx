@@ -1,23 +1,23 @@
-import React from 'react'
-import ControlGroup from './ControlGroup'
-import SegmentedControl from './SegmentedControl'
-
 interface FretNumberControl {
   state: any;
-  fret_options: any;
+  fret_options: number[];
   set: any;
 }
 
-const FretNumberControl = ({state, fret_options, set}: FretNumberControl) => {
+const FretNumberControl = ({ state, fret_options, set }: FretNumberControl) => {
   return (
-         <ControlGroup label="Frets">
-          <SegmentedControl
-            options={fret_options}
-            value={state.frets}
-            onChange={(v) => set({ frets: v })}
-          />
-        </ControlGroup>
-  )
-}
+    <div className="fret-control">
+      {fret_options.map((opt, i) => (
+        <button
+          key={opt}
+          className={`fret-btn ${state.frets === opt ? "fret-btn--active" : ""}`}
+          onClick={() => set({ frets: opt })}
+        >
+          {opt}
+        </button>
+      ))}
+    </div>
+  );
+};
 
-export default FretNumberControl
+export default FretNumberControl;
