@@ -25,7 +25,7 @@ export function chordNotesToPlayNotes(notes: ChordNote[]): PlayNote[] {
     .sort((a, b) => a.midi - b.midi);
 }
 
-// Like chordNotesToPlayNotes but preserves array order — used for lick playback.
+// Like chordNotesToPlayNotes but preserves array order - used for lick playback.
 export function lickToPlayNotes(notes: ChordNote[]): PlayNote[] {
   return notes
     .filter((n) => n.fret !== null && !n.isMuted)
