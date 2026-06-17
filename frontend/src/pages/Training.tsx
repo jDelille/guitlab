@@ -1,32 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Training.scss";
-
-const plans = [
-  {
-    id: "caged-scales",
-    name: "Map the CAGED Scale",
-    description: "You're given a key and CAGED shape — mark every scale note on the fretboard.",
-    difficulty: "Beginner",
-  },
-  {
-    id: "caged-triads",
-    name: "Map the Triads",
-    description: "Identify and mark the triad notes within a CAGED shape.",
-    difficulty: "Intermediate",
-  },
-  {
-    id: "find-the-root",
-    name: "Find the Root Notes",
-    description: "Given a key, find all root note positions across the entire fretboard.",
-    difficulty: "Beginner",
-  },
-  {
-    id: "identify-interval",
-    name: "Identify the Interval",
-    description: "A note is highlighted — identify its interval relative to the root.",
-    difficulty: "Intermediate",
-  },
-];
+import { useEffect, useState } from "react";
 
 const mockStats = {
   gamesPlayed: 24,
@@ -44,12 +18,38 @@ const mockLeaderboard = [
 ];
 
 const mockActivity = [
-  { drill: "Map the CAGED Scale", score: 95, key: "C", shape: "A", date: "Today" },
-  { drill: "Find the Root Notes", score: 88, key: "G", shape: "E", date: "Today" },
-  { drill: "Map the Triads", score: 72, key: "F", shape: "C", date: "Yesterday" },
+  {
+    drill: "Map the CAGED Scale",
+    score: 95,
+    key: "C",
+    shape: "A",
+    date: "Today",
+  },
+  {
+    drill: "Find the Root Notes",
+    score: 88,
+    key: "G",
+    shape: "E",
+    date: "Today",
+  },
+  {
+    drill: "Map the Triads",
+    score: 72,
+    key: "F",
+    shape: "C",
+    date: "Yesterday",
+  },
 ];
 
 const Training = () => {
+  const [drills, setDrills] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/drills")
+      .then((res) => res.json())
+      .then((data) => setDrills(data));
+  }, []);
+
   return (
     <div className="page-content">
       <div className="header">
@@ -59,7 +59,7 @@ const Training = () => {
 
       <div className="plans">
         <ul>
-          {plans.map((plan) => (
+          {drills.map((plan) => (
             <li key={plan.id} className="plan">
               <Link to={`/training/${plan.id}`}>
                 <span className="difficulty">{plan.difficulty}</span>
@@ -88,7 +88,9 @@ const Training = () => {
               <span className="stat-label">Total Points</span>
             </div>
             <div className="stat">
-              <span className="stat-value">{Object.values(mockStats.bestScores)[0]}%</span>
+              <span className="stat-value">
+                {Object.values(mockStats.bestScores)[0]}%
+              </span>
               <span className="stat-label">Best Score</span>
             </div>
           </div>
@@ -117,7 +119,9 @@ const Training = () => {
               <li key={i} className="activity-entry">
                 <div className="activity-info">
                   <span className="activity-drill">{item.drill}</span>
-                  <span className="activity-meta">{item.key} — Shape {item.shape} · {item.date}</span>
+                  <span className="activity-meta">
+                    {item.key} — Shape {item.shape} · {item.date}
+                  </span>
                 </div>
                 <span className="activity-score">{item.score}%</span>
               </li>

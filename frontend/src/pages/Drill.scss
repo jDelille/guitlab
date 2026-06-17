@@ -15,7 +15,7 @@
     text-decoration: none;
     transition: var.$transition;
     margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     &:hover { color: white; }
   }
 
@@ -24,6 +24,10 @@
     margin: 0 auto;
     color: white;
     margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     h1 {
       font-size: 24px;
       font-weight: 600;
@@ -38,13 +42,30 @@
     }
   }
 
-  .drill-actions {
+  .drill-controls-wrapper {
     @include mix.contentWidth();
-    margin: 0.5rem auto;
+    margin: 0 auto 1.5rem;
     display: flex;
     align-items: center;
+    margin-top: 2.5rem;
+  }
 
-    .submit-btn {
+  .submit-btn,
+  .drill-result {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    justify-content: space-between;
+    width: 100%;
+
+    .try-again-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+  }
+
+  .submit-btn {
       background-color: var.$accent;
       color: white;
       border: none;
@@ -52,6 +73,7 @@
       padding: 0.6rem 1.5rem;
       font-size: 14px;
       cursor: pointer;
+      width: fit-content;
       transition: var.$transition;
 
       &:hover { opacity: 0.85; }
@@ -88,5 +110,4 @@
         &:hover { border-color: white; }
       }
     }
-  }
 }

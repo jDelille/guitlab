@@ -1,0 +1,39 @@
+@use "../../scss/variables" as var;
+
+.drill-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 13px;
+  
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    &.solved {
+      color: #22c55e;
+      .dot { background-color: #22c55e; }
+    }
+
+    &.attempted {
+      color: #888;
+      .dot { background-color: #555; }
+    }
+
+    &.remaining {
+      color: #444;
+    }
+  }
+
+  &__sep {
+    color: #333;
+  }
+}
