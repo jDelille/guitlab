@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { supabase } from "../../services/supabase";
 import { useUser } from "../../hooks/useUser";
+import { useTheme } from "../../context/ThemeContext";
 import "./Navbar.scss";
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 
 const Navbar = ({ onAuthOpen }: Props) => {
   const user = useUser();
+  const { theme, toggleTheme } = useTheme();
   const handleLogout = () => supabase.auth.signOut();
 
   return (
@@ -22,6 +24,9 @@ const Navbar = ({ onAuthOpen }: Props) => {
           <li><Link to="/training">Training</Link></li>
         </ul>
         <ul className="settings">
+          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+            {theme === "dark" ? "☀️" : "🌙"}
+          </button>
           {user ? (
             <>
               <span className="user-email">{user.email}</span>

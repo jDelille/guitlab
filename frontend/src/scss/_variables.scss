@@ -1,10 +1,10 @@
-// colors
-$primaryDark: #0A0A0A;
-$border: 1px solid #1a1a1a;
-$secondaryDark: #171717;
+// colors (reference CSS custom properties for theming)
+$primaryDark: var(--bg-primary);
+$border: 1px solid var(--border-color);
+$secondaryDark: var(--bg-secondary);
 
-$accent: #0066FF;
-$alice-blue: #262626;
+$accent: var(--accent);
+$alice-blue: var(--bg-elevated);
 
 // fretboard
 $noteWidth: 25px;

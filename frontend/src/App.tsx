@@ -6,11 +6,13 @@ import AuthModal from "./components/auth/AuthModal";
 import Home from "./pages/Home";
 import Training from "./pages/Training";
 import Drill from "./pages/Drill";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
   const [authMode, setAuthMode] = useState<"login" | "signup" | null>(null);
 
   return (
+    <ThemeProvider>
     <BrowserRouter>
       <div className="page">
         <div className="layout">
@@ -25,6 +27,7 @@ function App() {
         {authMode && <AuthModal onClose={() => setAuthMode(null)} />}
       </div>
     </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

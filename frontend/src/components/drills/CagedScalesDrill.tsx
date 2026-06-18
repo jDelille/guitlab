@@ -18,7 +18,7 @@ import {
 import "../../pages/Drill.scss";
 
 const RANKS = ["Novice", "Bedroom Guitarist", "Local Legend", "Face Melter", "Guitar Hero"];
-const RANK_THRESHOLDS = [0, 500, 1500, 3500, 7000];
+const RANK_THRESHOLDS = [0, 2500, 5000, 7500, 10000];
 
 function getRankInfo(points: number) {
   let rank = RANKS[0];

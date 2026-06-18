@@ -64,6 +64,21 @@ def get_drills():
     return response.data
 
 
+@app.get("/leaderboard")
+def get_leaderboard():
+    response = (
+        supabase.table("profiles")
+        .select("username, total_points")
+        .order("total_points", desc=True)
+        .limit(5)
+        .execute()
+    )
+    return [
+        {"rank": i + 1, "username": r["username"] or "Anonymous", "points": r["total_points"] or 0}
+        for i, r in enumerate(response.data)
+    ]
+
+
 @app.get("/drill-progress")
 def get_drill_progress(authorization: str | None = Header(None)):
     user = get_user_from_token(authorization)

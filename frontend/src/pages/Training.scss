@@ -10,6 +10,10 @@
 }
 
 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   h1 {
     font-size: 28px;
     font-weight: 600;
@@ -33,9 +37,30 @@
     border-radius: 8px;
     transition: var.$transition;
 
-    &:hover {
+    &:hover:not(.coming-soon) {
       border-color: var.$accent;
       background-color: var.$secondaryDark;
+    }
+
+    &.coming-soon {
+      opacity: 0.5;
+      cursor: default;
+
+      div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1.5rem;
+      }
+    }
+
+    .coming-soon-badge {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-top: 0.25rem;
     }
 
     a {
@@ -46,25 +71,25 @@
       height: 100%;
       text-decoration: none;
       color: white;
+    }
 
-      .difficulty {
-        font-size: 11px;
-        color: var.$accent;
-        text-transform: uppercase;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-      }
+    .difficulty {
+      font-size: 11px;
+      color: var.$accent;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
 
-      h3 {
-        font-size: 16px;
-        font-weight: 600;
-      }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+    }
 
-      p {
-        font-size: 13px;
-        color: #888;
-        line-height: 1.5;
-      }
+    p {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.5;
     }
   }
 }
@@ -111,6 +136,11 @@
     padding: 1.5rem;
   }
 
+  .stats-empty {
+    font-size: 13px;
+    color: #555;
+  }
+
   .stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -131,6 +161,15 @@
         color: #888;
       }
     }
+  }
+
+  .view-all {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 12px;
+    color: var.$accent;
+    text-decoration: none;
+    &:hover { opacity: 0.8; }
   }
 
   .leaderboard {

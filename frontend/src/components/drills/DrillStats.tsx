@@ -9,13 +9,23 @@ interface Props {
   nextRankPoints: number;
 }
 
-const DrillStats = ({ solved, total, points, rank, nextRank, nextRankPoints }: Props) => {
+const DrillStats = ({
+  solved,
+  total,
+  points,
+  rank,
+  nextRank,
+  nextRankPoints,
+}: Props) => {
   const progress = Math.min((points / nextRankPoints) * 100, 100);
 
   return (
     <div className="drill-stats">
       <div className="drill-stat">
-        <span className="drill-stat__value">{solved}<span className="drill-stat__total">/{total}</span></span>
+        <span className="drill-stat__value">
+          {solved}
+          <span className="drill-stat__total">/{total}</span>
+        </span>
         <span className="drill-stat__label">Solved</span>
       </div>
 
@@ -36,9 +46,14 @@ const DrillStats = ({ solved, total, points, rank, nextRank, nextRankPoints }: P
             <span>{nextRank}</span>
           </div> */}
           <div className="rank-progress__bar">
-            <div className="rank-progress__fill" style={{ width: `${progress}%` }} />
+            <div
+              className="rank-progress__fill"
+              style={{ width: `${progress}%` }}
+            />
           </div>
-          <span className="rank-progress__points">{points} / {nextRankPoints} pts</span>
+          <span className="rank-progress__points">
+            {points} / {nextRankPoints} pts
+          </span>
         </div>
       </div>
     </div>
