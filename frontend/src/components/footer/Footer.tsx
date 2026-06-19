@@ -3,7 +3,9 @@ import "./Footer.scss";
 const Footer = () => {
   return (
     <footer className="footer">
-      <p>Uncaged</p>
+      <div className="footer-content">
+        <p>Uncaged</p>
+      </div>
     </footer>
   );
 };

@@ -12,6 +12,8 @@ interface ChordsProps {
   showAll: boolean;
   setShowAll: (val: boolean) => void;
   showAllCagedScales: boolean;
+  showDoubleStops: boolean;
+  showScaleWithDoubleStops: boolean;
   setSettings: any;
 }
 
@@ -21,6 +23,8 @@ const Chords = ({
   keyName,
   setSettings,
   showAllCagedScales,
+  showDoubleStops,
+  showScaleWithDoubleStops,
 }: ChordsProps) => {
   const [active, setActive] = useState<ShapeName>("C");
   const shapes = getShapesForKey(keyName); // was hardcoded "C"
@@ -46,6 +50,8 @@ const Chords = ({
             active={cagedChord}
             setActive={setCagedChord}
             showAllCagedScales={showAllCagedScales}
+            showDoubleStops={showDoubleStops}
+            showScaleWithDoubleStops={showScaleWithDoubleStops}
             setSettings={setSettings}
           />
         ))}

@@ -1,5 +1,8 @@
 import { getInstrument } from "./soundfont";
 import type { PlayNote } from "./utils";
+import type { DoubleStopPair } from "../constants/doubleStops";
+
+const MIDI_TUNING = [64, 59, 55, 50, 45, 40];
 
 export async function playScale(
   notes: PlayNote[],
@@ -40,5 +43,38 @@ export async function playScale(
     timers.forEach(clearTimeout);
     instrument.stop();
     onNote?.(null);
+  };
+}
+
+export async function playDoubleStops(
+  pairs: DoubleStopPair[],
+  bpm: number,
+  onStep?: (positions: { string: number; fret: number }[] | null) => void,
+  onComplete?: () => void
+): Promise<() => void> {
+  const instrument = await getInstrument();
+  const intervalMs = (60 / bpm) * 1000;
+  const timers: number[] = [];
+
+  pairs.forEach((pair, i) => {
+    const timer = window.setTimeout(() => {
+      pair.strings.forEach((s, idx) => {
+        instrument.start({ note: MIDI_TUNING[s] + pair.frets[idx] });
+      });
+      onStep?.(pair.strings.map((s, idx) => ({ string: s, fret: pair.frets[idx] })));
+    }, i * intervalMs);
+    timers.push(timer);
+  });
+
+  const clearTimer = window.setTimeout(() => {
+    onStep?.(null);
+    onComplete?.();
+  }, pairs.length * intervalMs);
+  timers.push(clearTimer);
+
+  return () => {
+    timers.forEach(clearTimeout);
+    instrument.stop();
+    onStep?.(null);
   };
 }

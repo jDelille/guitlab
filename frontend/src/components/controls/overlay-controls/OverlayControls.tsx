@@ -10,14 +10,18 @@ const CONTROLS = [
   { label: "Intervals", key: "showIntervals" },
   { label: "Triads", key: "showTriads" },
   { label: "All Notes", key: "showAllCagedScales"},
-  { label: "3nps", key: "show3Nps"}
+  { label: "Double Stops", key: "showDoubleStops" }
   // { label: "Flip Fretboard", key: "flipFretboard" },
   // { label: "Flip Strings", key: "flipStrings" },
 ];
 
 const OverlayControls = ({ settings, setSettings }: OverlayControlsProps) => {
   const toggle = (key: string) =>
-    setSettings((s: any) => ({ ...s, [key]: !s[key] }));
+    setSettings((s: any) => ({
+      ...s,
+      [key]: !s[key],
+      ...(key === "showDoubleStops" && { showScaleWithDoubleStops: false }),
+    }));
 
   return (
     <div className="overlay-controls">

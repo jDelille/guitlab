@@ -2,19 +2,20 @@ import { useEffect, useState } from "react";
 import Fretboard from "../components/fretboard/Fretboard";
 import Chords from "../components/chords/Chords";
 import Controls from "../components/controls/Controls";
-import { playScale } from "../audio/playScale";
+import { playScale, playDoubleStops } from "../audio/playScale";
 import { getShapesForKey, type ShapeName } from "../constants/CagedChords";
 import type { Scales } from "../types/Scales";
 import { chordNotesToPlayNotes, lickToPlayNotes } from "../audio/utils";
 import { getLicksForShape } from "../constants/licks";
+import { getDoubleStopsForKey } from "../constants/doubleStops";
 
-type NotePosition = { string: number; fret: number } | null;
+type ActivePositions = { string: number; fret: number }[] | null;
 
 const Home = () => {
   const [cagedChord, setCagedChord] = useState<ShapeName>("C");
   const [showAllScales, setShowAllScales] = useState<boolean>(false);
   const [showChordTones, setShowChordTones] = useState<boolean>(false);
-  const [activePosition, setActivePosition] = useState<NotePosition>(null);
+  const [activePositions, setActivePositions] = useState<ActivePositions>(null);
   const [selectedLickId, setSelectedLickId] = useState<string | null>(null);
 
   const [settings, setSettings] = useState({
@@ -26,6 +27,8 @@ const Home = () => {
     showIntervals: true,
     showTriads: false,
     showAllCagedScales: false,
+    showDoubleStops: false,
+    showScaleWithDoubleStops: false,
     flipped: false,
     flipFretboard: false,
     flipStrings: false,
@@ -42,28 +45,39 @@ const Home = () => {
   useEffect(() => {
     if (!settings.playScale) return;
 
-    const activeLick = selectedLickId
-      ? getLicksForShape(cagedChord, settings.scale as Scales, settings.key).find(
-          (l) => l.id === selectedLickId,
-        )
-      : null;
-
-    const notes = activeLick
-      ? lickToPlayNotes(activeLick.notes)
-      : chordNotesToPlayNotes(scaleNotes);
-
-    const direction = activeLick ? "asc" : settings.playScaleDirection;
     const onComplete = () => setSettings((s: any) => ({ ...s, playScale: false }));
-
     let cancel: (() => void) | undefined;
     let cleaned = false;
 
-    playScale(notes, settings.playScaleBpm, direction, setActivePosition, onComplete).then(
-      (stop) => {
-        if (cleaned) stop();
-        else cancel = stop;
-      },
-    );
+    if (settings.showDoubleStops) {
+      const pairs = [...getDoubleStopsForKey(settings.key)].sort((a, b) => {
+        const minDiff = Math.min(...a.frets) - Math.min(...b.frets);
+        return minDiff !== 0 ? minDiff : Math.max(...a.frets) - Math.max(...b.frets);
+      });
+      playDoubleStops(pairs, settings.playScaleBpm, setActivePositions, onComplete).then(
+        (stop) => { if (cleaned) stop(); else cancel = stop; }
+      );
+    } else {
+      const activeLick = selectedLickId
+        ? getLicksForShape(cagedChord, settings.scale as Scales, settings.key).find(
+            (l) => l.id === selectedLickId,
+          )
+        : null;
+
+      const notes = activeLick
+        ? lickToPlayNotes(activeLick.notes)
+        : chordNotesToPlayNotes(scaleNotes);
+
+      const direction = activeLick ? "asc" : settings.playScaleDirection;
+
+      playScale(
+        notes,
+        settings.playScaleBpm,
+        direction,
+        (pos) => setActivePositions(pos ? [pos] : null),
+        onComplete,
+      ).then((stop) => { if (cleaned) stop(); else cancel = stop; });
+    }
 
     return () => {
       cleaned = true;
@@ -73,6 +87,7 @@ const Home = () => {
     settings.playScale,
     settings.playScaleBpm,
     settings.playScaleDirection,
+    settings.showDoubleStops,
     settings.key,
     settings.scale,
     cagedChord,
@@ -94,7 +109,7 @@ const Home = () => {
         cagedChord={cagedChord}
         showChordTones={showChordTones}
         settings={settings}
-        activePosition={activePosition}
+        activePositions={activePositions}
         lickNotes={
           selectedLickId
             ? (getLicksForShape(cagedChord, settings.scale as Scales, settings.key).find(
@@ -110,6 +125,8 @@ const Home = () => {
         showAll={showAllScales}
         setShowAll={setShowAllScales}
         showAllCagedScales={settings.showAllCagedScales}
+        showDoubleStops={settings.showDoubleStops}
+        showScaleWithDoubleStops={settings.showScaleWithDoubleStops}
         setSettings={setSettings}
       />
     </div>

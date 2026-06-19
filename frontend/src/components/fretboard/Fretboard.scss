@@ -103,7 +103,7 @@
       .ghost-note {
         @include mix.note();
         color: var(--text-secondary);
-        background: var(--bg-fretboard) !important;
+        background: var(--bg-fretboard);
         border-radius: none !important;
         &:hover {
           transform: none;

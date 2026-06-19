@@ -12,6 +12,8 @@ interface ChordProps {
   active: string;
   setActive: (shape: ShapeName) => void;
   showAllCagedScales: boolean;
+  showDoubleStops: boolean;
+  showScaleWithDoubleStops: boolean;
   setSettings: any;
 }
 
@@ -20,6 +22,8 @@ export default function Chord({
   active,
   setActive,
   showAllCagedScales,
+  showDoubleStops,
+  showScaleWithDoubleStops,
   setSettings,
 }: ChordProps) {
   const DISPLAY_FRETS = 5;
@@ -52,12 +56,18 @@ export default function Chord({
 
   const isActive = active === shape.shape;
 
-  const handleChordClick = (shape: ShapeName) => {
-    setActive(shape);
-    setSettings((s: any) => ({
-      ...s,
-      showAllCagedScales: false,
-    }));
+  const handleChordClick = (shapeName: ShapeName) => {
+    if (showDoubleStops) {
+      if (shapeName === active && showScaleWithDoubleStops) {
+        setSettings((s: any) => ({ ...s, showScaleWithDoubleStops: false }));
+      } else {
+        setActive(shapeName);
+        setSettings((s: any) => ({ ...s, showScaleWithDoubleStops: true, showAllCagedScales: false }));
+      }
+    } else {
+      setActive(shapeName);
+      setSettings((s: any) => ({ ...s, showAllCagedScales: false }));
+    }
   };
 
   return (
@@ -66,8 +76,15 @@ export default function Chord({
       onClick={() => handleChordClick(shape.shape)}
       style={{
         outline:
-          !showAllCagedScales && isActive ? `2px solid ${color}` : undefined,
-        opacity: showAllCagedScales ? 1 : isActive ? 1 : 0.4,
+          !showAllCagedScales && isActive && (!showDoubleStops || showScaleWithDoubleStops)
+            ? `2px solid ${color}`
+            : undefined,
+        opacity:
+          showAllCagedScales
+            ? 1
+            : isActive && (!showDoubleStops || showScaleWithDoubleStops)
+              ? 1
+              : 0.4,
       }}
     >
       <div className="title">
