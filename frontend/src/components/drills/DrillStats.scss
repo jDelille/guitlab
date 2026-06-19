@@ -5,10 +5,9 @@
   align-items: center;
   gap: 2rem;
   padding: 1rem 1.5rem;
-  background-color: var.$secondaryDark;
-  border: var.$border;
+  background-color: var(--bg-secondary);
   border-radius: 8px;
-  color: white;
+  color: var(--text-primary);
   
   .drill-stat {
     display: flex;

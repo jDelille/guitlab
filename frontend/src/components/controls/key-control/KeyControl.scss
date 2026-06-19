@@ -6,12 +6,16 @@
   gap: 4px;
   height: 100%;
   width: 100%;
+  background-color: var(--bg-secondary);
+  padding: 8px 8px;
+  height: 55px;
+  border-radius: 6px;
 }
 
 .key-btn {
   all: unset;
   cursor: pointer;
-  color: #888;
+  color: var(--text-primary);
   font-size: 13px;
   font-weight: 500;
   flex: 1;
@@ -20,15 +24,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #1e1e1e;
+  background-color: var(--bg-elevated);
 
   &:hover {
-    background-color: #2e2e2e;
-    color: #fff;
+    background-color: var(--bg-elevated-hovered);
+    color: var(--text-primary);
   }
 
   &--active {
     background-color: var.$accent !important;
-    color: white;
+    color: white !important;
   }
 }

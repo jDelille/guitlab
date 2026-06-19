@@ -138,7 +138,7 @@ const DrillRoadmap = ({
                               key={scale}
                               className={`scale-pip ${done ? "done" : ""} ${isCur ? "active" : ""}`}
                             >
-                              {done ? "✓" : "○"} {SCALE_LABELS[scale]}
+                              {done ? "✓" : "-"} {SCALE_LABELS[scale]}
                             </span>
                           );
                         })}

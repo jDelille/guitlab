@@ -2,10 +2,10 @@
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  background-color: #080808;
+  background-color: var(--bg-secondary);
   padding: 1rem;
   border-radius: 12px;
-  border: 1px solid rgb(26, 26, 26);
+  border: 1px solid var(--border-color);
 }
 
 .title {
@@ -37,7 +37,7 @@
 .cell {
   width: 32px;
   height: 32px;
-  border: 1px solid #444;
+  border: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,5 +52,5 @@
   left: -16px;
   z-index: 2;
   border-radius: 50%;
-  background: white;
+  background: var(--text-primary)
 }

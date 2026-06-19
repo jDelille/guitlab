@@ -186,7 +186,7 @@ const Fretboard = ({
                           isLickNote
                             ? "2px solid #fbbf24"
                             : isActive && showChordTones && noteData?.isChordTone
-                              ? "2px solid white"
+                              ? "2px solid var(--text-primary)"
                               : "none",
                         outlineOffset: "2px",
                         cursor: "pointer",
@@ -195,7 +195,7 @@ const Fretboard = ({
                           activePosition != null &&
                           stringNumber === activePosition.string &&
                           fret === activePosition.fret
-                            ? "0 0 0 2px white, 0 0 10px 2px rgba(255,255,255,0.6)"
+                            ? "0 0 0 2px var(--text-primary), 0 0 10px 2px rgba(255,255,255,0.6)"
                             : "none",
                       }}
                     >

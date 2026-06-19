@@ -6,7 +6,6 @@
   display: flex;
   align-items: center;
   flex: 1;
-  
 
   &__trigger {
     all: unset;
@@ -17,17 +16,16 @@
     width: 100%;
     height: 38px;
     padding: 0 12px;
-    background-color: var.$secondaryDark;
+    background-color: var(--bg-secondary);
     border-radius: 6px;
-    color: #fff;
+    color: var(--text-primary);
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.15s ease;
     box-sizing: border-box;
-height: 50px;
+    height: 50px;
     &:hover {
-      background-color: #2a2a2a;
+      // background-color: var(--bg-elevated-hovered);
     }
   }
 
@@ -46,8 +44,7 @@ height: 50px;
     top: calc(100% + 6px);
     left: 0;
     right: 0;
-    background-color: #1a1a1a;
-    border: 1px solid #2a2a2a;
+    background-color: var(--bg-primary);
     border-radius: 6px;
     overflow: hidden;
     z-index: 10;
@@ -60,15 +57,13 @@ height: 50px;
     width: 100%;
     padding: 10px 12px;
     font-size: 13px;
-    color: #888;
+    color: var(--text-primary);
     cursor: pointer;
     box-sizing: border-box;
     height: 50px;
     &:hover {
-      background-color: #2a2a2a;
-      color: #fff;
+      background-color: var(--bg-elevated-hovered);
     }
-
     &--active {
       color: white;
       background-color: var.$accent !important;

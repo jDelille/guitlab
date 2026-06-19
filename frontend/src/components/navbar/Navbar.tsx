@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { supabase } from "../../services/supabase";
 import { useUser } from "../../hooks/useUser";
 import { useTheme } from "../../context/ThemeContext";
+import { IoSunnyOutline } from "react-icons/io5";
+
 import "./Navbar.scss";
 
 interface Props {
@@ -20,12 +22,24 @@ const Navbar = ({ onAuthOpen }: Props) => {
           <p>Uncaged</p>
         </div>
         <ul className="links">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/training">Training</Link></li>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/training">Training</Link>
+          </li>
         </ul>
         <ul className="settings">
-          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
-            {theme === "dark" ? "☀️" : "🌙"}
+          <button
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? (
+              <IoSunnyOutline color="var(--text-primary)" />
+            ) : (
+              <IoSunnyOutline color="var(--text-primary)" />
+            )}
           </button>
           {user ? (
             <>

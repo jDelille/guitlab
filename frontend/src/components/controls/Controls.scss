@@ -9,18 +9,18 @@
   gap: 2.5rem;
   @include mix.contentWidth();
   margin: 0 auto;
-  margin-top: 3rem;
+  margin-top: 2rem;
   margin-bottom: 1.5rem;
   .keys,
   .flex {
     display: flex;
     gap: 1rem;
     align-items: center;
-    border: var.$border;
-    background-color: var.$secondaryDark;
+    border: var(--border-color);
+    background-color: var(--bg-primary);
     height: 50px;
     border-radius: 6px;
-    padding: 5px 10px;
+    
     position: relative;
   }
 

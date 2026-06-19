@@ -11,18 +11,20 @@
     margin: 0 auto;
     display: block;
     font-size: 13px;
-    color: #888;
+    color: var(--text-secondary);
     text-decoration: none;
     transition: var.$transition;
     margin-top: 2rem;
     margin-bottom: 1.5rem;
-    &:hover { color: white; }
+    &:hover {
+      color: var(--text-primary);
+    }
   }
 
   .drill-header {
     @include mix.contentWidth();
     margin: 0 auto;
-    color: white;
+    color: var(--text-primary);
     margin-bottom: 2rem;
     display: flex;
     align-items: center;
@@ -36,9 +38,11 @@
 
     p {
       font-size: 14px;
-      color: #888;
+      color: var(--text-secondary);
 
-      strong { color: white; }
+      strong {
+        color: var(--text-primary);
+      }
     }
   }
 
@@ -66,54 +70,62 @@
   }
 
   .submit-btn {
-      background-color: var.$accent;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 0.6rem 1.5rem;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1.5rem;
+    font-size: 14px;
+    cursor: pointer;
+    width: fit-content;
+    transition: var.$transition;
+
+    &:hover {
+      opacity: 0.85;
+    }
+    &:disabled {
+      opacity: 0.8;
+      cursor: not-allowed;
+    }
+  }
+
+  .drill-result {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: white;
+
+    .score {
+      font-size: 32px;
+      font-weight: 700;
+      color: var.$accent;
+    }
+
+    .points-earned {
       font-size: 14px;
+      color: #22c55e;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .retry-btn {
+      background: none;
+      background-color: var(--accent);
+      border: none;
+      color: white;
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      font-size: 13px;
       cursor: pointer;
-      width: fit-content;
       transition: var.$transition;
 
-      &:hover { opacity: 0.85; }
-      &:disabled { opacity: 0.4; cursor: not-allowed; }
-    }
-
-    .drill-result {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      color: white;
-
-      .score {
-        font-size: 32px;
-        font-weight: 700;
-        color: var.$accent;
-      }
-
-      .points-earned {
-        font-size: 14px;
-        color: #22c55e;
-        font-weight: 600;
-      }
-
-      p {
-        font-size: 14px;
-        color: #888;
-      }
-
-      .retry-btn {
-        background: none;
-        border: 1px solid #333;
-        color: white;
-        border-radius: 6px;
-        padding: 0.5rem 1rem;
-        font-size: 13px;
-        cursor: pointer;
-        transition: var.$transition;
-
-        &:hover { border-color: white; }
+      &:hover {
+        border-color: white;
       }
     }
+  }
 }

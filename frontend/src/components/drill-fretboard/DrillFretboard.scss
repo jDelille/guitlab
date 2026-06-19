@@ -8,7 +8,7 @@
   border-radius: 4px;
   border-right: 0;
   border-left: 0;
-  background-color: #080808;
+  background-color: var(--bg-fretboard);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 20px;
   margin: 0 auto;
 
@@ -26,29 +26,28 @@
       top: 15px;
       height: 1px;
     }
-
     &:nth-of-type(1):before {
-      background-color: $high-strings-color;
+      background-color: var(--high-string-color);
       height: 1.5px;
     }
     &:nth-of-type(2):before {
-      background-color: $high-strings-color;
+      background-color: var(--high-string-color);
       height: 2.4px;
     }
     &:nth-of-type(3):before {
-      background-color: $high-strings-color;
+      background-color: var(--high-string-color);
       height: 2.5px;
     }
     &:nth-of-type(4):before {
-      background-color: $low-strings-color;
+      background-color: var(--low-string-color);
       height: 2.75px;
     }
     &:nth-of-type(5):before {
-      background-color: $low-strings-color;
+      background-color: var(--low-string-color);
       height: 3px;
     }
     &:nth-of-type(6):before {
-      background-color: $low-strings-color;
+      background-color: var(--low-string-color);
       height: 3.25px;
     }
 
@@ -60,12 +59,12 @@
       position: relative;
       z-index: 1;
       height: 35px;
-      border-right: 3px solid $fret-color;
+      border-right: 3px solid var(--high-string-color);
 
       &:nth-child(1) {
         max-width: 75px;
         min-width: 75px;
-        background-color: #121316;
+        background-color: var(--bg-primary);
       }
 
       &:last-child {
@@ -78,13 +77,13 @@
 
       .drill-note-name {
         @include mix.note();
-        background-color: #080808;
+        background-color: var(--bg-fretboard);
         color: #444;
         font-size: 10px;
         cursor: pointer;
 
         &:hover {
-          background-color: #1a1a1a;
+          background-color: var(--accent);
           color: white;
           transform: scale(1.1);
         }
@@ -92,7 +91,7 @@
 
       .drill-note {
         @include mix.note();
-        background-color: #080808;
+        background-color: var(--bg-fretboard);
         color: transparent;
 
         &:hover {

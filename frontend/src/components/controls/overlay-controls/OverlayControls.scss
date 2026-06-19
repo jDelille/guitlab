@@ -8,34 +8,28 @@
   align-content: center;
   gap: 5px;
   padding: 5px 10px;
-  border: var.$border;
   background-color: var.$secondaryDark;
-  color: white;
   button {
     all: unset;
-    background-color: #1e1e1e;
+    background-color: var(--bg-elevated);
     cursor: pointer;
     flex: 1;
     font-size: 13px;
     font-weight: 500;
-    color: #888;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     border-radius: 6px;
-    transition:
-      background-color 0.15s ease,
-      color 0.15s ease;
-
     &:hover {
-      background-color: #2e2e2e;
-      color: #fff;
+      background-color: var(--bg-elevated-hovered);
+      color: var(--text-primary);
     }
 
     &.activeBtn {
       background-color: var.$accent !important;
-      color: white;
+      color: white !important;
     }
   }
 }
