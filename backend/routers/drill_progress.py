@@ -12,7 +12,6 @@ DIFFICULTY_MULTIPLIERS = {
     "Expert": 3.0,
 }
 
-
 class DrillProgressBody(BaseModel):
     drill_id: str
     key: str
@@ -22,6 +21,7 @@ class DrillProgressBody(BaseModel):
     difficulty: str
 
 
+# get drill progress
 @router.get("/drill-progress")
 def get_drill_progress(authorization: str | None = Header(None)):
     user = get_user_from_token(authorization)
@@ -34,6 +34,7 @@ def get_drill_progress(authorization: str | None = Header(None)):
     return response.data
 
 
+# save drill progress
 @router.post("/drill-progress")
 def save_drill_progress(body: DrillProgressBody, authorization: str | None = Header(None)):
     user = get_user_from_token(authorization)

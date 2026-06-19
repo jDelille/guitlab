@@ -9,7 +9,7 @@ router = APIRouter()
 class UpdateProfileBody(BaseModel):
     username: str
 
-
+# get user
 @router.get("/users/me")
 def get_profile(authorization: str | None = Header(None)):
     user = get_user_from_token(authorization)
@@ -22,6 +22,7 @@ def get_profile(authorization: str | None = Header(None)):
     return response.data[0] if response.data else {}
 
 
+# update user
 @router.patch("/users/me")
 def update_profile(body: UpdateProfileBody, authorization: str | None = Header(None)):
     user = get_user_from_token(authorization)

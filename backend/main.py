@@ -12,6 +12,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# routers
 app.include_router(drills.router)
 app.include_router(drill_progress.router)
 app.include_router(leaderboard.router)
