@@ -1,4 +1,6 @@
+import { useRef, useState, useEffect } from "react";
 import { FaPlay, FaStop } from "react-icons/fa";
+import { IoSettingsOutline } from "react-icons/io5";
 import "./PlayScale.scss";
 
 type Direction = "asc" | "desc" | "both";
@@ -15,14 +17,27 @@ interface PlayScaleProps {
 }
 
 const DIRECTIONS: { label: string; value: Direction }[] = [
-  { label: "Asc", value: "asc" },
-  { label: "Desc", value: "desc" },
+  { label: "Ascending", value: "asc" },
+  { label: "Descending", value: "desc" },
   { label: "Both", value: "both" },
 ];
 
 const PlayScale = ({ settings, setSettings }: PlayScaleProps) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
   const set = (patch: Partial<PlayScaleSettings>) =>
     setSettings((s: any) => ({ ...s, ...patch }));
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="play-scale">
@@ -33,7 +48,6 @@ const PlayScale = ({ settings, setSettings }: PlayScaleProps) => {
         {settings.playScale ? <FaStop size={12} /> : <FaPlay size={12} />}
       </button>
 
-
       <div className="play-scale__bpm">
         <input
           type="range"
@@ -42,18 +56,39 @@ const PlayScale = ({ settings, setSettings }: PlayScaleProps) => {
           value={settings.playScaleBpm}
           onChange={(e) => set({ playScaleBpm: Number(e.target.value) })}
         />
-        <span >{settings.playScaleBpm} BPM</span>
+        <span>{settings.playScaleBpm} BPM</span>
       </div>
 
-      <select
-        className="play-scale__direction-select"
-        value={settings.playScaleDirection}
-        onChange={(e) => set({ playScaleDirection: e.target.value as Direction })}
-      >
-        {DIRECTIONS.map(({ label, value }) => (
-          <option key={value} value={value}>{label}</option>
-        ))}
-      </select>
+      <div className="play-scale__settings-wrapper" ref={menuRef}>
+        <button
+          className="play-scale__settings-btn"
+          onClick={() => setMenuOpen((o) => !o)}
+          aria-label="Playback settings"
+        >
+          <IoSettingsOutline size={15} />
+        </button>
+
+        {menuOpen && (
+          <div className="play-scale__menu">
+            <span className="play-scale__menu-label">Direction</span>
+            <ul>
+              {DIRECTIONS.map(({ label, value }) => (
+                <li key={value}>
+                  <button
+                    className={settings.playScaleDirection === value ? "active" : ""}
+                    onClick={() => {
+                      set({ playScaleDirection: value });
+                      setMenuOpen(false);
+                    }}
+                  >
+                    {label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

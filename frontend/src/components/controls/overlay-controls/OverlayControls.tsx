@@ -8,9 +8,9 @@ interface OverlayControlsProps {
 const CONTROLS = [
   { label: "Note Names", key: "showNotes" },
   { label: "Intervals", key: "showIntervals" },
+  { label: "All Notes", key: "showAllCagedScales" },
   { label: "Triads", key: "showTriads" },
-  { label: "All Notes", key: "showAllCagedScales"},
-  { label: "Double Stops", key: "showDoubleStops" }
+  { label: "Double Stops", key: "showDoubleStops" },
   // { label: "Flip Fretboard", key: "flipFretboard" },
   // { label: "Flip Strings", key: "flipStrings" },
 ];
@@ -20,6 +20,8 @@ const OverlayControls = ({ settings, setSettings }: OverlayControlsProps) => {
     setSettings((s: any) => ({
       ...s,
       [key]: !s[key],
+      ...(key === "showNotes" && !s.showNotes && { showIntervals: false }),
+      ...(key === "showIntervals" && !s.showIntervals && { showNotes: false }),
       ...(key === "showDoubleStops" && { showScaleWithDoubleStops: false }),
     }));
 

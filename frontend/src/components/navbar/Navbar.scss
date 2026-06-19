@@ -2,13 +2,12 @@
 @use "../../scss/variables" as var;
 
 .navbar {
-  min-height: 55px;
   display: flex;
   align-items: center;
   color: var(--text-primary);
   width: 100%;
   margin: 0 auto;
-  padding: 1rem 6rem;
+  height: 55px;
   background-color: var.$primaryDark;
   .content {
     margin: 0 auto;

@@ -1,7 +1,7 @@
 @use "../../../scss/variables" as var;
 
 .play-scale {
-  height: 100%;
+  height: 50px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -10,7 +10,7 @@
   color: #fff;
   border-radius: 6px;
   padding: 0 10px;
-  height: 50px;
+
   &__btn {
     all: unset;
     cursor: pointer;
@@ -23,27 +23,23 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: background-color 0.15s ease;
-
-    &:hover {
-      // background-color: #2a2a2a;
-    }
   }
 
   &__bpm {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #888;
+    color: var(--text-primary);
     font-size: 13px;
+    flex: 1;
 
     input[type="range"] {
       appearance: none;
-      width: 120px;
       height: 4px;
       border-radius: 999px;
       background-color: var(--bg-elevated);
       cursor: pointer;
+      flex: 1;
     }
 
     input[type="range"]::-webkit-slider-thumb {
@@ -67,24 +63,74 @@
     }
   }
 
-  &__direction-select {
-    appearance: none;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    border: none;
-    border-radius: 5px;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 5px 10px;
+  &__settings-wrapper {
+    position: relative;
+  }
+
+  &__settings-btn {
+    all: unset;
     cursor: pointer;
-    outline: none;
+    color: var(--text-secondary);
+    background-color: var(--bg-primary);
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
-      background-color: #333;
+      color: var(--text-primary);
     }
+  }
 
-    option {
-      background-color: #1e1e1e;
+  &__menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px;
+    min-width: 150px;
+    z-index: 100;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  &__menu-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 8px 6px;
+  }
+
+  &__menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li button {
+      all: unset;
+      display: block;
+      width: 100%;
+      padding: 7px 8px;
+      font-size: 13px;
+      color: var(--text-primary);
+      border-radius: 5px;
+      cursor: pointer;
+      box-sizing: border-box;
+
+      &:hover {
+        background-color: var(--bg-elevated);
+      }
+
+      &.active {
+        font-weight: 600;
+        color: var(--accent, #9b59b6);
+      }
     }
   }
 }
