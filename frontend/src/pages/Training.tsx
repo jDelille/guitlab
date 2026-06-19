@@ -208,7 +208,7 @@ const Training = () => {
           ) : (
             <p className="stats-empty">No entries yet</p>
           )}
-          <Link to="/leaderboard" className="view-all">View leaderboard →</Link>
+          {/* <Link to="/leaderboard" className="view-all">View leaderboard →</Link> */}
         </div>
 
         <div className="recent-activity">
