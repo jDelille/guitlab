@@ -54,12 +54,16 @@ function getTransposeOffset(key: string): number {
 
 export function getTriadsForKey(key: string, shape?: CagedShape): Triad[] {
   const offset = getTransposeOffset(key);
+  const results: Triad[] = [];
 
-  return TRIADS_C.filter((t) => !shape || t.shape === shape)
-    .map((triad) => ({
-      shape: triad.shape,
-      strings: triad.strings,
-      frets: triad.frets.map((f) => f + offset) as [number, number, number],
-    }))
-    .filter(({ frets }) => frets.every((f) => f >= 0 && f <= 20));
+  TRIADS_C.filter((t) => !shape || t.shape === shape).forEach((triad) => {
+    [0, 12].forEach((octaveShift) => {
+      const frets = triad.frets.map((f) => f + offset + octaveShift) as [number, number, number];
+      if (frets.every((f) => f >= 0 && f <= 20)) {
+        results.push({ shape: triad.shape, strings: triad.strings, frets });
+      }
+    });
+  });
+
+  return results;
 }
