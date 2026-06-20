@@ -7,7 +7,7 @@ export function useDrills() {
 
   useEffect(() => {
     if (drillsCache) return;
-    fetch("http://127.0.0.1:8000/drills")
+    fetch(`${import.meta.env.VITE_API_URL}/drills`)
       .then((res) => res.json())
       .then((data) => {
         drillsCache = data;

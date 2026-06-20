@@ -38,7 +38,7 @@ const Navbar = ({ onAuthOpen }: Props) => {
     <div className="navbar">
       <div className="content">
         <div className="logo">
-          <p>Uncaged</p>
+          <p>Fretwise</p>
         </div>
         <ul className="links">
           <li>

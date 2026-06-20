@@ -43,7 +43,7 @@ const CagedScalesDrill = () => {
   const next = getNextCombo(progress);
   const [key, setKey] = useState<string>(next.key);
   const [shape, setShape] = useState<ShapeName>(next.shape);
-  const [difficulty, setDifficulty] = useState("Novice");
+  const [difficulty] = useState("Novice");
   const [scale, setScale] = useState<Scales>(next.scale);
 
   const correct = useMemo(() => buildCorrectSet(key, shape, scale), [key, shape, scale]);
@@ -58,7 +58,7 @@ const CagedScalesDrill = () => {
       if (!session) { setLoading(false); return; }
 
       const [progressRes, profileRes] = await Promise.all([
-        fetch("http://127.0.0.1:8000/drill-progress", {
+        fetch(`${import.meta.env.VITE_API_URL}/drill-progress`, {
           headers: { Authorization: `Bearer ${session.access_token}` },
         }),
         supabase.from("profiles").select("total_points").eq("id", session.user.id).single(),
@@ -105,7 +105,7 @@ const CagedScalesDrill = () => {
 
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
-      const res = await fetch("http://127.0.0.1:8000/drill-progress", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/drill-progress`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

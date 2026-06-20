@@ -1,7 +1,4 @@
-import { useState } from "react";
 import { getShapesForKey, type ShapeName } from "../../constants/CagedChords";
-import { playChord } from "../../audio/playChord";
-import { FaPlay } from "react-icons/fa";
 import Chord from "./chord/Chord";
 import "./Chords.scss";
 
@@ -26,10 +23,7 @@ const Chords = ({
   showDoubleStops,
   showScaleWithDoubleStops,
 }: ChordsProps) => {
-  const [active, setActive] = useState<ShapeName>("C");
-  const shapes = getShapesForKey(keyName); // was hardcoded "C"
-
-  const activeShape = shapes[cagedChord as ShapeName];
+  const shapes = getShapesForKey(keyName);
 
   return (
     <div className="chords">

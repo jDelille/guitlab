@@ -2,19 +2,20 @@ import { useEffect, useState } from "react";
 import Fretboard from "../components/fretboard/Fretboard";
 import Chords from "../components/chords/Chords";
 import Controls from "../components/controls/Controls";
-import { playScale, playDoubleStops } from "../audio/playScale";
+import { playScale, playDoubleStops, playTriads } from "../audio/playScale";
 import { getShapesForKey, type ShapeName } from "../constants/CagedChords";
 import type { Scales } from "../types/Scales";
 import { chordNotesToPlayNotes, lickToPlayNotes } from "../audio/utils";
 import { getLicksForShape } from "../constants/licks";
 import { getDoubleStopsForKey } from "../constants/doubleStops";
+import { getTriadsForKey, type CagedShape } from "../constants/triads";
 
 type ActivePositions = { string: number; fret: number }[] | null;
 
 const Home = () => {
   const [cagedChord, setCagedChord] = useState<ShapeName>("C");
   const [showAllScales, setShowAllScales] = useState<boolean>(false);
-  const [showChordTones, setShowChordTones] = useState<boolean>(false);
+  const [showChordTones] = useState<boolean>(false);
   const [activePositions, setActivePositions] = useState<ActivePositions>(null);
   const [selectedLickId, setSelectedLickId] = useState<string | null>(null);
 
@@ -57,6 +58,13 @@ const Home = () => {
       playDoubleStops(pairs, settings.playScaleBpm, setActivePositions, onComplete).then(
         (stop) => { if (cleaned) stop(); else cancel = stop; }
       );
+    } else if (settings.showTriads) {
+      const triads = [...getTriadsForKey(settings.key, cagedChord as CagedShape)].sort((a, b) =>
+        Math.min(...a.frets) - Math.min(...b.frets)
+      );
+      playTriads(triads, settings.playScaleBpm, setActivePositions, onComplete).then(
+        (stop) => { if (cleaned) stop(); else cancel = stop; }
+      );
     } else {
       const activeLick = selectedLickId
         ? getLicksForShape(cagedChord, settings.scale as Scales, settings.key).find(
@@ -88,6 +96,7 @@ const Home = () => {
     settings.playScaleBpm,
     settings.playScaleDirection,
     settings.showDoubleStops,
+    settings.showTriads,
     settings.key,
     settings.scale,
     cagedChord,

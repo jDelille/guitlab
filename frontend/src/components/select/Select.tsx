@@ -2,12 +2,10 @@ function Select({
   value,
   options,
   onChange,
-  minWidth = 120,
 }: {
   value: string;
   options: string[];
   onChange: (v: string) => void;
-  minWidth?: number;
 }) {
   return (
     <div className="select-wrapper">

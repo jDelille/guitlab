@@ -66,6 +66,10 @@
         max-width: 75px;
         min-width: 75px;
         background-color: var(--bg-primary);
+
+        .ghost-note {
+          background-color: var(--bg-primary) !important;
+        }
       }
 
       &:last-child {

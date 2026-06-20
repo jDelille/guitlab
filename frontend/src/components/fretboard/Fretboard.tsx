@@ -11,6 +11,7 @@ import {
 import { SHAPE_COLORS } from "../chords/constants";
 import GuitarConstants from "../../constants/GuitarConstants";
 import { getDoubleStopsForKey } from "../../constants/doubleStops";
+import { getTriadsForKey, type CagedShape } from "../../constants/triads";
 import FretNumbers from "./FretNumbers";
 import type { Scales } from "../../types/Scales";
 import "./Fretboard.scss";
@@ -27,8 +28,9 @@ interface FretboardProps {
 
 const NOTES = GuitarConstants.notesSharp;
 const STANDARD_TUNING = GuitarConstants.tuning[0];
-const TRIAD_DEGREES = ["R", 3, 5];
 const MIDI_TUNING = [64, 59, 55, 50, 45, 40];
+
+const TRIAD_COLOR = "39,174,96";
 
 const NUT_WIDTH = 75;
 const STRING_ROW_H = 35;
@@ -54,15 +56,26 @@ function getNoteName(string: number, fret: number) {
 }
 
 const DEGREE_LABELS: Record<number, string> = {
-  0: "R", 1: "b2", 2: "2", 3: "b3", 4: "3", 5: "4",
-  6: "b5", 7: "5", 8: "b6", 9: "6", 10: "b7", 11: "7",
+  0: "R",
+  1: "b2",
+  2: "2",
+  3: "b3",
+  4: "3",
+  5: "4",
+  6: "b5",
+  7: "5",
+  8: "b6",
+  9: "6",
+  10: "b7",
+  11: "7",
 };
 
 function getDegree(string: number, fret: number, keyName: string): string {
   const notePitch = (STANDARD_TUNING[string] + fret) % 12;
-  const rootPitch = NOTES.indexOf(keyName) !== -1
-    ? NOTES.indexOf(keyName)
-    : GuitarConstants.notesFlat.indexOf(keyName);
+  const rootPitch =
+    NOTES.indexOf(keyName) !== -1
+      ? NOTES.indexOf(keyName)
+      : GuitarConstants.notesFlat.indexOf(keyName);
   if (rootPitch === -1) return "";
   return DEGREE_LABELS[(notePitch - rootPitch + 12) % 12] ?? "";
 }
@@ -108,11 +121,7 @@ const Fretboard = ({
 
     const scaleNotes = shape[scale as Scales];
 
-    const filteredNotes = settings.showTriads
-      ? scaleNotes.filter((n) => TRIAD_DEGREES.includes(n.degree as any))
-      : scaleNotes;
-
-    filteredNotes.forEach((note) => {
+    scaleNotes.forEach((note) => {
       const key = `${note.string}-${note.fret}`;
 
       map.set(key, {
@@ -120,8 +129,6 @@ const Fretboard = ({
         isChordTone: chordToneKeys.has(key),
       });
     });
-
-
 
     return map;
   }, [shape, scale, chordToneKeys]);
@@ -153,7 +160,9 @@ const Fretboard = ({
   const lickNoteMap = useMemo(() => {
     const map = new Map<string, ChordNote>();
     if (!lickNotes) return map;
-    lickNotes.filter(n => n.fret !== null).forEach(n => map.set(`${n.string}-${n.fret}`, n));
+    lickNotes
+      .filter((n) => n.fret !== null)
+      .forEach((n) => map.set(`${n.string}-${n.fret}`, n));
     return map;
   }, [lickNotes]);
 
@@ -163,7 +172,9 @@ const Fretboard = ({
   useEffect(() => {
     const el = fretboardRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(([entry]) => setContainerWidth(entry.contentRect.width));
+    const ro = new ResizeObserver(([entry]) =>
+      setContainerWidth(entry.contentRect.width),
+    );
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
@@ -182,6 +193,19 @@ const Fretboard = ({
     return map;
   }, [doubleStopPairs]);
 
+  const triadPositions = useMemo(() => {
+    if (!settings.showTriads) return [];
+    return getTriadsForKey(keyName, cagedChord as CagedShape);
+  }, [keyName, cagedChord, settings.showTriads]);
+
+  const triadsMap = useMemo(() => {
+    const set = new Set<string>();
+    triadPositions.forEach(({ strings, frets }) => {
+      [0, 1, 2].forEach((i) => set.add(`${strings[i]}-${frets[i]}`));
+    });
+    return set;
+  }, [triadPositions]);
+
   const insideBracketSet = useMemo(() => {
     const set = new Set<string>();
     doubleStopPairs.forEach(({ strings, frets }) => {
@@ -199,13 +223,25 @@ const Fretboard = ({
   }, [doubleStopPairs]);
 
   const showAll = settings.showAllCagedScales;
-  const hideScales = settings.showDoubleStops && !showAll && !settings.showScaleWithDoubleStops;
+  const hideScales =
+    (settings.showDoubleStops &&
+      !showAll &&
+      !settings.showScaleWithDoubleStops) ||
+    (settings.showTriads && !showAll);
 
-  const activeMap = showAll ? allShapesNoteMap : (hideScales ? new Map() : noteMap);
+  const activeMap = showAll
+    ? allShapesNoteMap
+    : hideScales
+      ? new Map()
+      : noteMap;
 
   return (
     <>
-      <FretNumbers numberOfFrets={21} startFret={0} flipped={settings.flipFretboard} />
+      <FretNumbers
+        numberOfFrets={21}
+        startFret={0}
+        flipped={settings.flipFretboard}
+      />
 
       <div
         className={!settings.flipStrings ? "fretboard" : "fretboardFlipped"}
@@ -225,35 +261,37 @@ const Fretboard = ({
               zIndex: 2,
             }}
           >
-            {doubleStopPairs.map(({ strings: pairStrings, frets: pairFrets }, idx) => {
-              const x1 = getFretCenterX(pairFrets[0], containerWidth);
-              const y1 = getStringCenterY(pairStrings[0]);
-              const x2 = getFretCenterX(pairFrets[1], containerWidth);
-              const y2 = getStringCenterY(pairStrings[1]);
-              const cx = (x1 + x2) / 2;
-              const cy = (y1 + y2) / 2;
-              const dx = x2 - x1;
-              const dy = y2 - y1;
-              const length = Math.sqrt(dx * dx + dy * dy);
-              const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-              const capsuleLen = length + NOTE_RADIUS * 2 + 6;
-              const capsuleThick = NOTE_RADIUS * 2 + 8;
-              return (
-                <rect
-                  key={idx}
-                  x={-capsuleLen / 2}
-                  y={-capsuleThick / 2}
-                  width={capsuleLen}
-                  height={capsuleThick}
-                  rx={capsuleThick / 2}
-                  ry={capsuleThick / 2}
-                  fill="rgba(155,89,182,0.1)"
-                  stroke="rgba(155,89,182,0.65)"
-                  strokeWidth={1.5}
-                  transform={`translate(${cx}, ${cy}) rotate(${angle})`}
-                />
-              );
-            })}
+            {doubleStopPairs.map(
+              ({ strings: pairStrings, frets: pairFrets }, idx) => {
+                const x1 = getFretCenterX(pairFrets[0], containerWidth);
+                const y1 = getStringCenterY(pairStrings[0]);
+                const x2 = getFretCenterX(pairFrets[1], containerWidth);
+                const y2 = getStringCenterY(pairStrings[1]);
+                const cx = (x1 + x2) / 2;
+                const cy = (y1 + y2) / 2;
+                const dx = x2 - x1;
+                const dy = y2 - y1;
+                const length = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+                const capsuleLen = length + NOTE_RADIUS * 2 + 6;
+                const capsuleThick = NOTE_RADIUS * 2 + 8;
+                return (
+                  <rect
+                    key={idx}
+                    x={-capsuleLen / 2}
+                    y={-capsuleThick / 2}
+                    width={capsuleLen}
+                    height={capsuleThick}
+                    rx={capsuleThick / 2}
+                    ry={capsuleThick / 2}
+                    fill="rgba(155,89,182,0.1)"
+                    stroke="rgba(155,89,182,0.65)"
+                    strokeWidth={1.5}
+                    transform={`translate(${cx}, ${cy}) rotate(${angle})`}
+                  />
+                );
+              },
+            )}
           </svg>
         )}
         {strings.map((stringNumber) => (
@@ -270,7 +308,18 @@ const Fretboard = ({
               const isLickNote = !!lickNote;
               const dsPairIndex = doubleStopsMap.get(key);
               const isDoubleStop = dsPairIndex !== undefined;
-              const isInsideBracket = !isDoubleStop && insideBracketSet.has(key);
+              const isTriad = triadsMap.has(key);
+              const isTriadPlaying =
+                settings.showTriads &&
+                activePositions != null &&
+                activePositions.length > 0;
+              const isActiveTriad =
+                isTriad &&
+                activePositions?.some(
+                  (p) => p.string === stringNumber && p.fret === fret,
+                );
+              const isInsideBracket =
+                !isDoubleStop && insideBracketSet.has(key);
               const noteName = getNoteName(stringNumber, fret);
               const noteData = showAll ? (activeNote as any)?.note : activeNote;
               const noteColor = showAll ? (activeNote as any)?.color : color;
@@ -278,53 +327,77 @@ const Fretboard = ({
                 ? (activeNote as any)?.dimColor
                 : dimColor;
 
-              const displayValue = isLickNote && !isActive
-                ? (settings.showIntervals ? lickNote!.degree : settings.showNotes ? noteName : "")
-                : isDoubleStop
-                  ? (settings.showIntervals
-                      ? getDegree(stringNumber, fret, keyName)
-                      : settings.showNotes ? noteName : "")
-                  : isActive
+              const displayValue =
+                isLickNote && !isActive
+                  ? settings.showIntervals
+                    ? lickNote!.degree
+                    : settings.showNotes
+                      ? noteName
+                      : ""
+                  : isDoubleStop
                     ? settings.showIntervals
-                      ? noteData?.degree
+                      ? getDegree(stringNumber, fret, keyName)
                       : settings.showNotes
                         ? noteName
                         : ""
-                    : noteName;
+                    : isTriad
+                      ? settings.showIntervals
+                        ? getDegree(stringNumber, fret, keyName)
+                        : settings.showNotes
+                          ? noteName
+                          : ""
+                      : isActive
+                        ? settings.showIntervals
+                          ? noteData?.degree
+                          : settings.showNotes
+                            ? noteName
+                            : ""
+                        : noteName;
 
               return (
                 <div className="fret" key={key}>
                   <div className="noteBackground">
                     <div
-                      className={noteData?.degree || (isLickNote && !isActive) || isDoubleStop ? "note" : "ghost-note"}
+                      className={
+                        noteData?.degree ||
+                        (isLickNote && !isActive) ||
+                        isDoubleStop ||
+                        isTriad
+                          ? "note"
+                          : "ghost-note"
+                      }
                       onClick={() => playNote(stringNumber, fret)}
                       style={{
-                        backgroundColor: isLickNote && !isActive
-                          ? "rgba(251,191,36,0.15)"
-                          : isDoubleStop
-                            ? "rgba(155,89,182,0.85)"
-                            : isActive
-                              ? noteData?.isRoot
-                                ? noteColor
-                                : noteDimColor
-                              : isInsideBracket
-                                ? "rgba(155,89,182,0.1)"
-                                : "var(--bg-fretboard)",
-                        outline:
-                          isLickNote
-                            ? "2px solid #fbbf24"
+                        background:
+                          isLickNote && !isActive
+                            ? "rgba(251,191,36,0.15)"
                             : isDoubleStop
-                              ? "2px solid rgba(155,89,182,1)"
+                              ? "rgba(155,89,182,0.85)"
+                              : isTriad
+                                ? `rgba(${TRIAD_COLOR},${isTriadPlaying && !isActiveTriad ? 0.25 : 0.85})`
+                                : isActive
+                                  ? noteData?.isRoot
+                                    ? noteColor
+                                    : noteDimColor
+                                  : isInsideBracket
+                                    ? "rgba(155,89,182,0.1)"
+                                    : "var(--bg-fretboard)",
+                        outline: isLickNote
+                          ? "2px solid #fbbf24"
+                          : isDoubleStop
+                            ? "2px solid rgba(155,89,182,1)"
+                            : isTriad
+                              ? isTriadPlaying && !isActiveTriad
+                                ? `2px solid rgba(${TRIAD_COLOR},0.25)`
+                                : `2px solid rgba(${TRIAD_COLOR},1)`
                               : isActive && showChordTones && noteData?.isChordTone && !hideScales
                                 ? "2px solid var(--text-primary)"
                                 : "none",
                         outlineOffset: "2px",
                         cursor: "pointer",
                         boxShadow:
-                          (isActive || isLickNote || isDoubleStop) &&
-                          activePositions?.some(
-                            (p) => p.string === stringNumber && p.fret === fret
-                          )
+                          (isActive || isLickNote || isDoubleStop || isTriad) &&
+                          activePositions?.some((p) => p.string === stringNumber && p.fret === fret)
                             ? "0 0 0 2px var(--text-primary), 0 0 10px 2px rgba(255,255,255,0.6)"
                             : "none",
                       }}

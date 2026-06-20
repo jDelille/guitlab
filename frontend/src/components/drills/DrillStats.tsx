@@ -5,7 +5,7 @@ interface Props {
   total: number;
   points: number;
   rank: string;
-  nextRank: string;
+  nextRank?: string | null;
   nextRankPoints: number;
 }
 
@@ -14,7 +14,6 @@ const DrillStats = ({
   total,
   points,
   rank,
-  nextRank,
   nextRankPoints,
 }: Props) => {
   const progress = Math.min((points / nextRankPoints) * 100, 100);

@@ -1,6 +1,7 @@
 import { getInstrument } from "./soundfont";
 import type { PlayNote } from "./utils";
 import type { DoubleStopPair } from "../constants/doubleStops";
+import type { Triad } from "../constants/triads";
 
 const MIDI_TUNING = [64, 59, 55, 50, 45, 40];
 
@@ -70,6 +71,39 @@ export async function playDoubleStops(
     onStep?.(null);
     onComplete?.();
   }, pairs.length * intervalMs);
+  timers.push(clearTimer);
+
+  return () => {
+    timers.forEach(clearTimeout);
+    instrument.stop();
+    onStep?.(null);
+  };
+}
+
+export async function playTriads(
+  triads: Triad[],
+  bpm: number,
+  onStep?: (positions: { string: number; fret: number }[] | null) => void,
+  onComplete?: () => void
+): Promise<() => void> {
+  const instrument = await getInstrument();
+  const intervalMs = (60 / bpm) * 1000;
+  const timers: number[] = [];
+
+  triads.forEach((triad, i) => {
+    const timer = window.setTimeout(() => {
+      triad.strings.forEach((s, idx) => {
+        instrument.start({ note: MIDI_TUNING[s] + triad.frets[idx] });
+      });
+      onStep?.(triad.strings.map((s, idx) => ({ string: s, fret: triad.frets[idx] })));
+    }, i * intervalMs);
+    timers.push(timer);
+  });
+
+  const clearTimer = window.setTimeout(() => {
+    onStep?.(null);
+    onComplete?.();
+  }, triads.length * intervalMs);
   timers.push(clearTimer);
 
   return () => {

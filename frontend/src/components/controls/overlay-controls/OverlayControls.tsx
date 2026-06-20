@@ -22,7 +22,8 @@ const OverlayControls = ({ settings, setSettings }: OverlayControlsProps) => {
       [key]: !s[key],
       ...(key === "showNotes" && !s.showNotes && { showIntervals: false }),
       ...(key === "showIntervals" && !s.showIntervals && { showNotes: false }),
-      ...(key === "showDoubleStops" && { showScaleWithDoubleStops: false }),
+      ...(key === "showDoubleStops" && { showScaleWithDoubleStops: false, ...((!s.showDoubleStops) && { showTriads: false }) }),
+      ...(key === "showTriads" && !s.showTriads && { showDoubleStops: false }),
     }));
 
   return (

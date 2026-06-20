@@ -7,7 +7,7 @@ interface FretNumberControl {
 const FretNumberControl = ({ state, fret_options, set }: FretNumberControl) => {
   return (
     <div className="fret-control">
-      {fret_options.map((opt, i) => (
+      {fret_options.map((opt) => (
         <button
           key={opt}
           className={`fret-btn ${state.frets === opt ? "fret-btn--active" : ""}`}

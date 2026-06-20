@@ -33,7 +33,7 @@ const frets = Array.from({ length: 16 }, (_, i) => i);
 const showNoteNames = (difficulty: string) =>
   ["Novice", "Intermediate", "Advanced", "Expert"].includes(difficulty);
 
-const DrillFretboard = ({ selected, prefilled, onToggle, feedback, difficulty, correctPositions }: Props) => {
+const DrillFretboard = ({ selected, prefilled, onToggle, feedback, difficulty }: Props) => {
   const displayNotes = showNoteNames(difficulty);
 
   return (

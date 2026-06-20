@@ -1,6 +1,5 @@
 function Toggle({
   label,
-  active,
   onClick,
 }: {
   label: string;

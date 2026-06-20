@@ -1,4 +1,4 @@
-import type { ShapeName, NoteName } from "./CagedChords";
+import type { ShapeName } from "./CagedChords";
 
 export const SHAPE_ROOT_FRETS: Record<ShapeName, Record<string, number>> = {
   C: {

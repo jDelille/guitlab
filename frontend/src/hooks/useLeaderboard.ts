@@ -10,7 +10,7 @@ export function useLeaderboard() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/leaderboard")
+    fetch(`${import.meta.env.VITE_API_URL}/leaderboard`)
       .then((res) => res.json())
       .then((data) => setLeaderboard(data));
   }, []);
