@@ -27,14 +27,14 @@
 
     &__label {
       font-size: 11px;
-      color: #666;
+      color: var(--text-secondary);
       text-transform: uppercase;
       letter-spacing: 0.05em;
       font-weight: 600;
     }
 
     &.rank .drill-stat__value {
-      color: var.$accent;
+      color: var(--accent);
       font-size: 16px;
     }
 
@@ -54,12 +54,12 @@
       display: flex;
       justify-content: space-between;
       font-size: 12px;
-      color: #666;
+      color: var(--text-secondary);
     }
 
     &__bar {
       height: 6px;
-      background-color: #1e1e1e;
+      background-color: var(--high-string-color);
       border-radius: 99px;
       overflow: hidden;
       width: 200px;

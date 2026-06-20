@@ -8,8 +8,8 @@ import "./Training.scss";
 
 const Training = () => {
   const drills = useDrills();
-  const { stats, activity } = useUserStats();
-  const leaderboard = useLeaderboard();
+  const { stats, activity, loading: statsLoading } = useUserStats();
+  const { leaderboard, loading: leaderboardLoading } = useLeaderboard();
 
   return (
     <div className="page-content">
@@ -65,7 +65,11 @@ const Training = () => {
       <div className="training-bottom">
         <div className="stats">
           <h2>Your Stats</h2>
-          {stats ? (
+          {statsLoading ? (
+            <div className="skeleton-grid">
+              {[...Array(4)].map((_, i) => <div key={i} className="skeleton-stat" />)}
+            </div>
+          ) : stats ? (
             <div className="stats-grid">
               <div className="stat">
                 <span className="stat-value">{stats.totalPoints}</span>
@@ -93,7 +97,11 @@ const Training = () => {
           <div className="section-header">
             <h2>Leaderboard</h2>
           </div>
-          {leaderboard.length ? (
+          {leaderboardLoading ? (
+            <div className="skeleton-list">
+              {[...Array(4)].map((_, i) => <div key={i} className="skeleton-row" />)}
+            </div>
+          ) : leaderboard.length ? (
             <ul>
               {leaderboard.map((entry) => (
                 <li key={entry.rank} className="leaderboard-entry">
@@ -110,7 +118,11 @@ const Training = () => {
 
         <div className="recent-activity">
           <h2>Recent Activity</h2>
-          {activity.length ? (
+          {statsLoading ? (
+            <div className="skeleton-list">
+              {[...Array(3)].map((_, i) => <div key={i} className="skeleton-row" />)}
+            </div>
+          ) : activity.length ? (
             <ul>
               {activity.map((item, i) => (
                 <li key={i} className="activity-entry">

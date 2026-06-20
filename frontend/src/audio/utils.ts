@@ -1,6 +1,6 @@
 import type { ChordNote } from "../constants/CagedChords";
 
-const MIDI_TUNING = [64, 59, 55, 50, 45, 40];
+export const MIDI_TUNING = [64, 59, 55, 50, 45, 40];
 
 export interface PlayNote {
   midi: number;

@@ -5,7 +5,7 @@ import Controls from "../components/controls/Controls";
 import { playScale, playDoubleStops, playTriads } from "../audio/playScale";
 import { getShapesForKey, type ShapeName } from "../constants/CagedChords";
 import type { Scales } from "../types/Scales";
-import { chordNotesToPlayNotes, lickToPlayNotes } from "../audio/utils";
+import { chordNotesToPlayNotes, lickToPlayNotes, MIDI_TUNING } from "../audio/utils";
 import { getLicksForShape } from "../constants/licks";
 import { getDoubleStopsForKey } from "../constants/doubleStops";
 import { getTriadsForKey, type CagedShape } from "../constants/triads";
@@ -65,6 +65,32 @@ const Home = () => {
       playTriads(triads, settings.playScaleBpm, setActivePositions, onComplete).then(
         (stop) => { if (cleaned) stop(); else cancel = stop; }
       );
+    } else if (settings.showAllCagedScales) {
+      const shapeOrder: ShapeName[] = ["C", "A", "G", "E", "D"];
+      const seen = new Set<string>();
+      const allNotes: { midi: number; string: number; fret: number }[] = [];
+
+      shapeOrder.forEach((shapeName) => {
+        getShapesForKey(settings.key)[shapeName][settings.scale as Scales]
+          .filter((n) => !n.isOctaveExtension && n.fret !== null)
+          .forEach((n) => {
+            const k = `${n.string}-${n.fret}`;
+            if (!seen.has(k)) {
+              seen.add(k);
+              allNotes.push({ midi: MIDI_TUNING[n.string] + n.fret!, string: n.string, fret: n.fret! });
+            }
+          });
+      });
+
+      allNotes.sort((a, b) => a.fret !== b.fret ? a.fret - b.fret : a.string - b.string);
+
+      playScale(
+        allNotes,
+        settings.playScaleBpm,
+        "asc",
+        (pos) => setActivePositions(pos ? [pos] : null),
+        onComplete,
+      ).then((stop) => { if (cleaned) stop(); else cancel = stop; });
     } else {
       const activeLick = selectedLickId
         ? getLicksForShape(cagedChord, settings.scale as Scales, settings.key).find(
@@ -97,6 +123,7 @@ const Home = () => {
     settings.playScaleDirection,
     settings.showDoubleStops,
     settings.showTriads,
+    settings.showAllCagedScales,
     settings.key,
     settings.scale,
     cagedChord,

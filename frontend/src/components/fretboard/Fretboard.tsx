@@ -92,7 +92,7 @@ const Fretboard = ({
   const shape = getShapesForKey(keyName)[cagedChord as ShapeName];
 
   const color = SHAPE_COLORS[shape.shape];
-  const dimColor = withAlpha(color, 0.25);
+  const dimColor = withAlpha(color, 0.55);
 
   const strings = Array.from({ length: 6 }, (_, i) => i);
   const frets = Array.from({ length: 21 }, (_, i) => i);
@@ -134,23 +134,39 @@ const Fretboard = ({
   }, [shape, scale, chordToneKeys]);
 
   const allShapesNoteMap = useMemo(() => {
-    const map = new Map<
-      string,
-      { note: any; color: string; dimColor: string }
-    >();
-
+    const allShapes = getShapesForKey(keyName);
     const shapeOrder: ShapeName[] = ["C", "A", "G", "E", "D"];
 
-    shapeOrder.forEach((shapeName) => {
-      const shapeData = getShapesForKey(keyName)[shapeName];
-      const shapeColor = SHAPE_COLORS[shapeName];
-      const dim = withAlpha(shapeColor, 0.25);
+    const intermediate = new Map<
+      string,
+      { note: any; entries: { color: string; dimColor: string; effectiveBaseFret: number }[] }
+    >();
 
-      shapeData[scale as Scales].forEach((note) => {
+    shapeOrder.forEach((shapeName) => {
+      const shapeColor = SHAPE_COLORS[shapeName];
+      const dim = withAlpha(shapeColor, 0.55);
+      const baseFret = allShapes[shapeName].baseFret;
+      allShapes[shapeName][scale as Scales].forEach((note) => {
         const key = `${note.string}-${note.fret}`;
-        if (!map.has(key)) {
-          map.set(key, { note, color: shapeColor, dimColor: dim });
+        // Extensions are 12 frets above the base shape, so treat them as sitting one cycle higher
+        const effectiveBaseFret = note.isOctaveExtension ? baseFret + 12 : baseFret;
+        const existing = intermediate.get(key);
+        if (existing) {
+          existing.entries.push({ color: shapeColor, dimColor: dim, effectiveBaseFret });
+        } else {
+          intermediate.set(key, { note, entries: [{ color: shapeColor, dimColor: dim, effectiveBaseFret }] });
         }
+      });
+    });
+
+    // Sort each note's colors by effective fret position (left = closer to nut, right = higher up neck)
+    const map = new Map<string, { note: any; colors: string[]; dimColors: string[] }>();
+    intermediate.forEach((value, key) => {
+      const sorted = [...value.entries].sort((a, b) => a.effectiveBaseFret - b.effectiveBaseFret);
+      map.set(key, {
+        note: value.note,
+        colors: sorted.map((e) => e.color),
+        dimColors: sorted.map((e) => e.dimColor),
       });
     });
 
@@ -322,10 +338,14 @@ const Fretboard = ({
                 !isDoubleStop && insideBracketSet.has(key);
               const noteName = getNoteName(stringNumber, fret);
               const noteData = showAll ? (activeNote as any)?.note : activeNote;
-              const noteColor = showAll ? (activeNote as any)?.color : color;
-              const noteDimColor = showAll
-                ? (activeNote as any)?.dimColor
-                : dimColor;
+              const noteColors: string[] = showAll ? (activeNote as any)?.colors ?? [] : [color];
+              const noteDimColors: string[] = showAll ? (activeNote as any)?.dimColors ?? [] : [dimColor];
+              const noteColor = noteColors.length > 1
+                ? `linear-gradient(to right, ${noteColors.map((c, i) => `${c} ${i * (100 / noteColors.length)}%, ${c} ${(i + 1) * (100 / noteColors.length)}%`).join(", ")})`
+                : noteColors[0];
+              const noteDimColor = noteDimColors.length > 1
+                ? `linear-gradient(to right, ${noteDimColors.map((c, i) => `${c} ${i * (100 / noteDimColors.length)}%, ${c} ${(i + 1) * (100 / noteDimColors.length)}%`).join(", ")})`
+                : noteDimColors[0];
 
               const displayValue =
                 isLickNote && !isActive

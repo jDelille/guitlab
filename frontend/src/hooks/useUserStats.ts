@@ -40,11 +40,12 @@ function formatDate(iso: string): string {
 export function useUserStats() {
   const [stats, setStats] = useState<UserStats | null>(null);
   const [activity, setActivity] = useState<ActivityEntry[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchUserData() {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
+      if (!session) { setLoading(false); return; }
 
       const [profileRes, progressRes, recentRes] = await Promise.all([
         supabase.from("profiles").select("total_points").eq("id", session.user.id).single(),
@@ -72,10 +73,11 @@ export function useUserStats() {
         date: formatDate(r.updated_at),
       }));
       setActivity(recent);
+      setLoading(false);
     }
 
     fetchUserData();
   }, []);
 
-  return { stats, activity };
+  return { stats, activity, loading };
 }

@@ -9,6 +9,7 @@ def get_leaderboard():
     response = (
         supabase.table("profiles")
         .select("username, total_points")
+        .gt("total_points", 0)
         .order("total_points", desc=True)
         .limit(5)
         .execute()
