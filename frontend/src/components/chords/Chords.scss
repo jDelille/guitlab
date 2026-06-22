@@ -4,7 +4,7 @@
 .chords {
   display: flex;
   width: 100%;
-  gap: 2rem;
+  gap: 1.5rem;
   flex-direction: column;
   color: var(--text-primary);
 
@@ -39,14 +39,8 @@
 }
 
 .section-label {
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 500;
-  display: flex;
-  gap: 3px;
-
-  span {
-    color: var(--text-secondary);
-  }
 }
 
 .chord-row {
@@ -63,6 +57,41 @@
 .chords-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+
+.quality-toggle {
+  display: flex;
+  background: var(--bg-secondary);
+  // border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+
+  button {
+    all: unset;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    
+    &:hover {
+      color: var(--text-primary);
+    }
+
+    &.active {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+  }
+}
+
+.chords-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: -1rem;
 }
 
 .play-chord-btn {

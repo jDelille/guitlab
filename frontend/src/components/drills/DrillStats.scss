@@ -10,8 +10,7 @@
   border-radius: 8px;
   color: var(--text-primary);
   @include bp.mobile() {
-      width: 100%;
-
+    width: 100%;
   }
   .drill-stat {
     display: flex;
@@ -24,7 +23,7 @@
 
       .drill-stat__total {
         font-size: 14px;
-        color: #555;
+        color: var(--text-secondary);
         font-weight: 400;
       }
     }
@@ -39,7 +38,8 @@
 
     &.rank .drill-stat__value {
       color: var(--accent);
-      font-size: 16px;
+      font-size: 20px;
+      font-weight: 700;
     }
 
     &.progress {
@@ -66,7 +66,6 @@
       background-color: var(--high-string-color);
       border-radius: 99px;
       overflow: hidden;
-      
     }
 
     &__fill {
@@ -78,8 +77,10 @@
 
     &__points {
       font-size: 11px;
-      color: #555;
+      color: var(--text-secondary);
       text-align: right;
+      font-weight: 500;
+
     }
   }
 }

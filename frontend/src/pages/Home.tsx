@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Fretboard from "../components/fretboard/Fretboard";
 import Chords from "../components/chords/Chords";
 import Controls from "../components/controls/Controls";
 import { playScale, playDoubleStops, playTriads } from "../audio/playScale";
 import { getShapesForKey, type ShapeName } from "../constants/CagedChords";
 import type { Scales } from "../types/Scales";
-import { chordNotesToPlayNotes, lickToPlayNotes, MIDI_TUNING } from "../audio/utils";
+import { lickToPlayNotes, MIDI_TUNING } from "../audio/utils";
 import { getLicksForShape } from "../constants/licks";
 import { getDoubleStopsForKey } from "../constants/doubleStops";
 import { getTriadsForKey, type CagedShape } from "../constants/triads";
 
 type ActivePositions = { string: number; fret: number }[] | null;
+
+const ALL_SHAPES: ShapeName[] = ["C", "A", "G", "E", "D"];
 
 const Home = () => {
   const [cagedChord, setCagedChord] = useState<ShapeName>("C");
@@ -39,25 +41,37 @@ const Home = () => {
     playScaleDirection: "asc",
   });
 
+  const preAllShapesRef = useRef<Set<ShapeName>>(new Set(["C"]));
+  const prevShowAllRef = useRef(false);
+
+  useEffect(() => {
+    const wasShowingAll = prevShowAllRef.current;
+    const isShowingAll = settings.showAllCagedScales;
+    prevShowAllRef.current = isShowingAll;
+
+    if (!wasShowingAll && isShowingAll) {
+      preAllShapesRef.current = new Set(selectedShapes);
+      setSelectedShapes(new Set(ALL_SHAPES));
+    } else if (wasShowingAll && !isShowingAll && selectedShapes.size === 5) {
+      // Only restore if all shapes are still selected — means the button was toggled off,
+      // not a shape being deselected (which already updated selectedShapes to < 5)
+      setSelectedShapes(preAllShapesRef.current);
+    }
+  }, [settings.showAllCagedScales]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleShapeToggle = (shapeName: ShapeName) => {
     setCagedChord(shapeName);
-    setSelectedShapes((prev) => {
-      const next = new Set(prev);
-      if (next.has(shapeName)) {
-        if (next.size === 1) return prev;
-        next.delete(shapeName);
-      } else {
-        next.add(shapeName);
-      }
-      return next;
-    });
-    setSettings((s: any) => ({ ...s, showAllCagedScales: false }));
+    const next = new Set(selectedShapes);
+    if (next.has(shapeName)) {
+      if (next.size === 1) return;
+      next.delete(shapeName);
+    } else {
+      next.add(shapeName);
+    }
+    setSelectedShapes(next);
+    // Mirror the all-selected state into showAllCagedScales
+    setSettings((s: any) => ({ ...s, showAllCagedScales: next.size === 5 }));
   };
-
-  const shapeData = getShapesForKey(settings.key)[cagedChord];
-  const scaleNotes = shapeData[settings.scale as Scales].filter(
-    (n) => !n.isOctaveExtension,
-  );
 
   useEffect(() => {
     if (!settings.playScale) return;
@@ -81,32 +95,6 @@ const Home = () => {
       playTriads(triads, settings.playScaleBpm, setActivePositions, onComplete).then(
         (stop) => { if (cleaned) stop(); else cancel = stop; }
       );
-    } else if (settings.showAllCagedScales) {
-      const shapeOrder: ShapeName[] = ["C", "A", "G", "E", "D"];
-      const seen = new Set<string>();
-      const allNotes: { midi: number; string: number; fret: number }[] = [];
-
-      shapeOrder.forEach((shapeName) => {
-        getShapesForKey(settings.key)[shapeName][settings.scale as Scales]
-          .filter((n) => !n.isOctaveExtension && n.fret !== null)
-          .forEach((n) => {
-            const k = `${n.string}-${n.fret}`;
-            if (!seen.has(k)) {
-              seen.add(k);
-              allNotes.push({ midi: MIDI_TUNING[n.string] + n.fret!, string: n.string, fret: n.fret! });
-            }
-          });
-      });
-
-      allNotes.sort((a, b) => a.fret !== b.fret ? a.fret - b.fret : a.string - b.string);
-
-      playScale(
-        allNotes,
-        settings.playScaleBpm,
-        "asc",
-        (pos) => setActivePositions(pos ? [pos] : null),
-        onComplete,
-      ).then((stop) => { if (cleaned) stop(); else cancel = stop; });
     } else {
       const activeLick = selectedLickId
         ? getLicksForShape(cagedChord, settings.scale as Scales, settings.key).find(
@@ -114,19 +102,41 @@ const Home = () => {
           )
         : null;
 
-      const notes = activeLick
-        ? lickToPlayNotes(activeLick.notes)
-        : chordNotesToPlayNotes(scaleNotes);
+      if (activeLick) {
+        playScale(
+          lickToPlayNotes(activeLick.notes),
+          settings.playScaleBpm,
+          "asc",
+          (pos) => setActivePositions(pos ? [pos] : null),
+          onComplete,
+        ).then((stop) => { if (cleaned) stop(); else cancel = stop; });
+      } else {
+        // Play each shape in CAGED neck order, completing one shape before moving to the next
+        const shapesToPlay = settings.showAllCagedScales
+          ? ALL_SHAPES
+          : ALL_SHAPES.filter((s) => selectedShapes.has(s));
 
-      const direction = activeLick ? "asc" : settings.playScaleDirection;
+        const notes: { midi: number; string: number; fret: number }[] = [];
 
-      playScale(
-        notes,
-        settings.playScaleBpm,
-        direction,
-        (pos) => setActivePositions(pos ? [pos] : null),
-        onComplete,
-      ).then((stop) => { if (cleaned) stop(); else cancel = stop; });
+        const toPlayNotes = (arr: any[]) =>
+          arr
+            .filter((n) => n.fret !== null)
+            .map((n) => ({ midi: MIDI_TUNING[n.string] + n.fret!, string: n.string, fret: n.fret! }))
+            .sort((a, b) => a.string !== b.string ? b.string - a.string : a.fret - b.fret);
+
+        shapesToPlay.forEach((shapeName) => {
+          const scaleData = getShapesForKey(settings.key)[shapeName][settings.scale as Scales];
+          notes.push(...toPlayNotes(scaleData.filter((n) => !n.isOctaveExtension)));
+        });
+
+        playScale(
+          notes,
+          settings.playScaleBpm,
+          "asc",
+          (pos) => setActivePositions(pos ? [pos] : null),
+          onComplete,
+        ).then((stop) => { if (cleaned) stop(); else cancel = stop; });
+      }
     }
 
     return () => {
@@ -136,13 +146,13 @@ const Home = () => {
   }, [
     settings.playScale,
     settings.playScaleBpm,
-    settings.playScaleDirection,
     settings.showDoubleStops,
     settings.showTriads,
     settings.showAllCagedScales,
     settings.key,
     settings.scale,
     cagedChord,
+    selectedShapes,
     selectedLickId,
   ]);
 

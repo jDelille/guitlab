@@ -48,13 +48,18 @@ const Training = () => {
                   <span className="difficulty">{plan.difficulty}</span>
                   <h3>{plan.name}</h3>
                   <p>{plan.description}</p>
-                  <span className="coming-soon-badge">Coming Soon</span>
+                  <span className="badge">Coming Soon</span>
                 </div>
               ) : (
                 <Link to={`/training/${plan.id}`}>
                   <span className="difficulty">{plan.difficulty}</span>
                   <h3>{plan.name}</h3>
                   <p>{plan.description}</p>
+                  <span className="badge">
+                    {stats?.totalAttempts && stats?.totalAttempts > 0
+                      ? " Continue"
+                      : "Start Training"}{" "}
+                  </span>
                 </Link>
               )}
             </li>
@@ -67,7 +72,9 @@ const Training = () => {
           <h2>Your Stats</h2>
           {statsLoading ? (
             <div className="skeleton-grid">
-              {[...Array(4)].map((_, i) => <div key={i} className="skeleton-stat" />)}
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="skeleton-stat" />
+              ))}
             </div>
           ) : stats ? (
             <div className="stats-grid">
@@ -99,7 +106,9 @@ const Training = () => {
           </div>
           {leaderboardLoading ? (
             <div className="skeleton-list">
-              {[...Array(3)].map((_, i) => <div key={i} className="skeleton-row" />)}
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="skeleton-row" />
+              ))}
             </div>
           ) : leaderboard.length ? (
             <ul>
@@ -120,7 +129,9 @@ const Training = () => {
           <h2>Recent Activity</h2>
           {statsLoading ? (
             <div className="skeleton-list">
-              {[...Array(3)].map((_, i) => <div key={i} className="skeleton-row" />)}
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="skeleton-row" />
+              ))}
             </div>
           ) : activity.length ? (
             <ul>

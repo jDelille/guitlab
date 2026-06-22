@@ -100,7 +100,14 @@ const Fretboard = ({
 
     const intermediate = new Map<
       string,
-      { note: any; entries: { color: string; dimColor: string; effectiveBaseFret: number }[] }
+      {
+        note: any;
+        entries: {
+          color: string;
+          dimColor: string;
+          effectiveBaseFret: number;
+        }[];
+      }
     >();
 
     shapeOrder.forEach((shapeName) => {
@@ -110,20 +117,34 @@ const Fretboard = ({
       allShapes[shapeName][scale as Scales].forEach((note) => {
         const key = `${note.string}-${note.fret}`;
         // Extensions are 12 frets above the base shape, so treat them as sitting one cycle higher
-        const effectiveBaseFret = note.isOctaveExtension ? baseFret + 12 : baseFret;
+        const effectiveBaseFret = note.isOctaveExtension
+          ? baseFret + 12
+          : baseFret;
         const existing = intermediate.get(key);
         if (existing) {
-          existing.entries.push({ color: shapeColor, dimColor: dim, effectiveBaseFret });
+          existing.entries.push({
+            color: shapeColor,
+            dimColor: dim,
+            effectiveBaseFret,
+          });
         } else {
-          intermediate.set(key, { note, entries: [{ color: shapeColor, dimColor: dim, effectiveBaseFret }] });
+          intermediate.set(key, {
+            note,
+            entries: [{ color: shapeColor, dimColor: dim, effectiveBaseFret }],
+          });
         }
       });
     });
 
     // Sort each note's colors by effective fret position (left = closer to nut, right = higher up neck)
-    const map = new Map<string, { note: any; colors: string[]; dimColors: string[] }>();
+    const map = new Map<
+      string,
+      { note: any; colors: string[]; dimColors: string[] }
+    >();
     intermediate.forEach((value, key) => {
-      const sorted = [...value.entries].sort((a, b) => a.effectiveBaseFret - b.effectiveBaseFret);
+      const sorted = [...value.entries].sort(
+        (a, b) => a.effectiveBaseFret - b.effectiveBaseFret,
+      );
       map.set(key, {
         note: value.note,
         colors: sorted.map((e) => e.color),
@@ -140,28 +161,53 @@ const Fretboard = ({
 
     const intermediate = new Map<
       string,
-      { note: any; entries: { color: string; dimColor: string; effectiveBaseFret: number }[] }
+      {
+        note: any;
+        entries: {
+          color: string;
+          dimColor: string;
+          effectiveBaseFret: number;
+        }[];
+      }
     >();
 
-    shapeOrder.filter((s) => selectedShapes.has(s)).forEach((shapeName) => {
-      const shapeColor = SHAPE_COLORS[shapeName];
-      const dim = withAlpha(shapeColor, 0.55);
-      const baseFret = allShapes[shapeName].baseFret;
-      allShapes[shapeName][scale as Scales].forEach((note) => {
-        const key = `${note.string}-${note.fret}`;
-        const effectiveBaseFret = note.isOctaveExtension ? baseFret + 12 : baseFret;
-        const existing = intermediate.get(key);
-        if (existing) {
-          existing.entries.push({ color: shapeColor, dimColor: dim, effectiveBaseFret });
-        } else {
-          intermediate.set(key, { note, entries: [{ color: shapeColor, dimColor: dim, effectiveBaseFret }] });
-        }
+    shapeOrder
+      .filter((s) => selectedShapes.has(s))
+      .forEach((shapeName) => {
+        const shapeColor = SHAPE_COLORS[shapeName];
+        const dim = withAlpha(shapeColor, 0.55);
+        const baseFret = allShapes[shapeName].baseFret;
+        allShapes[shapeName][scale as Scales].forEach((note) => {
+          const key = `${note.string}-${note.fret}`;
+          const effectiveBaseFret = note.isOctaveExtension
+            ? baseFret + 12
+            : baseFret;
+          const existing = intermediate.get(key);
+          if (existing) {
+            existing.entries.push({
+              color: shapeColor,
+              dimColor: dim,
+              effectiveBaseFret,
+            });
+          } else {
+            intermediate.set(key, {
+              note,
+              entries: [
+                { color: shapeColor, dimColor: dim, effectiveBaseFret },
+              ],
+            });
+          }
+        });
       });
-    });
 
-    const map = new Map<string, { note: any; colors: string[]; dimColors: string[] }>();
+    const map = new Map<
+      string,
+      { note: any; colors: string[]; dimColors: string[] }
+    >();
     intermediate.forEach((value, key) => {
-      const sorted = [...value.entries].sort((a, b) => a.effectiveBaseFret - b.effectiveBaseFret);
+      const sorted = [...value.entries].sort(
+        (a, b) => a.effectiveBaseFret - b.effectiveBaseFret,
+      );
       map.set(key, {
         note: value.note,
         colors: sorted.map((e) => e.color),
@@ -338,13 +384,16 @@ const Fretboard = ({
               const noteName = getNoteName(stringNumber, fret);
               const noteData = (activeNote as any)?.note;
               const noteColors: string[] = (activeNote as any)?.colors ?? [];
-              const noteDimColors: string[] = (activeNote as any)?.dimColors ?? [];
-              const noteColor = noteColors.length > 1
-                ? `linear-gradient(to right, ${noteColors.map((c, i) => `${c} ${i * (100 / noteColors.length)}%, ${c} ${(i + 1) * (100 / noteColors.length)}%`).join(", ")})`
-                : noteColors[0];
-              const noteDimColor = noteDimColors.length > 1
-                ? `linear-gradient(to right, ${noteDimColors.map((c, i) => `${c} ${i * (100 / noteDimColors.length)}%, ${c} ${(i + 1) * (100 / noteDimColors.length)}%`).join(", ")})`
-                : noteDimColors[0];
+              const noteDimColors: string[] =
+                (activeNote as any)?.dimColors ?? [];
+              const noteColor =
+                noteColors.length > 1
+                  ? `linear-gradient(to right, ${noteColors.map((c, i) => `${c} ${i * (100 / noteColors.length)}%, ${c} ${(i + 1) * (100 / noteColors.length)}%`).join(", ")})`
+                  : noteColors[0];
+              const noteDimColor =
+                noteDimColors.length > 1
+                  ? `linear-gradient(to right, ${noteDimColors.map((c, i) => `${c} ${i * (100 / noteDimColors.length)}%, ${c} ${(i + 1) * (100 / noteDimColors.length)}%`).join(", ")})`
+                  : noteDimColors[0];
 
               const displayValue =
                 isLickNote && !isActive
@@ -409,15 +458,20 @@ const Fretboard = ({
                               ? isTriadPlaying && !isActiveTriad
                                 ? `2px solid rgba(${TRIAD_COLOR},0.25)`
                                 : `2px solid rgba(${TRIAD_COLOR},1)`
-                              : isActive && showChordTones && noteData?.isChordTone && !hideScales
+                              : isActive &&
+                                  showChordTones &&
+                                  noteData?.isChordTone &&
+                                  !hideScales
                                 ? "2px solid var(--text-primary)"
                                 : "none",
                         outlineOffset: "2px",
                         cursor: "pointer",
                         boxShadow:
                           (isActive || isLickNote || isDoubleStop || isTriad) &&
-                          activePositions?.some((p) => p.string === stringNumber && p.fret === fret)
-                            ? "0 0 0 2px var(--text-primary), 0 0 10px 2px rgba(255,255,255,0.6)"
+                          activePositions?.some(
+                            (p) => p.string === stringNumber && p.fret === fret,
+                          )
+                            ? "0 0 0 5px var(--text-primary), 0 0 10px 2px rgba(255,255,255,0.6)"
                             : "none",
                       }}
                     >

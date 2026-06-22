@@ -20,7 +20,7 @@ export default function Controls({ settings, setSettings }: ControlsProps) {
   return (
     <div className="controls">
       <div className="keys">
-        <p className="label">Keys</p>
+        <p className="label">Key</p>
         <KeyControl
           notes={NOTES}
           settings={settings}

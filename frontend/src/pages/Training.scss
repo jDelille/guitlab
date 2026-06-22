@@ -53,7 +53,7 @@
   }
 
   .plan {
-    border: 1px solid var(--border-color);
+    // border: 1px solid var(--border-color);
     flex: 1;
     border-radius: 8px;
     background-color: var(--bg-secondary);
@@ -75,7 +75,7 @@
       }
     }
 
-    .coming-soon-badge {
+    .badge {
       font-size: 11px;
       color: var(--text-secondary);
       text-transform: uppercase;
@@ -156,7 +156,7 @@
   .leaderboard,
   .recent-activity {
     background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
+    // border: 1px solid var(--border-color);
     border-radius: 8px;
     overflow: hidden;
     display: flex;

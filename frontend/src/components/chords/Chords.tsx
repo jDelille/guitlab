@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { getShapesForKey, type ShapeName } from "../../constants/CagedChords";
 import Chord from "./chord/Chord";
 import "./Chords.scss";
@@ -24,6 +24,7 @@ const Chords = ({
   showDoubleStops,
   showScaleWithDoubleStops,
 }: ChordsProps) => {
+  const [chordQuality, setChordQuality] = useState<"major" | "minor" | "dom7">("major");
   const shapes = getShapesForKey(keyName);
   const chordsRef = useRef<HTMLDivElement>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -41,15 +42,32 @@ const Chords = ({
 
   return (
     <div className="chords" ref={chordsRef} onMouseLeave={hideScrollbar}>
-      {/* <div className="chords-header">
-        <button
-          className="play-chord-btn"
-          onClick={() => playChord(activeShape.notes)}
-        >
-          <FaPlay size={10} />
-          Play Chord
-        </button>
-      </div> */}
+      <div className="chords-header">
+        <p className="section-label">
+          {chordQuality === "dom7" ? "Dom7 Chords" : `${chordQuality === "major" ? "Major" : "Minor"} CAGED Chords`}
+        </p>
+        <div className="quality-toggle">
+          <button
+            className={chordQuality === "major" ? "active" : ""}
+            onClick={() => setChordQuality("major")}
+          >
+            Major
+          </button>
+          <button
+            className={chordQuality === "minor" ? "active" : ""}
+            onClick={() => setChordQuality("minor")}
+          >
+            Minor
+          </button>
+          <button
+            className={chordQuality === "dom7" ? "active" : ""}
+            onClick={() => setChordQuality("dom7")}
+          >
+            Dom7
+          </button>
+        </div>
+      </div>
+      <p className="chords-hint">Click a shape to select it · click again to deselect</p>
       <div className="chord-row">
         {Object.values(shapes).map((shape) => (
           <div key={shape.shape} onMouseEnter={showScrollbar}>
@@ -57,6 +75,7 @@ const Chords = ({
               shape={shape}
               selectedShapes={selectedShapes}
               onToggle={onShapeToggle}
+              chordQuality={chordQuality}
               showAllCagedScales={showAllCagedScales}
               showDoubleStops={showDoubleStops}
               showScaleWithDoubleStops={showScaleWithDoubleStops}

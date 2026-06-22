@@ -5,11 +5,11 @@
 .controls {
   display: flex;
   flex-direction: column;
-  gap: 3.5rem;
+  gap: 2rem;
   margin: 0 auto;
   margin-top: 2rem;
   margin-bottom: 1.5rem;
-  
+
   @include mix.contentWidth();
 
   @include bp.tablet() {
@@ -19,7 +19,6 @@
 
   @include bp.mediumLaptop() {
   }
-
 
   @include bp.mobile() {
     display: none;
@@ -32,12 +31,10 @@
     align-items: center;
     border: var(--border-color);
     background-color: var(--bg-primary);
-    height: 50px;
     border-radius: 6px;
     position: relative;
     @include bp.tablet() {
       height: fit-content;
-      
     }
   }
 
@@ -55,8 +52,7 @@
       font-weight: 500;
     }
   }
-  
-  
+
   .group {
     flex: 1;
   }
@@ -73,9 +69,9 @@
     height: fit-content;
     display: flex;
     align-items: flex-start;
-    
+
     @include bp.tablet() {
-      flex-direction: column;
+      
     }
 
     .group,

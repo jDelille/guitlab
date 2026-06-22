@@ -11,6 +11,7 @@ interface ChordProps {
   shape: ChordShape;
   selectedShapes: Set<ShapeName>;
   onToggle: (shape: ShapeName) => void;
+  chordQuality: "major" | "minor" | "dom7";
   showAllCagedScales: boolean;
   showDoubleStops: boolean;
   showScaleWithDoubleStops: boolean;
@@ -21,6 +22,7 @@ export default function Chord({
   shape,
   selectedShapes,
   onToggle,
+  chordQuality,
   showAllCagedScales,
   showDoubleStops,
   showScaleWithDoubleStops,
@@ -31,7 +33,12 @@ export default function Chord({
   const color = SHAPE_COLORS[shape.shape];
   const dimColor = withAlpha(color, 0.55);
 
-  const fretted = shape.notes.filter(
+  const displayNotes =
+    chordQuality === "minor" ? shape.minorChord :
+    chordQuality === "dom7" ? shape.dom7Chord :
+    shape.notes;
+
+  const fretted = displayNotes.filter(
     (n): n is ChordNote & { fret: number } => n.fret !== null,
   );
 
@@ -46,7 +53,7 @@ export default function Chord({
   const startFret = Math.max(0, minFret - leftPad);
 
   const getNote = (stringIndex: number, fret: number) =>
-    shape.notes.find((note) => {
+    displayNotes.find((note) => {
       if (fret === 0 && note.fret === null) {
         return note.string === stringIndex;
       }
@@ -75,7 +82,7 @@ export default function Chord({
       onClick={() => handleChordClick(shape.shape)}
       style={{
         boxShadow:
-          !showAllCagedScales && isActive && (!showDoubleStops || showScaleWithDoubleStops)
+          showAllCagedScales || (isActive && (!showDoubleStops || showScaleWithDoubleStops))
             ? `inset 0 0 0 2px ${color}`
             : undefined,
         opacity:
