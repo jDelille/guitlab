@@ -2,6 +2,22 @@
 @use "../../scss/mixins" as mix;
 @use "../../scss/breakpoints" as bp;
 
+.fretboard-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  padding: 0 0 1rem;
+
+  &:hover::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    background-clip: padding-box;
+  }
+
+  &:hover::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+    background-clip: padding-box;
+  }
+}
+
 .fretboard,
 .fretboardFlipped {
   width: calc(100% - 4rem);
@@ -13,6 +29,7 @@
   background-color: var(--bg-fretboard);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 20px;
   margin-bottom: 2rem;
+  width: 1856px;
   margin: 0 auto;
   .string,
   .stringsFlipped {
@@ -134,10 +151,10 @@
   display: flex;
   align-items: center;
   height: 50px;
-  width: calc(100% - 4rem);
+  width: 1856px;
   margin: 0 auto;
   position: relative;
-
+  margin: 0 auto;
   .fretNumber {
     flex: 1;
     display: flex;

@@ -1,16 +1,30 @@
 ﻿@use "../../scss/mixins" as mix;
 @use "../../scss/variables" as var;
+@use "../../scss/breakpoints" as bp;
 
 .controls {
-  width: 100%;
   display: flex;
   flex-direction: column;
-
   gap: 2.5rem;
-  @include mix.contentWidth();
   margin: 0 auto;
   margin-top: 2rem;
   margin-bottom: 1.5rem;
+  
+  @include mix.contentWidth();
+
+  @include bp.tablet() {
+    width: 100%;
+    gap: 1rem;
+  }
+
+  @include bp.mediumLaptop() {
+  }
+
+
+  @include bp.mobile() {
+    display: none;
+  }
+
   .keys,
   .flex {
     display: flex;
@@ -20,13 +34,30 @@
     background-color: var(--bg-primary);
     height: 50px;
     border-radius: 6px;
-    
     position: relative;
+    @include bp.tablet() {
+      height: fit-content;
+      
+    }
   }
 
   .flex {
     background-color: transparent;
     border: none;
     padding: 0;
+    flex-wrap: wrap;
+    height: fit-content;
+    display: flex;
+    align-items: flex-start;
+    
+    @include bp.tablet() {
+      flex-direction: column;
+    }
+    .flex-row {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      flex: 3;
+    }
   }
 }

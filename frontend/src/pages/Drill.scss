@@ -1,11 +1,14 @@
 @use "../scss/variables" as var;
 @use "../scss/mixins" as mix;
+@use "../scss/breakpoints" as bp;
 
 .drill-page {
   display: flex;
   flex-direction: column;
   padding-bottom: 4rem;
-
+   @include bp.mediumLaptop() {
+      padding: 0 1rem;
+    }
   .back {
     @include mix.contentWidth();
     margin: 0 auto;
@@ -29,6 +32,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @include bp.mobile {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+  
 
     h1 {
       font-size: 24px;

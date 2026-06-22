@@ -252,7 +252,7 @@ const Fretboard = ({
       : noteMap;
 
   return (
-    <>
+    <div className="fretboard-wrapper">
       <FretNumbers
         numberOfFrets={21}
         startFret={0}
@@ -431,7 +431,7 @@ const Fretboard = ({
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

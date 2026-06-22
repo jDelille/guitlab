@@ -19,7 +19,7 @@ $breakpoint-tablet: 968px;
 }
 
 // Breakpoint for laptops and desktops
-$breakpoint-laptop: 1370px;
+$breakpoint-laptop: 1270px;
 
 // Mixin for targeting laptops and desktops and up
 @mixin laptop {
@@ -48,35 +48,34 @@ $breakpoint-medium-laptop: 1649px;
    }
 }
 
-// testing
-$breakpoint1: 1770px;
-$breakpoint2: 1700px;
-$breakpoint3: 1570px;
-$breakpoint4: 1524px;
-$breakpoint5: 1454px;
+$breakpoint-widescreen: 1770px;
+$breakpoint-large-desktop: 1700px;
+$breakpoint-desktop: 1570px;
+$breakpoint-small-desktop: 1524px;
+$breakpoint-narrow-desktop: 1454px;
 
-@mixin breakpoint1 {
-   @media (max-width: #{$breakpoint1}) {
+@mixin widescreen {
+   @media (max-width: #{$breakpoint-widescreen}) {
       @content;
    }
 }
-@mixin breakpoint2 {
-   @media (max-width: #{$breakpoint1}) {
+@mixin largeDesktop {
+   @media (max-width: #{$breakpoint-large-desktop}) {
       @content;
    }
 }
-@mixin breakpoint3 {
-   @media (max-width: #{$breakpoint1}) {
+@mixin desktop {
+   @media (max-width: #{$breakpoint-desktop}) {
       @content;
    }
 }
-@mixin breakpoint4 {
-   @media (max-width: #{$breakpoint1}) {
+@mixin smallDesktop {
+   @media (max-width: #{$breakpoint-small-desktop}) {
       @content;
    }
 }
-@mixin breakpoint5 {
-   @media (max-width: #{$breakpoint1}) {
+@mixin narrowDesktop {
+   @media (max-width: #{$breakpoint-narrow-desktop}) {
       @content;
    }
 }

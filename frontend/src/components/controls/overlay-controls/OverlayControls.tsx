@@ -6,13 +6,11 @@ interface OverlayControlsProps {
 }
 
 const CONTROLS = [
-  { label: "Note Names", key: "showNotes" },
-  { label: "Intervals", key: "showIntervals" },
-  { label: "All Notes", key: "showAllCagedScales" },
-  { label: "Triads", key: "showTriads" },
-  { label: "Double Stops", key: "showDoubleStops" },
-  // { label: "Flip Fretboard", key: "flipFretboard" },
-  // { label: "Flip Strings", key: "flipStrings" },
+  { label: "Note Names", short: "Notes", key: "showNotes" },
+  { label: "Intervals", short: "Intervals", key: "showIntervals" },
+  { label: "All Notes", short: "All", key: "showAllCagedScales" },
+  { label: "Triads", short: "Triads", key: "showTriads" },
+  { label: "Double Stops", short: "Dbl Stops", key: "showDoubleStops" },
 ];
 
 const OverlayControls = ({ settings, setSettings }: OverlayControlsProps) => {
@@ -28,13 +26,14 @@ const OverlayControls = ({ settings, setSettings }: OverlayControlsProps) => {
 
   return (
     <div className="overlay-controls">
-      {CONTROLS.map(({ label, key }) => (
+      {CONTROLS.map(({ label, short, key }) => (
         <button
           key={key}
           className={settings[key] ? "activeBtn" : ""}
           onClick={() => toggle(key)}
         >
-          {label}
+          <span className="label-full">{label}</span>
+          <span className="label-short">{short}</span>
         </button>
       ))}
     </div>

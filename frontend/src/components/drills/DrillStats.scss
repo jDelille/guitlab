@@ -1,4 +1,5 @@
 @use "../../scss/variables" as var;
+@use "../../scss/breakpoints" as bp;
 
 .drill-stats {
   display: flex;
@@ -8,7 +9,10 @@
   background-color: var(--bg-secondary);
   border-radius: 8px;
   color: var(--text-primary);
-  
+  @include bp.mobile() {
+      width: 100%;
+
+  }
   .drill-stat {
     display: flex;
     flex-direction: column;
@@ -62,7 +66,7 @@
       background-color: var(--high-string-color);
       border-radius: 99px;
       overflow: hidden;
-      width: 200px;
+      
     }
 
     &__fill {

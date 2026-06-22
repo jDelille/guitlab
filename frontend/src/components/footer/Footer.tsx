@@ -5,7 +5,7 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-content">
         <ul className="footer-links">
-          <li>Github</li>
+          {/* <li>Github</li> */}
         </ul>
       </div>
     </footer>

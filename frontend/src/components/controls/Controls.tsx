@@ -28,12 +28,14 @@ export default function Controls({ settings, setSettings }: ControlsProps) {
       </div>
 
       <div className="flex">
-        <ScaleControl
+        <div className="flex-row">
+          <ScaleControl
           scales={SCALES}
           settings={settings}
           setSettings={setSettings}
         />
         <OverlayControls settings={settings} setSettings={setSettings} />
+        </div>
 
         <PlayScale settings={settings} setSettings={setSettings} />
       </div>

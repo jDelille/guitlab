@@ -1,7 +1,7 @@
 @use "../../../scss/variables" as var;
 
 .play-scale {
-  height: 50px;
+  min-height: 50px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -10,7 +10,7 @@
   color: #fff;
   border-radius: 6px;
   padding: 0 10px;
-
+  width: fit-content;
   &__btn {
     all: unset;
     cursor: pointer;

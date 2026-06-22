@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { getShapesForKey, type ShapeName } from "../../constants/CagedChords";
 import Chord from "./chord/Chord";
 import "./Chords.scss";
@@ -24,9 +25,22 @@ const Chords = ({
   showScaleWithDoubleStops,
 }: ChordsProps) => {
   const shapes = getShapesForKey(keyName);
+  const chordsRef = useRef<HTMLDivElement>(null);
+  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showScrollbar = () => {
+    if (hideTimer.current) clearTimeout(hideTimer.current);
+    chordsRef.current?.classList.add("scrollbar-visible");
+  };
+
+  const hideScrollbar = () => {
+    hideTimer.current = setTimeout(() => {
+      chordsRef.current?.classList.remove("scrollbar-visible");
+    }, 800);
+  };
 
   return (
-    <div className="chords">
+    <div className="chords" ref={chordsRef} onMouseLeave={hideScrollbar}>
       {/* <div className="chords-header">
         <button
           className="play-chord-btn"
@@ -38,16 +52,17 @@ const Chords = ({
       </div> */}
       <div className="chord-row">
         {Object.values(shapes).map((shape) => (
-          <Chord
-            key={shape.shape}
-            shape={shape}
-            active={cagedChord}
-            setActive={setCagedChord}
-            showAllCagedScales={showAllCagedScales}
-            showDoubleStops={showDoubleStops}
-            showScaleWithDoubleStops={showScaleWithDoubleStops}
-            setSettings={setSettings}
-          />
+          <div key={shape.shape} onMouseEnter={showScrollbar}>
+            <Chord
+              shape={shape}
+              active={cagedChord}
+              setActive={setCagedChord}
+              showAllCagedScales={showAllCagedScales}
+              showDoubleStops={showDoubleStops}
+              showScaleWithDoubleStops={showScaleWithDoubleStops}
+              setSettings={setSettings}
+            />
+          </div>
         ))}
       </div>
     </div>

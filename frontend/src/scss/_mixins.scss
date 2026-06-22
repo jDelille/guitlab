@@ -1,4 +1,5 @@
 @use './variables' as *;
+@use './breakpoints' as bp;
 
 @mixin note {
   width: $noteWidth;
@@ -22,5 +23,6 @@
 }
 
 @mixin contentWidth {
-  width: 1268px;
+  max-width: 1268px;
+  width: 100%;
 }

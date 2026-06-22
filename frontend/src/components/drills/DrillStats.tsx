@@ -35,7 +35,7 @@ const DrillStats = ({
 
       <div className="drill-stat rank">
         <span className="drill-stat__value">{rank}</span>
-        <span className="drill-stat__label">Current Rank</span>
+        <span className="drill-stat__label">Rank</span>
       </div>
 
       <div className="drill-stat progress">

@@ -1,3 +1,4 @@
+import { useRef, useEffect, useMemo } from "react";
 import GuitarConstants from "../../constants/GuitarConstants";
 import FretNumbers from "../fretboard/FretNumbers";
 import { getInstrument } from "../../audio/soundfont";
@@ -33,11 +34,28 @@ const frets = Array.from({ length: 16 }, (_, i) => i);
 const showNoteNames = (difficulty: string) =>
   ["Novice", "Intermediate", "Advanced", "Expert"].includes(difficulty);
 
+// Fret 0 column is fixed at 75px; frets 1-15 share the remaining width equally
+const FRET_ZERO_WIDTH = 75;
+const FRET_WIDTH = (1856 - FRET_ZERO_WIDTH) / 15;
+
 const DrillFretboard = ({ selected, prefilled, onToggle, feedback, difficulty }: Props) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const displayNotes = showNoteNames(difficulty);
 
+  const minPrefilledFret = useMemo(() => {
+    if (prefilled.size === 0) return 0;
+    return Math.min(...Array.from(prefilled).map(k => parseInt(k.split("-")[1])));
+  }, [prefilled]);
+
+  useEffect(() => {
+    if (!wrapperRef.current || minPrefilledFret <= 2) return;
+    // Scroll so there's one fret of visual padding to the left of the first note
+    const scrollX = FRET_ZERO_WIDTH + (minPrefilledFret - 1) * FRET_WIDTH;
+    wrapperRef.current.scrollTo({ left: scrollX, behavior: "smooth" });
+  }, [minPrefilledFret]);
+
   return (
-    <>
+    <div className="drill-fretboard-wrapper" ref={wrapperRef}>
       <FretNumbers numberOfFrets={16} startFret={0} flipped={false} />
       <div className="drill-fretboard">
         {strings.map((stringNum) => (
@@ -72,7 +90,7 @@ const DrillFretboard = ({ selected, prefilled, onToggle, feedback, difficulty }:
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -75,9 +75,9 @@ export default function Chord({
       className="chord-grid"
       onClick={() => handleChordClick(shape.shape)}
       style={{
-        outline:
+        boxShadow:
           !showAllCagedScales && isActive && (!showDoubleStops || showScaleWithDoubleStops)
-            ? `2px solid ${color}`
+            ? `inset 0 0 0 2px ${color}`
             : undefined,
         opacity:
           showAllCagedScales
