@@ -91,49 +91,8 @@ const Fretboard = ({
   activePositions,
   lickNotes,
 }: FretboardProps) => {
-  const shape = getShapesForKey(keyName)[cagedChord as ShapeName];
-
-  const color = SHAPE_COLORS[shape.shape];
-  const dimColor = withAlpha(color, 0.55);
-
   const strings = Array.from({ length: 6 }, (_, i) => i);
   const frets = Array.from({ length: 21 }, (_, i) => i);
-
-  const chordToneKeys = useMemo(() => {
-    const keys = new Set<string>();
-
-    shape.notes
-      .filter((n) => !n.isMuted && n.fret !== null)
-      .forEach((n) => {
-        const flippedString = 5 - n.string;
-        keys.add(`${flippedString}-${n.fret}`);
-        if (n.fret! + 12 <= 20) {
-          keys.add(`${flippedString}-${n.fret! + 12}`);
-        }
-      });
-
-    return keys;
-  }, [shape]);
-
-  const noteMap = useMemo(() => {
-    const map = new Map<
-      string,
-      (typeof shape)[Scales][0] & { isChordTone: boolean }
-    >();
-
-    const scaleNotes = shape[scale as Scales];
-
-    scaleNotes.forEach((note) => {
-      const key = `${note.string}-${note.fret}`;
-
-      map.set(key, {
-        ...note,
-        isChordTone: chordToneKeys.has(key),
-      });
-    });
-
-    return map;
-  }, [shape, scale, chordToneKeys]);
 
   const allShapesNoteMap = useMemo(() => {
     const allShapes = getShapesForKey(keyName);
