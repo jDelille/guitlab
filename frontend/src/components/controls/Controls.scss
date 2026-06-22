@@ -5,7 +5,7 @@
 .controls {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 3.5rem;
   margin: 0 auto;
   margin-top: 2rem;
   margin-bottom: 1.5rem;
@@ -41,6 +41,30 @@
     }
   }
 
+  .keys,
+  .group,
+  .group-2 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+
+    .label {
+      // text-transform: uppercase;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+    }
+  }
+  
+  
+  .group {
+    flex: 1;
+  }
+
+  .group-2 {
+    flex: 2;
+  }
+
   .flex {
     background-color: transparent;
     border: none;
@@ -53,11 +77,11 @@
     @include bp.tablet() {
       flex-direction: column;
     }
-    .flex-row {
+
+    .group,
+    .group-2 {
       display: flex;
-      gap: 1rem;
-      width: 100%;
-      flex: 3;
+      gap: 10px;
     }
   }
 }

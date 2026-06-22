@@ -14,6 +14,7 @@ type ActivePositions = { string: number; fret: number }[] | null;
 
 const Home = () => {
   const [cagedChord, setCagedChord] = useState<ShapeName>("C");
+  const [selectedShapes, setSelectedShapes] = useState<Set<ShapeName>>(new Set(["C"]));
   const [showAllScales, setShowAllScales] = useState<boolean>(false);
   const [showChordTones] = useState<boolean>(false);
   const [activePositions, setActivePositions] = useState<ActivePositions>(null);
@@ -37,6 +38,21 @@ const Home = () => {
     playScaleBpm: 120,
     playScaleDirection: "asc",
   });
+
+  const handleShapeToggle = (shapeName: ShapeName) => {
+    setCagedChord(shapeName);
+    setSelectedShapes((prev) => {
+      const next = new Set(prev);
+      if (next.has(shapeName)) {
+        if (next.size === 1) return prev;
+        next.delete(shapeName);
+      } else {
+        next.add(shapeName);
+      }
+      return next;
+    });
+    setSettings((s: any) => ({ ...s, showAllCagedScales: false }));
+  };
 
   const shapeData = getShapesForKey(settings.key)[cagedChord];
   const scaleNotes = shapeData[settings.scale as Scales].filter(
@@ -143,6 +159,7 @@ const Home = () => {
         keyName={settings.key}
         scale={settings.scale}
         cagedChord={cagedChord}
+        selectedShapes={selectedShapes}
         showChordTones={showChordTones}
         settings={settings}
         activePositions={activePositions}
@@ -155,8 +172,8 @@ const Home = () => {
         }
       />
       <Chords
-        cagedChord={cagedChord}
-        setCagedChord={setCagedChord}
+        selectedShapes={selectedShapes}
+        onShapeToggle={handleShapeToggle}
         keyName={settings.key}
         showAll={showAllScales}
         setShowAll={setShowAllScales}

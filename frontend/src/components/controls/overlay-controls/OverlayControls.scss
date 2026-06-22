@@ -6,10 +6,12 @@
   flex: 2;
   border-radius: 6px;
   display: flex;
-  align-content: center;
+  // align-content: center;
   gap: 5px;
   padding: 5px 10px;
   background-color: var.$secondaryDark;
+  width: 100%;
+  min-height: 50px;
   button {
     all: unset;
     background-color: var(--bg-elevated);
@@ -21,8 +23,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
     border-radius: 6px;
+
     &:hover {
       background-color: var(--bg-elevated-hovered);
       color: var(--text-primary);

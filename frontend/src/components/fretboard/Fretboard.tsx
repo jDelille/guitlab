@@ -20,6 +20,7 @@ interface FretboardProps {
   keyName: string;
   scale: string;
   cagedChord: string;
+  selectedShapes: Set<ShapeName>;
   showChordTones: boolean;
   settings: any;
   activePositions?: { string: number; fret: number }[] | null;
@@ -84,6 +85,7 @@ const Fretboard = ({
   keyName,
   scale,
   cagedChord,
+  selectedShapes,
   showChordTones,
   settings,
   activePositions,
@@ -173,6 +175,44 @@ const Fretboard = ({
     return map;
   }, [keyName, scale]);
 
+  const selectedShapesNoteMap = useMemo(() => {
+    const allShapes = getShapesForKey(keyName);
+    const shapeOrder: ShapeName[] = ["C", "A", "G", "E", "D"];
+
+    const intermediate = new Map<
+      string,
+      { note: any; entries: { color: string; dimColor: string; effectiveBaseFret: number }[] }
+    >();
+
+    shapeOrder.filter((s) => selectedShapes.has(s)).forEach((shapeName) => {
+      const shapeColor = SHAPE_COLORS[shapeName];
+      const dim = withAlpha(shapeColor, 0.55);
+      const baseFret = allShapes[shapeName].baseFret;
+      allShapes[shapeName][scale as Scales].forEach((note) => {
+        const key = `${note.string}-${note.fret}`;
+        const effectiveBaseFret = note.isOctaveExtension ? baseFret + 12 : baseFret;
+        const existing = intermediate.get(key);
+        if (existing) {
+          existing.entries.push({ color: shapeColor, dimColor: dim, effectiveBaseFret });
+        } else {
+          intermediate.set(key, { note, entries: [{ color: shapeColor, dimColor: dim, effectiveBaseFret }] });
+        }
+      });
+    });
+
+    const map = new Map<string, { note: any; colors: string[]; dimColors: string[] }>();
+    intermediate.forEach((value, key) => {
+      const sorted = [...value.entries].sort((a, b) => a.effectiveBaseFret - b.effectiveBaseFret);
+      map.set(key, {
+        note: value.note,
+        colors: sorted.map((e) => e.color),
+        dimColors: sorted.map((e) => e.dimColor),
+      });
+    });
+
+    return map;
+  }, [keyName, scale, selectedShapes]);
+
   const lickNoteMap = useMemo(() => {
     const map = new Map<string, ChordNote>();
     if (!lickNotes) return map;
@@ -249,7 +289,7 @@ const Fretboard = ({
     ? allShapesNoteMap
     : hideScales
       ? new Map()
-      : noteMap;
+      : selectedShapesNoteMap;
 
   return (
     <div className="fretboard-wrapper">
@@ -337,9 +377,9 @@ const Fretboard = ({
               const isInsideBracket =
                 !isDoubleStop && insideBracketSet.has(key);
               const noteName = getNoteName(stringNumber, fret);
-              const noteData = showAll ? (activeNote as any)?.note : activeNote;
-              const noteColors: string[] = showAll ? (activeNote as any)?.colors ?? [] : [color];
-              const noteDimColors: string[] = showAll ? (activeNote as any)?.dimColors ?? [] : [dimColor];
+              const noteData = (activeNote as any)?.note;
+              const noteColors: string[] = (activeNote as any)?.colors ?? [];
+              const noteDimColors: string[] = (activeNote as any)?.dimColors ?? [];
               const noteColor = noteColors.length > 1
                 ? `linear-gradient(to right, ${noteColors.map((c, i) => `${c} ${i * (100 / noteColors.length)}%, ${c} ${(i + 1) * (100 / noteColors.length)}%`).join(", ")})`
                 : noteColors[0];

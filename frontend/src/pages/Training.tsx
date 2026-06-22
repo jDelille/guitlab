@@ -99,7 +99,7 @@ const Training = () => {
           </div>
           {leaderboardLoading ? (
             <div className="skeleton-list">
-              {[...Array(4)].map((_, i) => <div key={i} className="skeleton-row" />)}
+              {[...Array(3)].map((_, i) => <div key={i} className="skeleton-row" />)}
             </div>
           ) : leaderboard.length ? (
             <ul>

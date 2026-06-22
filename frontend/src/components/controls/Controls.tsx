@@ -20,6 +20,7 @@ export default function Controls({ settings, setSettings }: ControlsProps) {
   return (
     <div className="controls">
       <div className="keys">
+        <p className="label">Keys</p>
         <KeyControl
           notes={NOTES}
           settings={settings}
@@ -28,18 +29,25 @@ export default function Controls({ settings, setSettings }: ControlsProps) {
       </div>
 
       <div className="flex">
-        <div className="flex-row">
+        <div className="group">
+          <p className="label">Scale / Arpeggio</p>
           <ScaleControl
-          scales={SCALES}
-          settings={settings}
-          setSettings={setSettings}
-        />
-        <OverlayControls settings={settings} setSettings={setSettings} />
+            scales={SCALES}
+            settings={settings}
+            setSettings={setSettings}
+          />
         </div>
 
-        <PlayScale settings={settings} setSettings={setSettings} />
-      </div>
+        <div className="group-2">
+          <p className="label">Overlay</p>
+          <OverlayControls settings={settings} setSettings={setSettings} />
+        </div>
 
+        <div className="group">
+          <p className="label">Play Scale</p>
+          <PlayScale settings={settings} setSettings={setSettings} />
+        </div>
+      </div>
     </div>
   );
 }

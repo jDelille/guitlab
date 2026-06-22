@@ -9,8 +9,8 @@ import "./Chord.scss";
 
 interface ChordProps {
   shape: ChordShape;
-  active: string;
-  setActive: (shape: ShapeName) => void;
+  selectedShapes: Set<ShapeName>;
+  onToggle: (shape: ShapeName) => void;
   showAllCagedScales: boolean;
   showDoubleStops: boolean;
   showScaleWithDoubleStops: boolean;
@@ -19,8 +19,8 @@ interface ChordProps {
 
 export default function Chord({
   shape,
-  active,
-  setActive,
+  selectedShapes,
+  onToggle,
   showAllCagedScales,
   showDoubleStops,
   showScaleWithDoubleStops,
@@ -54,19 +54,18 @@ export default function Chord({
       return note.string === stringIndex && note.fret === fret;
     });
 
-  const isActive = active === shape.shape;
+  const isActive = selectedShapes.has(shape.shape);
 
   const handleChordClick = (shapeName: ShapeName) => {
     if (showDoubleStops) {
-      if (shapeName === active && showScaleWithDoubleStops) {
+      if (isActive && showScaleWithDoubleStops) {
         setSettings((s: any) => ({ ...s, showScaleWithDoubleStops: false }));
       } else {
-        setActive(shapeName);
+        onToggle(shapeName);
         setSettings((s: any) => ({ ...s, showScaleWithDoubleStops: true, showAllCagedScales: false }));
       }
     } else {
-      setActive(shapeName);
-      setSettings((s: any) => ({ ...s, showAllCagedScales: false }));
+      onToggle(shapeName);
     }
   };
 

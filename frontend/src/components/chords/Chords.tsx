@@ -5,8 +5,8 @@ import "./Chords.scss";
 
 interface ChordsProps {
   keyName: string;
-  cagedChord: string;
-  setCagedChord: React.Dispatch<React.SetStateAction<ShapeName>>;
+  selectedShapes: Set<ShapeName>;
+  onShapeToggle: (shape: ShapeName) => void;
   showAll: boolean;
   setShowAll: (val: boolean) => void;
   showAllCagedScales: boolean;
@@ -16,8 +16,8 @@ interface ChordsProps {
 }
 
 const Chords = ({
-  cagedChord,
-  setCagedChord,
+  selectedShapes,
+  onShapeToggle,
   keyName,
   setSettings,
   showAllCagedScales,
@@ -55,8 +55,8 @@ const Chords = ({
           <div key={shape.shape} onMouseEnter={showScrollbar}>
             <Chord
               shape={shape}
-              active={cagedChord}
-              setActive={setCagedChord}
+              selectedShapes={selectedShapes}
+              onToggle={onShapeToggle}
               showAllCagedScales={showAllCagedScales}
               showDoubleStops={showDoubleStops}
               showScaleWithDoubleStops={showScaleWithDoubleStops}
