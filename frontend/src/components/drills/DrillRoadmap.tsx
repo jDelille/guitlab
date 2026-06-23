@@ -1,16 +1,18 @@
 import { useState } from "react";
+import { FaLock } from "react-icons/fa";
+
 import "./DrillRoadmap.scss";
 
 const KEYS = ["C", "D", "E", "F", "G", "A", "B"];
 const SHAPES = ["C", "A", "G", "E", "D"];
-const SCALES = ["majorPentatonic", "majorScale", "arpeggio"];
-const SCALE_LABELS: Record<string, string> = {
+const SHAPES_TO_UNLOCK_NEXT_KEY = 3;
+
+const DEFAULT_SCALES = ["majorPentatonic", "majorScale", "arpeggio"];
+const DEFAULT_SCALE_LABELS: Record<string, string> = {
   majorPentatonic: "Major Pent.",
   majorScale: "Major Scale",
   arpeggio: "Arpeggio",
 };
-
-const SHAPES_TO_UNLOCK_NEXT_KEY = 3;
 
 interface ComboProgress {
   key: string;
@@ -24,6 +26,8 @@ interface Props {
   currentKey: string;
   currentShape: string;
   currentScale: string;
+  scales?: string[];
+  scaleLabels?: Record<string, string>;
 }
 
 const DrillRoadmap = ({
@@ -31,6 +35,8 @@ const DrillRoadmap = ({
   currentKey,
   currentShape,
   currentScale,
+  scales = DEFAULT_SCALES,
+  scaleLabels = DEFAULT_SCALE_LABELS,
 }: Props) => {
   const [expanded, setExpanded] = useState<Set<string>>(new Set([currentKey]));
 
@@ -53,7 +59,7 @@ const DrillRoadmap = ({
 
   const shapesCompletedForKey = (key: string) =>
     SHAPES.filter((shape) =>
-      SCALES.every((scale) => isCompleted(key, shape, scale)),
+      scales.every((scale) => isCompleted(key, shape, scale)),
     ).length;
 
   const isKeyUnlocked = (keyIndex: number) => {
@@ -85,7 +91,7 @@ const DrillRoadmap = ({
               <div className="roadmap-key__header-right">
                 {!unlocked && (
                   <span className="roadmap-key__lock">
-                    🔒 Complete {SHAPES_TO_UNLOCK_NEXT_KEY}/5 in{" "}
+                    <FaLock /> Complete {SHAPES_TO_UNLOCK_NEXT_KEY}/5 in{" "}
                     {KEYS[keyIndex - 1]}
                   </span>
                 )}
@@ -118,7 +124,7 @@ const DrillRoadmap = ({
               <div className="roadmap-key__shapes">
                 {SHAPES.map((shape) => {
                   const isCurrentCombo = isCurrent && shape === currentShape;
-                  const allScalesDone = SCALES.every((scale) =>
+                  const allScalesDone = scales.every((scale) =>
                     isCompleted(key, shape, scale),
                   );
 
@@ -129,7 +135,7 @@ const DrillRoadmap = ({
                     >
                       <span className="roadmap-shape__name">{shape}</span>
                       <div className="roadmap-shape__scales">
-                        {SCALES.map((scale) => {
+                        {scales.map((scale) => {
                           const done = isCompleted(key, shape, scale);
                           const isCur =
                             isCurrentCombo && scale === currentScale;
@@ -138,7 +144,7 @@ const DrillRoadmap = ({
                               key={scale}
                               className={`scale-pip ${done ? "done" : ""} ${isCur ? "active" : ""}`}
                             >
-                              {done ? "✓" : "-"} {SCALE_LABELS[scale]}
+                              {done ? "✓" : "-"} {scaleLabels[scale]}
                             </span>
                           );
                         })}

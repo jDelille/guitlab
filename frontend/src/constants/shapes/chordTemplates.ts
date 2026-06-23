@@ -86,12 +86,9 @@ export const CHORD_TEMPLATES: Record<ShapeName, ChordTemplate> = {
 // prettier-ignore
 export const MINOR_CHORD_TEMPLATES: Record<ShapeName, ChordTemplate> = {
   C: { shape: "C", baseFret: 0, barre: null, notes: [
-    { string: 0, fret: null, degree: null, isRoot: false, isMuted: true },
-    { string: 1, fret: 3, degree: "R", isRoot: true, isMuted: false },
-    { string: 2, fret: 1, degree: "b3", isRoot: false, isMuted: false },
     { string: 3, fret: 0, degree: 5, isRoot: false, isMuted: false },
-    { string: 4, fret: 1, degree: "R", isRoot: true, isMuted: false },
-    { string: 5, fret: 3, degree: 5, isRoot: false, isMuted: false },
+    { string: 2, fret: 1, degree: "R", isRoot: true, isMuted: false },
+    { string: 1, fret: 3, degree: 5, isRoot: false, isMuted: false },
   ]},
   A: { shape: "A", baseFret: 3, barre: { fret: 3, fromString: 1, toString: 5 }, notes: [
     { string: 0, fret: null, degree: null,  isRoot: false, isMuted: true  },

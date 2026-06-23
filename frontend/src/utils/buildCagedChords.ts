@@ -44,6 +44,7 @@ export function buildCagedChords(key: string): CagedKeyData {
           baseFret: template.baseFret + offset,
           barre,
           notes,
+          majorChord: notes,
           color: SHAPE_COLORS[shapeName],
           ...buildCagedShape(normalizedKey, shapeName, offset),
           minorChord: minorNotes,

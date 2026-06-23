@@ -1,0 +1,50 @@
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 100vh;
+  width: 100%;
+  background: var(--bg-primary);
+
+  &__strings {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 48px;
+  }
+
+  &__bar {
+    width: 3px;
+    height: 6px;
+    border-radius: 2px;
+    background: var(--accent, #9b59b6);
+    animation: string-bounce 0.7s ease-in-out infinite alternate;
+
+    // Thicker bars for the wound strings (low E, A, D)
+    &:nth-child(4),
+    &:nth-child(5),
+    &:nth-child(6) {
+      width: 4px;
+      opacity: 0.75;
+    }
+  }
+
+  &__label {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+}
+
+@keyframes string-bounce {
+  from {
+    height: 6px;
+    opacity: 0.3;
+  }
+  to {
+    height: 40px;
+    opacity: 1;
+  }
+}

@@ -1,4 +1,5 @@
 export type Scales =
+  | "majorChord"
   | "arpeggio"
   | "majorPentatonic"
   | "majorScale"
