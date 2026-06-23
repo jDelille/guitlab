@@ -70,7 +70,7 @@ const Chords = ({
   };
 
   return (
-    <div className="chords" ref={chordsRef} onMouseLeave={hideScrollbar}>
+    <div className="chords">
       <div className="chords-header">
         <p className="section-label">
           {chordQuality === "dom7" ? "Dom7 Chords" : `${chordQuality === "major" ? "Major" : "Minor"} CAGED Chords`}
@@ -97,21 +97,23 @@ const Chords = ({
         </div>
       </div>
       <p className="chords-hint">Click a shape to select it · click again to deselect</p>
-      <div className="chord-row">
-        {Object.values(shapes).map((shape) => (
-          <div key={shape.shape} onMouseEnter={showScrollbar}>
-            <Chord
-              shape={shape}
-              selectedShapes={selectedShapes}
-              onToggle={onShapeToggle}
-              chordQuality={chordQuality}
-              showAllCagedScales={showAllCagedScales}
-              showDoubleStops={showDoubleStops}
-              showScaleWithDoubleStops={showScaleWithDoubleStops}
-              setSettings={setSettings}
-            />
-          </div>
-        ))}
+      <div className="chord-row-scroll" ref={chordsRef} onMouseLeave={hideScrollbar}>
+        <div className="chord-row">
+          {Object.values(shapes).map((shape) => (
+            <div key={shape.shape} onMouseEnter={showScrollbar}>
+              <Chord
+                shape={shape}
+                selectedShapes={selectedShapes}
+                onToggle={onShapeToggle}
+                chordQuality={chordQuality}
+                showAllCagedScales={showAllCagedScales}
+                showDoubleStops={showDoubleStops}
+                showScaleWithDoubleStops={showScaleWithDoubleStops}
+                setSettings={setSettings}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import {
   type ShapeName,
 } from "../../constants/CagedChords";
 import { SHAPE_COLORS } from "../chords/constants";
+import { SHAPE_ROOT_FRETS } from "../../constants/shapeRootFrets";
 import GuitarConstants from "../../constants/GuitarConstants";
 import { getDoubleStopsForKey } from "../../constants/doubleStops";
 import { getTriadsForKey, type CagedShape } from "../../constants/triads";
@@ -228,6 +229,7 @@ const Fretboard = ({
   }, [lickNotes]);
 
   const fretboardRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
 
   useEffect(() => {
@@ -239,6 +241,20 @@ const Fretboard = ({
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
+
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    const rootFret = SHAPE_ROOT_FRETS[cagedChord as ShapeName]?.[keyName];
+    if (rootFret === undefined) return;
+    if (rootFret <= 2) {
+      wrapper.scrollTo({ left: 0, behavior: "smooth" });
+      return;
+    }
+    const fretWidth = (wrapper.scrollWidth - NUT_WIDTH) / 20;
+    const scrollX = NUT_WIDTH + (rootFret - 2) * fretWidth;
+    wrapper.scrollTo({ left: scrollX, behavior: "smooth" });
+  }, [cagedChord, keyName]);
 
   const doubleStopPairs = useMemo(() => {
     if (!settings.showDoubleStops) return [];
@@ -297,7 +313,7 @@ const Fretboard = ({
       : selectedShapesNoteMap;
 
   return (
-    <div className="fretboard-wrapper">
+    <div className="fretboard-wrapper" ref={wrapperRef}>
       <FretNumbers
         numberOfFrets={21}
         startFret={0}

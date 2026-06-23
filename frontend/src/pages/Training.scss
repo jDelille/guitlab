@@ -214,6 +214,16 @@
     font-size: 13px;
     color: var(--text-secondary);
     padding: 0.75rem 1.5rem;
+
+    p { margin: 0 0 8px; }
+
+    .retry-btn {
+      all: unset;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--accent, #9b59b6);
+      &:hover { text-decoration: underline; }
+    }
   }
 
   .stats-grid {

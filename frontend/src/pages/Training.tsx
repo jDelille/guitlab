@@ -9,7 +9,7 @@ import "./Training.scss";
 const Training = () => {
   const drills = useDrills();
   const { stats, activity, loading: statsLoading } = useUserStats();
-  const { leaderboard, loading: leaderboardLoading } = useLeaderboard();
+  const { leaderboard, loading: leaderboardLoading, error: leaderboardError, retry: retryLeaderboard } = useLeaderboard();
 
   return (
     <div className="page-content">
@@ -109,6 +109,11 @@ const Training = () => {
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="skeleton-row" />
               ))}
+            </div>
+          ) : leaderboardError ? (
+            <div className="stats-empty">
+              <p>Couldn't load leaderboard</p>
+              <button className="retry-btn" onClick={retryLeaderboard}>Try again</button>
             </div>
           ) : leaderboard.length ? (
             <ul>
