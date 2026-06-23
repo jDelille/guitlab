@@ -28,6 +28,16 @@ const Chords = ({
 }: ChordsProps) => {
   const [chordQuality, setChordQuality] = useState<"major" | "minor" | "dom7">("major");
 
+  // Maps each scale to its major and minor counterpart
+  const SCALE_QUALITY_MAP: Record<string, { major: string; minor: string }> = {
+    arpeggio:        { major: "arpeggio",        minor: "minorArpeggio"   },
+    majorPentatonic: { major: "majorPentatonic", minor: "minorPentatonic" },
+    majorScale:      { major: "majorScale",      minor: "minorScale"      },
+    minorArpeggio:   { major: "arpeggio",        minor: "minorArpeggio"   },
+    minorPentatonic: { major: "majorPentatonic", minor: "minorPentatonic" },
+    minorScale:      { major: "majorScale",      minor: "minorScale"      },
+  };
+
   useEffect(() => {
     if (scale.includes("minor") || scale.includes("Minor")) {
       setChordQuality("minor");
@@ -35,6 +45,15 @@ const Chords = ({
       setChordQuality("major");
     }
   }, [scale]);
+
+  const handleQualityChange = (quality: "major" | "minor" | "dom7") => {
+    setChordQuality(quality);
+    if (quality !== "dom7") {
+      const mapped = SCALE_QUALITY_MAP[scale]?.[quality];
+      if (mapped) setSettings((s: any) => ({ ...s, scale: mapped }));
+    }
+  };
+
   const shapes = getShapesForKey(keyName);
   const chordsRef = useRef<HTMLDivElement>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -59,19 +78,19 @@ const Chords = ({
         <div className="quality-toggle">
           <button
             className={chordQuality === "major" ? "active" : ""}
-            onClick={() => setChordQuality("major")}
+            onClick={() => handleQualityChange("major")}
           >
             Major
           </button>
           <button
             className={chordQuality === "minor" ? "active" : ""}
-            onClick={() => setChordQuality("minor")}
+            onClick={() => handleQualityChange("minor")}
           >
             Minor
           </button>
           <button
             className={chordQuality === "dom7" ? "active" : ""}
-            onClick={() => setChordQuality("dom7")}
+            onClick={() => handleQualityChange("dom7")}
           >
             Dom7
           </button>

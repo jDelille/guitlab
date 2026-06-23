@@ -106,7 +106,7 @@ const Home = () => {
         playScale(
           lickToPlayNotes(activeLick.notes),
           settings.playScaleBpm,
-          "asc",
+          settings.playScaleDirection,
           (pos) => setActivePositions(pos ? [pos] : null),
           onComplete,
         ).then((stop) => { if (cleaned) stop(); else cancel = stop; });
@@ -132,7 +132,7 @@ const Home = () => {
         playScale(
           notes,
           settings.playScaleBpm,
-          "asc",
+          settings.playScaleDirection,
           (pos) => setActivePositions(pos ? [pos] : null),
           onComplete,
         ).then((stop) => { if (cleaned) stop(); else cancel = stop; });

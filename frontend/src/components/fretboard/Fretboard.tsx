@@ -471,7 +471,7 @@ const Fretboard = ({
                           activePositions?.some(
                             (p) => p.string === stringNumber && p.fret === fret,
                           )
-                            ? "0 0 0 5px var(--text-primary), 0 0 10px 2px rgba(255,255,255,0.6)"
+                            ? "0 0 0 2px var(--text-primary), 0 0 10px 2px rgba(255,255,255,0.6)"
                             : "none",
                       }}
                     >

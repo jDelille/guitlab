@@ -51,7 +51,7 @@ export default function Controls({ settings, setSettings }: ControlsProps) {
         </div>
 
         <div className="group">
-          <p className="label">Play Scale</p>
+          <p className="label">Play Scale / Metronome</p>
           <PlayScale settings={settings} setSettings={setSettings} />
         </div>
       </div>
