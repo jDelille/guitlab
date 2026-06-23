@@ -185,6 +185,7 @@ const Home = () => {
         selectedShapes={selectedShapes}
         onShapeToggle={handleShapeToggle}
         keyName={settings.key}
+        scale={settings.scale}
         showAll={showAllScales}
         setShowAll={setShowAllScales}
         showAllCagedScales={settings.showAllCagedScales}

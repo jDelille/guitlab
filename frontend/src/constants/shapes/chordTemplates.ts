@@ -82,3 +82,47 @@ export const CHORD_TEMPLATES: Record<ShapeName, ChordTemplate> = {
     ],
   },
 };
+
+// prettier-ignore
+export const MINOR_CHORD_TEMPLATES: Record<ShapeName, ChordTemplate> = {
+  C: { shape: "C", baseFret: 0, barre: null, notes: [
+    { string: 0, fret: null, degree: null, isRoot: false, isMuted: true },
+    { string: 1, fret: 3, degree: "R", isRoot: true, isMuted: false },
+    { string: 2, fret: 1, degree: "b3", isRoot: false, isMuted: false },
+    { string: 3, fret: 0, degree: 5, isRoot: false, isMuted: false },
+    { string: 4, fret: 1, degree: "R", isRoot: true, isMuted: false },
+    { string: 5, fret: 3, degree: 5, isRoot: false, isMuted: false },
+  ]},
+  A: { shape: "A", baseFret: 3, barre: { fret: 3, fromString: 1, toString: 5 }, notes: [
+    { string: 0, fret: null, degree: null,  isRoot: false, isMuted: true  },
+    { string: 1, fret: 3,    degree: "R",   isRoot: true,  isMuted: false },
+    { string: 2, fret: 5,    degree: 5,     isRoot: false, isMuted: false },
+    { string: 3, fret: 5,    degree: "R",   isRoot: true,  isMuted: false },
+    { string: 4, fret: 4,    degree: "b3",  isRoot: false, isMuted: false },
+    { string: 5, fret: 3,    degree: 5,     isRoot: false, isMuted: false },
+  ]},
+  G: { shape: "G", baseFret: 5, barre: null, notes: [
+    { string: 0, fret: 8,    degree: "R",   isRoot: true,  isMuted: false },
+    { string: 1, fret: 6,    degree: "b3",  isRoot: false, isMuted: false },
+    { string: 2, fret: 5,    degree: 5,     isRoot: false, isMuted: false },
+    { string: 3, fret: 5,    degree: "R",   isRoot: true,  isMuted: false },
+    { string: 4, fret: 8,    degree: 5,     isRoot: false, isMuted: false },
+    { string: 5, fret: 8,    degree: "R",   isRoot: true,  isMuted: false },
+  ]},
+  E: { shape: "E", baseFret: 8, barre: { fret: 8, fromString: 0, toString: 5 }, notes: [
+    { string: 0, fret: 8,    degree: "R",   isRoot: true,  isMuted: false },
+    { string: 1, fret: 10,   degree: 5,     isRoot: false, isMuted: false },
+    { string: 2, fret: 10,   degree: "R",   isRoot: true,  isMuted: false },
+    { string: 3, fret: 8,    degree: "b3",  isRoot: false, isMuted: false },
+    { string: 4, fret: 8,    degree: 5,     isRoot: false, isMuted: false },
+    { string: 5, fret: 8,    degree: "R",   isRoot: true,  isMuted: false },
+  ]},
+  D: { shape: "D", baseFret: 10, barre: null, notes: [
+    { string: 0, fret: null, degree: null,  isRoot: false, isMuted: true  },
+    { string: 1, fret: null, degree: null,  isRoot: false, isMuted: true  },
+    { string: 2, fret: 10,   degree: "R",   isRoot: true,  isMuted: false },
+    { string: 3, fret: 12,   degree: 5,     isRoot: false, isMuted: false },
+    { string: 4, fret: 13,   degree: "R",   isRoot: true,  isMuted: false },
+    { string: 5, fret: 11,   degree: "b3",  isRoot: false, isMuted: false },
+  ]},
+};

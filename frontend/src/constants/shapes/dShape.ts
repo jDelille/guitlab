@@ -59,52 +59,57 @@ export const D_SHAPE_BASE: ShapePatterns = {
   ],
 
   minorArpeggio: [
-    { string: 5, fret: -3, degree: 5, isRoot: false, isMuted: false },
-    { string: 5, fret: 0, degree: "R", isRoot: true, isMuted: false },
-    { string: 4, fret: -1, degree: "b3", isRoot: false, isMuted: false },
-    { string: 4, fret: 2, degree: 5, isRoot: false, isMuted: false },
-    { string: 3, fret: 2, degree: "R", isRoot: true, isMuted: false },
-    { string: 2, fret: 1, degree: "b3", isRoot: false, isMuted: false },
-    { string: 1, fret: 2, degree: 5, isRoot: false, isMuted: false },
-    { string: 0, fret: -1, degree: 5, isRoot: false, isMuted: false },
+    { string: 5, fret: 11, degree: "b3", isRoot: false, isMuted: false },
+    { string: 4, fret: 10, degree: 5, isRoot: false, isMuted: false },
+    { string: 3, fret: 10, degree: "R", isRoot: true, isMuted: false },
+    { string: 3, fret: 13, degree: "b3", isRoot: false, isMuted: false },
+
+    { string: 2, fret: 12, degree: 5, isRoot: false, isMuted: false },
+    { string: 1, fret: 13, degree: "R", isRoot: true, isMuted: false },
+    { string: 0, fret: 11, degree: "b3", isRoot: false, isMuted: false },
   ],
 
   minorPentatonic: [
-    { string: 5, fret: -3, degree: 5, isRoot: false, isMuted: false },
-    { string: 5, fret: 0, degree: "R", isRoot: true, isMuted: false },
-    { string: 4, fret: -1, degree: "b7", isRoot: false, isMuted: false },
-    { string: 4, fret: 2, degree: 4, isRoot: false, isMuted: false },
-    { string: 3, fret: -1, degree: 4, isRoot: false, isMuted: false },
-    { string: 3, fret: 2, degree: 5, isRoot: false, isMuted: false },
-    { string: 2, fret: -1, degree: "b7", isRoot: false, isMuted: false },
-    { string: 2, fret: 2, degree: "R", isRoot: true, isMuted: false },
-    { string: 1, fret: -1, degree: "b3", isRoot: false, isMuted: false },
-    { string: 1, fret: 2, degree: 4, isRoot: false, isMuted: false },
-    { string: 0, fret: -1, degree: 5, isRoot: false, isMuted: false },
-    { string: 0, fret: 3, degree: "b7", isRoot: false, isMuted: false },
+    { string: 5, fret: 11, degree: "b3", isRoot: false, isMuted: false },
+    { string: 5, fret: 13, degree: 4, isRoot: false, isMuted: false },
+
+    { string: 4, fret: 10, degree: 5, isRoot: false, isMuted: false },
+    { string: 4, fret: 13, degree: "b7", isRoot: false, isMuted: false },
+
+    { string: 3, fret: 10, degree: "R", isRoot: true, isMuted: false },
+    { string: 3, fret: 13, degree: "b3", isRoot: false, isMuted: false },
+
+    { string: 2, fret: 10, degree: 4, isRoot: false, isMuted: false },
+    { string: 2, fret: 12, degree: 5, isRoot: false, isMuted: false },
+
+    { string: 1, fret: 11, degree: "b7", isRoot: false, isMuted: false },
+    { string: 1, fret: 13, degree: "R", isRoot: true, isMuted: false },
+
+    { string: 0, fret: 11, degree: "b3", isRoot: false, isMuted: false },
+    { string: 0, fret: 13, degree: 4, isRoot: false, isMuted: false },
   ],
 
   minorScale: [
-    { string: 5, fret: -3, degree: 5, isRoot: false, isMuted: false },
-    { string: 5, fret: 0, degree: "R", isRoot: true, isMuted: false },
+    { string: 5, fret: 11, degree: 5, isRoot: false, isMuted: false },
+    { string: 5, fret: 13, degree: 4, isRoot: false, isMuted: false },
 
-    { string: 4, fret: -1, degree: "b7", isRoot: false, isMuted: false },
-    { string: 4, fret: 0, degree: "R", isRoot: true, isMuted: false },
-    { string: 4, fret: 2, degree: 2, isRoot: false, isMuted: false },
+    { string: 4, fret: 10, degree: 5, isRoot: false, isMuted: false },
+    { string: 4, fret: 13, degree: "b7", isRoot: false, isMuted: false },
 
-    { string: 3, fret: -1, degree: "b3", isRoot: false, isMuted: false },
-    { string: 3, fret: 0, degree: 4, isRoot: false, isMuted: false },
-    { string: 3, fret: 2, degree: 5, isRoot: false, isMuted: false },
+    { string: 3, fret: 10, degree: "R", isRoot: true, isMuted: false },
+    { string: 3, fret: 12, degree: 2, isRoot: false, isMuted: false },
+    { string: 3, fret: 13, degree: "b3", isRoot: false, isMuted: false },
 
-    { string: 2, fret: -1, degree: "b7", isRoot: false, isMuted: false },
-    { string: 2, fret: 2, degree: "R", isRoot: true, isMuted: false },
+    { string: 2, fret: 10, degree: 4, isRoot: false, isMuted: false },
+    { string: 2, fret: 12, degree: 5, isRoot: false, isMuted: false },
 
-    { string: 1, fret: -1, degree: 2, isRoot: false, isMuted: false },
-    { string: 1, fret: 0, degree: "b3", isRoot: false, isMuted: false },
-    { string: 1, fret: 2, degree: 4, isRoot: false, isMuted: false },
+    { string: 1, fret: 11, degree: "b7", isRoot: false, isMuted: false },
+    { string: 1, fret: 13, degree: "R", isRoot: true, isMuted: false },
 
-    { string: 0, fret: -1, degree: 5, isRoot: false, isMuted: false },
-    { string: 0, fret: 2, degree: "b7", isRoot: false, isMuted: false },
+    { string: 0, fret: 10, degree: 2, isRoot: false, isMuted: false },
+    { string: 0, fret: 11, degree: "b3", isRoot: false, isMuted: false },
+
+    { string: 0, fret: 13, degree: 4, isRoot: false, isMuted: false },
   ],
 
   dom7Chord: [

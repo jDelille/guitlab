@@ -53,14 +53,11 @@ export const C_SHAPE_BASE: ShapePatterns = {
   ],
 
   minorChord: [
-    { string: 5, fret: null, degree: null, isRoot: false, isMuted: true },
-
     { string: 4, fret: 3, degree: "R", isRoot: true, isMuted: false },
     { string: 3, fret: 1, degree: "b3", isRoot: false, isMuted: false },
     { string: 2, fret: 0, degree: 5, isRoot: false, isMuted: false },
     { string: 1, fret: 1, degree: "R", isRoot: true, isMuted: false },
-
-    { string: 0, fret: null, degree: null, isRoot: false, isMuted: true },
+    { string: 0, fret: 0, degree: 5, isRoot: false, isMuted: false },
   ],
 
   minorArpeggio: [
@@ -69,12 +66,11 @@ export const C_SHAPE_BASE: ShapePatterns = {
     { string: 3, fret: 1, degree: "b3", isRoot: false, isMuted: false },
     { string: 2, fret: 0, degree: 5, isRoot: false, isMuted: false },
     { string: 1, fret: 1, degree: "R", isRoot: true, isMuted: false },
-    { string: 1, fret: 4, degree: "b3", isRoot: false, isMuted: false },
-    { string: 0, fret: 3, degree: 5, isRoot: false, isMuted: false },
+    { string: 0, fret: 3, degree: "b3", isRoot: false, isMuted: false },
+    { string: 0, fret: -1, degree: 5, isRoot: false, isMuted: false },
   ],
 
   minorPentatonic: [
-    { string: 5, fret: 1, degree: 4, isRoot: false, isMuted: false },
     { string: 5, fret: 3, degree: 5, isRoot: false, isMuted: false },
 
     { string: 4, fret: 1, degree: "b7", isRoot: false, isMuted: false },
@@ -94,7 +90,6 @@ export const C_SHAPE_BASE: ShapePatterns = {
   ],
 
   minorScale: [
-    { string: 5, fret: 1, degree: 4, isRoot: false, isMuted: false },
     { string: 5, fret: 3, degree: 5, isRoot: false, isMuted: false },
 
     { string: 4, fret: 1, degree: "b7", isRoot: false, isMuted: false },

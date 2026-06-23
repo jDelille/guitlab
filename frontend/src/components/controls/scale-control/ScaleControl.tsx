@@ -11,6 +11,9 @@ const SCALE_LABELS: Record<string, string> = {
   arpeggio: "Arpeggio",
   majorPentatonic: "Major Pentatonic",
   majorScale: "Major Scale",
+  minorArpeggio: "Minor Arpeggio",
+  minorPentatonic: "Minor Pentatonic",
+  minorScale: "Minor Scale"
 };
 
 const ScaleControl = ({ scales, settings, setSettings }: ScaleControlProps) => {
@@ -43,7 +46,13 @@ const ScaleControl = ({ scales, settings, setSettings }: ScaleControlProps) => {
           fill="none"
           className={`scale-control__chevron ${open ? "scale-control__chevron--open" : ""}`}
         >
-          <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M2 4L6 8L10 4"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </button>
 

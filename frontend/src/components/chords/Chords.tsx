@@ -1,10 +1,11 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getShapesForKey, type ShapeName } from "../../constants/CagedChords";
 import Chord from "./chord/Chord";
 import "./Chords.scss";
 
 interface ChordsProps {
   keyName: string;
+  scale: string;
   selectedShapes: Set<ShapeName>;
   onShapeToggle: (shape: ShapeName) => void;
   showAll: boolean;
@@ -19,12 +20,21 @@ const Chords = ({
   selectedShapes,
   onShapeToggle,
   keyName,
+  scale,
   setSettings,
   showAllCagedScales,
   showDoubleStops,
   showScaleWithDoubleStops,
 }: ChordsProps) => {
   const [chordQuality, setChordQuality] = useState<"major" | "minor" | "dom7">("major");
+
+  useEffect(() => {
+    if (scale.includes("minor") || scale.includes("Minor")) {
+      setChordQuality("minor");
+    } else {
+      setChordQuality("major");
+    }
+  }, [scale]);
   const shapes = getShapesForKey(keyName);
   const chordsRef = useRef<HTMLDivElement>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

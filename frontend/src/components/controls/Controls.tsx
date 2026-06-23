@@ -6,7 +6,14 @@ import type { ShapeName } from "../../constants/CagedChords";
 import "./Controls.scss";
 
 const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-const SCALES = ["arpeggio", "majorPentatonic", "majorScale"];
+const SCALES = [
+  "arpeggio",
+  "majorPentatonic",
+  "majorScale",
+  "minorArpeggio",
+  "minorPentatonic",
+  "minorScale"
+];
 
 interface ControlsProps {
   settings: any;
