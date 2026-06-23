@@ -45,7 +45,7 @@ const Navbar = ({ onAuthOpen }: Props) => {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/training">Training</Link>
+            <Link to="/training">The Lab</Link>
           </li>
         </ul>
         <ul className="settings">
