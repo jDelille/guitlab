@@ -47,6 +47,17 @@ const Navbar = ({ onAuthOpen }: Props) => {
           <li>
             <Link to="/training">The Lab</Link>
           </li>
+
+          {!user && (
+            <>
+              <li>
+                <button onClick={() => onAuthOpen("login")} className="auth-btn">Login</button>
+              </li>
+              <li>
+                <button onClick={() => onAuthOpen("signup")} className="auth-btn">Sign Up</button>
+              </li>
+            </>
+          )}
         </ul>
         <ul className="settings">
           {!user && (
@@ -58,7 +69,7 @@ const Navbar = ({ onAuthOpen }: Props) => {
               <IoSunnyOutline color="var(--text-primary)" />
             </button>
           )}
-          {user ? (
+          {user && (
             <div className="user-menu-wrapper" ref={menuRef}>
               <button
                 className="user-icon-btn"
@@ -91,11 +102,6 @@ const Navbar = ({ onAuthOpen }: Props) => {
                 </div>
               )}
             </div>
-          ) : (
-            <>
-              <button onClick={() => onAuthOpen("login")}>Login</button>
-              <button onClick={() => onAuthOpen("signup")}>Sign Up</button>
-            </>
           )}
         </ul>
       </div>

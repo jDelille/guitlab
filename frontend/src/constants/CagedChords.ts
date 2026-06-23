@@ -43,6 +43,7 @@ export interface ChordShape {
   barre: Barre | null;
   notes: ChordNote[];
   color?: string;
+  majorChord: ChordNote[];
   arpeggio: ChordNote[];
   majorPentatonic: ChordNote[];
   majorScale: ChordNote[];

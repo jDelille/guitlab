@@ -1,4 +1,4 @@
-import { getShapesForKey, withAlpha, type ShapeName } from "../../constants/CagedChords";
+import { getShapesForKey, withAlpha, type ShapeName, type ChordNote } from "../../constants/CagedChords";
 import { SHAPE_COLORS } from "../chords/constants";
 import { getInstrument } from "../../audio/soundfont";
 import GuitarConstants from "../../constants/GuitarConstants";
@@ -63,7 +63,7 @@ export function buildShapeNoteMap(
     const shapeColor = SHAPE_COLORS[shapeName];
     const dim = withAlpha(shapeColor, 0.55);
     const baseFret = allShapes[shapeName].baseFret;
-    allShapes[shapeName][scale as Scales].forEach((note) => {
+    allShapes[shapeName][scale as Scales].forEach((note: ChordNote) => {
       const key = `${note.string}-${note.fret}`;
       const effectiveBaseFret = note.isOctaveExtension ? baseFret + 12 : baseFret;
       const existing = intermediate.get(key);

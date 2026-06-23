@@ -51,5 +51,5 @@ export function buildCagedChords(key: string): CagedKeyData {
         },
       ];
     })
-  ) as CagedKeyData;
+  ) as unknown as CagedKeyData;
 }

@@ -3,7 +3,7 @@ import { useUserStats } from "../hooks/useUserStats";
 import "./Training.scss";
 
 const Training = () => {
-  const { stats, completedDrills } = useUserStats();
+  const { completedDrills } = useUserStats();
 
   const DrillBox = ({ drillId }: { drillId: string }) =>
     completedDrills.has(drillId)

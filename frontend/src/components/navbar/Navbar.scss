@@ -49,6 +49,14 @@
           color: var.$accent;
         }
       }
+
+      .auth-btn {
+        all: unset;
+        cursor: pointer;
+        &:hover {
+          color: var.$accent;
+        }
+      }
     }
   }
 
