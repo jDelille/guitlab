@@ -28,7 +28,6 @@ const Chords = ({
 }: ChordsProps) => {
   const [chordQuality, setChordQuality] = useState<"major" | "minor" | "dom7">("major");
 
-  // Maps each scale to its major and minor counterpart
   const SCALE_QUALITY_MAP: Record<string, { major: string; minor: string }> = {
     arpeggio:        { major: "arpeggio",        minor: "minorArpeggio"   },
     majorPentatonic: { major: "majorPentatonic", minor: "minorPentatonic" },
@@ -50,7 +49,9 @@ const Chords = ({
     setChordQuality(quality);
     if (quality !== "dom7") {
       const mapped = SCALE_QUALITY_MAP[scale]?.[quality];
-      if (mapped) setSettings((s: any) => ({ ...s, scale: mapped }));
+      if (mapped) {
+        setSettings((s: any) => ({ ...s, scale: mapped }));
+      }
     }
   };
 
