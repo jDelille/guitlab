@@ -3,84 +3,87 @@
 
 .drill-stats {
   display: flex;
-  align-items: center;
-  gap: 2rem;
-  padding: 1rem 1.5rem;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
   background-color: var(--bg-secondary);
-  border-radius: 8px;
-  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  min-width: 260px;
+
   @include bp.mobile() {
     width: 100%;
+    min-width: unset;
   }
-  .drill-stat {
+
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  &__divider {
+    width: 1px;
+    height: 28px;
+    background-color: var(--border-color);
+  }
+
+  &__stat {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
+    flex: 1;
+  }
 
-    &__value {
-      font-size: 20px;
-      font-weight: 700;
+  &__value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
 
-      .drill-stat__total {
-        font-size: 14px;
-        color: var(--text-secondary);
-        font-weight: 400;
-      }
-    }
-
-    &__label {
-      font-size: 11px;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-weight: 600;
-    }
-
-    &.rank .drill-stat__value {
-      color: var(--accent);
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    &.progress {
-      flex: 1;
-      margin-left: auto;
+    &--rank {
+      color: var.$accent;
+      font-size: 16px;
     }
   }
 
-  .rank-progress {
+  &__total {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-secondary);
+  }
+
+  &__label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+  }
+
+  &__progress {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    width: 100%;
+    gap: 0.35rem;
+  }
 
-    &__labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
+  &__bar {
+    height: 4px;
+    background-color: var(--border-color);
+    border-radius: 99px;
+    overflow: hidden;
+  }
 
-    &__bar {
-      height: 6px;
-      background-color: var(--high-string-color);
-      border-radius: 99px;
-      overflow: hidden;
-    }
+  &__fill {
+    height: 100%;
+    background-color: var.$accent;
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
 
-    &__fill {
-      height: 100%;
-      background-color: var.$accent;
-      border-radius: 99px;
-      transition: width 0.4s ease;
-    }
-
-    &__points {
-      font-size: 11px;
-      color: var(--text-secondary);
-      text-align: right;
-      font-weight: 500;
-
-    }
+  &__pts {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-align: right;
   }
 }

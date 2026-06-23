@@ -1,90 +1,25 @@
 import { Link } from "react-router-dom";
 import { useUserStats } from "../hooks/useUserStats";
-import { useLeaderboard } from "../hooks/useLeaderboard";
-import { getRankInfo } from "../constants/ranks";
-import DrillStats from "../components/drills/DrillStats";
 import "./Training.scss";
 
-const LEARNING_PATH = [
-  {
-    section: "CAGED Scales",
-    description:
-      "Map every scale note across all 5 CAGED shapes on the fretboard.",
-    items: [
-      {
-        id: "caged-scales",
-        name: "Map the CAGED Scale",
-        description:
-          "You're given a key and CAGED shape — mark every scale note on the fretboard.",
-        comingSoon: false,
-        totalCombos: 35,
-      },
-    ],
-  },
-  {
-    section: "CAGED Chords",
-    description: "Identify chord tones and triad shapes within each position.",
-    items: [
-      {
-        id: "caged-triads",
-        name: "Map the Triads",
-        description: "Identify and mark the triad notes within a CAGED shape.",
-        comingSoon: true,
-        totalCombos: 0,
-      },
-    ],
-  },
-  {
-    section: "Fretboard Navigation",
-    description: "Find your way around every position on the neck.",
-    items: [
-      {
-        id: "find-the-root",
-        name: "Find the Root Notes",
-        description:
-          "Given a key, find all root note positions across the entire fretboard.",
-        comingSoon: true,
-        totalCombos: 0,
-      },
-      {
-        id: "identify-interval",
-        name: "Identify the Interval",
-        description:
-          "A note is highlighted — identify its interval relative to the root.",
-        comingSoon: true,
-        totalCombos: 0,
-      },
-    ],
-  },
-];
-
 const Training = () => {
-  const { stats } = useUserStats();
-  const {
-    leaderboard,
-    loading: leaderboardLoading,
-    error: leaderboardError,
-    retry: retryLeaderboard,
-  } = useLeaderboard();
+  const { stats, completedDrills } = useUserStats();
+
+  const DrillBox = ({ drillId }: { drillId: string }) =>
+    completedDrills.has(drillId)
+      ? <div className="box complete">✓</div>
+      : <div className="box" />;
+
+  // const {
+  //   leaderboard,
+  //   loading: leaderboardLoading,
+  //   error: leaderboardError,
+  //   retry: retryLeaderboard,
+  // } = useLeaderboard();
 
   return (
     <div className="page-content">
-      <div className="header">
-        {/* {stats &&
-          (() => {
-            const { rank, nextRank, nextRankPoints } = getRankInfo(stats.totalPoints);
-            return (
-              <DrillStats
-                solved={stats.solvedCombos}
-                total={35}
-                points={stats.totalPoints}
-                rank={rank}
-                nextRank={nextRank}
-                nextRankPoints={nextRankPoints}
-              />
-            );
-          })()} */}
-      </div>
+      <div className="header"></div>
 
       <div className="training-layout">
         <div className="column">
@@ -125,7 +60,7 @@ const Training = () => {
                     Learn the 5 major chord shapes that make up CAGED
                   </p>
                 </div>
-                <div className="box"></div>
+                <DrillBox drillId="major-caged-chords" />
               </Link>
             </li>
           </ul>
@@ -144,7 +79,7 @@ const Training = () => {
                     Learn the 5 minor chord shapes that make up CAGED
                   </p>
                 </div>
-                <div className="box"></div>
+                <DrillBox drillId="minor-caged-chords" />
               </Link>
             </li>
           </ul>
@@ -156,16 +91,16 @@ const Training = () => {
               naturally, and knowing all five shapes means you can find that
               sound anywhere on the neck.
             </p>
-            <li>
-              <Link to="/drill/dom7-caged-chords" className="drill-link">
+            <li className="coming-soon">
+              <div className="drill-link">
                 <div className="text">
                   <span>Dom7 Chords</span>
                   <p className="drills-description">
                     Learn the 5 dominant 7th chord shapes that make up CAGED
                   </p>
                 </div>
-                <div className="box"></div>
-              </Link>
+                <span className="coming-soon-label">Coming soon</span>
+              </div>
             </li>
           </ul>
 
@@ -184,7 +119,7 @@ const Training = () => {
                     Map the major scale across all 5 CAGED positions
                   </p>
                 </div>
-                <div className="box"></div>
+                <DrillBox drillId="major-scale" />
               </Link>
             </li>
             <li>
@@ -195,7 +130,7 @@ const Training = () => {
                     Map the major pentatonic across all 5 CAGED positions
                   </p>
                 </div>
-                <div className="box"></div>
+                <DrillBox drillId="major-pentatonic" />
               </Link>
             </li>
             <li>
@@ -206,7 +141,7 @@ const Training = () => {
                     Isolate the chord tones within each major CAGED shape
                   </p>
                 </div>
-                <div className="box"></div>
+                <DrillBox drillId="major-arpeggio" />
               </Link>
             </li>
           </ul>
@@ -226,7 +161,7 @@ const Training = () => {
                     Map the natural minor scale across all 5 CAGED positions
                   </p>
                 </div>
-                <div className="box"></div>
+                <DrillBox drillId="minor-scale" />
               </Link>
             </li>
             <li>
@@ -237,7 +172,7 @@ const Training = () => {
                     Map the minor pentatonic across all 5 CAGED positions
                   </p>
                 </div>
-                <div className="box"></div>
+                <DrillBox drillId="minor-pentatonic" />
               </Link>
             </li>
             <li>
@@ -248,7 +183,7 @@ const Training = () => {
                     Isolate the chord tones within each minor CAGED shape
                   </p>
                 </div>
-                <div className="box"></div>
+                <DrillBox drillId="minor-arpeggio" />
               </Link>
             </li>
           </ul>
@@ -260,27 +195,27 @@ const Training = () => {
               sit inside each CAGED shape is what separates players who solo
               from players who just run scales.
             </p>
-            <li>
-              <Link to="/drill/major-triads" className="drill-link">
+            <li className="coming-soon">
+              <div className="drill-link">
                 <div className="text">
                   <span>Major Triads</span>
                   <p className="drills-description">
                     Identify the major triad shapes within each CAGED position
                   </p>
                 </div>
-                <div className="box"></div>
-              </Link>
+                <span className="coming-soon-label">Coming soon</span>
+              </div>
             </li>
-            <li>
-              <Link to="/drill/minor-triads" className="drill-link">
+            <li className="coming-soon">
+              <div className="drill-link">
                 <div className="text">
                   <span>Minor Triads</span>
                   <p className="drills-description">
                     Identify the minor triad shapes within each CAGED position
                   </p>
                 </div>
-                <div className="box"></div>
-              </Link>
+                <span className="coming-soon-label">Coming soon</span>
+              </div>
             </li>
           </ul>
 
@@ -291,16 +226,16 @@ const Training = () => {
               pickin', blues fills, and everything in between. Learn to find
               them across the neck and your playing gets texture immediately.
             </p>
-            <li>
-              <Link to="/drill/double-stops" className="drill-link">
+            <li className="coming-soon">
+              <div className="drill-link">
                 <div className="text">
                   <span>Double Stops</span>
                   <p className="drills-description">
                     Locate double stop pairs across all 5 CAGED positions
                   </p>
                 </div>
-                <div className="box"></div>
-              </Link>
+                <span className="coming-soon-label">Coming soon</span>
+              </div>
             </li>
           </ul>
         </div>

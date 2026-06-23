@@ -4,11 +4,9 @@ import type { ShapeName } from "../../constants/CagedChords";
 import type { Scales } from "../../types/Scales";
 
 import DrillFretboard from "../drill-fretboard/DrillFretboard";
-import DrillStats from "./DrillStats";
 import DrillRoadmap from "./DrillRoadmap";
 import LoadingScreen from "../ui/LoadingScreen";
 import { supabase } from "../../services/supabase";
-import { getRankInfo } from "../../constants/ranks";
 import {
   DRILL_CONFIG,
   SCALE_LABELS,
@@ -25,7 +23,6 @@ const DrillPage = () => {
   const config = drillId ? DRILL_CONFIG[drillId] : null;
 
   const [progress, setProgress] = useState<ComboProgress[]>([]);
-  const [totalPoints, setTotalPoints] = useState(0);
   const [loading, setLoading] = useState(true);
   const [difficulty] = useState("Novice");
 
@@ -46,12 +43,9 @@ const DrillPage = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { setLoading(false); return; }
 
-      const [progressRes, profileRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL}/drill-progress`, {
-          headers: { Authorization: `Bearer ${session.access_token}` },
-        }),
-        supabase.from("profiles").select("total_points").eq("id", session.user.id).single(),
-      ]);
+      const progressRes = await fetch(`${import.meta.env.VITE_API_URL}/drill-progress`, {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
 
       if (progressRes.ok) {
         const data = await progressRes.json();
@@ -69,7 +63,6 @@ const DrillPage = () => {
         setSelected(new Set(getPrefilledNotes(buildCorrectSet(combo.key, combo.shape, combo.scale), difficulty)));
       }
 
-      if (profileRes.data) setTotalPoints(profileRes.data.total_points ?? 0);
       setLoading(false);
     }
 
@@ -102,7 +95,6 @@ const DrillPage = () => {
       if (res.ok) {
         const data = await res.json();
         pointsEarned = data.points_earned;
-        setTotalPoints((prev) => prev + pointsEarned);
         setProgress((prev) => {
           const existing = prev.find((p) => p.key === key && p.shape === shape && p.scale === scale);
           if (existing) {
@@ -145,9 +137,9 @@ const DrillPage = () => {
     );
   }
 
-  const { rank, nextRank, nextRankPoints } = getRankInfo(totalPoints);
-  const solved = progress.filter((p) => p.scale === config.scaleKey && p.bestScore === 100).length;
   const scaleLabels = { [config.scaleKey]: SCALE_LABELS[config.scaleKey] ?? config.label };
+  const solved = progress.filter(p => p.scale === config.scaleKey && p.bestScore === 100).length;
+  const drillComplete = solved === 35;
 
   return (
     <div className="drill-page">
@@ -158,14 +150,11 @@ const DrillPage = () => {
           <h1>{config.label}</h1>
           <p>{config.prompt(key, shape)}.</p>
         </div>
-        <DrillStats
-          solved={solved}
-          total={35}
-          points={totalPoints}
-          rank={rank}
-          nextRank={nextRank}
-          nextRankPoints={nextRankPoints}
-        />
+        {drillComplete && (
+          <div className="drill-complete-badge">
+            <span>✓</span> Drill Complete — {solved}/35
+          </div>
+        )}
       </div>
 
       <DrillFretboard

@@ -88,6 +88,20 @@
   li {
     padding: 1rem 0;
 
+    &.coming-soon {
+      opacity: 0.4;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .coming-soon-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+    }
+
     .drill-link {
       display: flex;
       align-items: center;
@@ -114,6 +128,18 @@
       width: 30px;
       height: 30px;
       border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+
+      &.complete {
+        border-color: #22c55e;
+        color: #22c55e;
+        background-color: rgba(34, 197, 94, 0.08);
+      }
     }
   }
 }

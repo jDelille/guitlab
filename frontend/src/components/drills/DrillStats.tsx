@@ -9,51 +9,34 @@ interface Props {
   nextRankPoints: number;
 }
 
-const DrillStats = ({
-  solved,
-  total,
-  points,
-  rank,
-  nextRankPoints,
-}: Props) => {
+const DrillStats = ({ solved, total, points, rank, nextRankPoints }: Props) => {
   const progress = Math.min((points / nextRankPoints) * 100, 100);
 
   return (
     <div className="drill-stats">
-      <div className="drill-stat">
-        <span className="drill-stat__value">
-          {solved}
-          <span className="drill-stat__total">/{total}</span>
-        </span>
-        <span className="drill-stat__label">Solved</span>
-      </div>
-
-      <div className="drill-stat">
-        <span className="drill-stat__value">{points}</span>
-        <span className="drill-stat__label">Points</span>
-      </div>
-
-      <div className="drill-stat rank">
-        <span className="drill-stat__value">{rank}</span>
-        <span className="drill-stat__label">Rank</span>
-      </div>
-
-      <div className="drill-stat progress">
-        <div className="rank-progress">
-          {/* <div className="rank-progress__labels">
-            <span>{rank}</span>
-            <span>{nextRank}</span>
-          </div> */}
-          <div className="rank-progress__bar">
-            <div
-              className="rank-progress__fill"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <span className="rank-progress__points">
-            {points} / {nextRankPoints} pts
+      <div className="drill-stats__top">
+        <div className="drill-stats__stat">
+          <span className="drill-stats__value">
+            {solved}<span className="drill-stats__total">/{total}</span>
           </span>
+          <span className="drill-stats__label">Solved</span>
         </div>
+        <div className="drill-stats__divider" />
+        <div className="drill-stats__stat">
+          <span className="drill-stats__value">{points}</span>
+          <span className="drill-stats__label">Points</span>
+        </div>
+        <div className="drill-stats__divider" />
+        <div className="drill-stats__stat">
+          <span className="drill-stats__value drill-stats__value--rank">{rank}</span>
+          <span className="drill-stats__label">Rank</span>
+        </div>
+      </div>
+      <div className="drill-stats__progress">
+        <div className="drill-stats__bar">
+          <div className="drill-stats__fill" style={{ width: `${progress}%` }} />
+        </div>
+        <span className="drill-stats__pts">{points} / {nextRankPoints} pts to next rank</span>
       </div>
     </div>
   );

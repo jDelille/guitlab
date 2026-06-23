@@ -40,6 +40,7 @@ function formatDate(iso: string): string {
 export function useUserStats() {
   const [stats, setStats] = useState<UserStats | null>(null);
   const [activity, setActivity] = useState<ActivityEntry[]>([]);
+  const [completedDrills, setCompletedDrills] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ export function useUserStats() {
 
       const [profileRes, progressRes, recentRes] = await Promise.all([
         supabase.from("profiles").select("total_points").eq("id", session.user.id).single(),
-        supabase.from("drill_progress").select("best_score, attempts, completed").eq("user_id", session.user.id),
+        supabase.from("drill_progress").select("drill_id, best_score, attempts, completed").eq("user_id", session.user.id),
         supabase.from("drill_progress")
           .select("drill_id, key, shape, scale, best_score, updated_at")
           .eq("user_id", session.user.id)
@@ -63,6 +64,12 @@ export function useUserStats() {
       const solvedCombos = progress.filter((r) => r.completed).length;
       const bestScore = progress.length ? Math.max(...progress.map((r) => r.best_score ?? 0)) : 0;
       setStats({ totalPoints, totalAttempts, solvedCombos, bestScore });
+
+      const drillCounts: Record<string, number> = {};
+      for (const r of progress) {
+        if (r.completed) drillCounts[r.drill_id] = (drillCounts[r.drill_id] ?? 0) + 1;
+      }
+      setCompletedDrills(new Set(Object.entries(drillCounts).filter(([, n]) => n >= 35).map(([id]) => id)));
 
       const recent = (recentRes.data ?? []).map((r) => ({
         drillName: DRILL_NAMES[r.drill_id] ?? r.drill_id,
@@ -79,5 +86,5 @@ export function useUserStats() {
     fetchUserData();
   }, []);
 
-  return { stats, activity, loading };
+  return { stats, activity, completedDrills, loading };
 }
