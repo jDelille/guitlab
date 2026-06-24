@@ -7,6 +7,7 @@ import { getShapesForKey, type ShapeName } from "../constants/CagedChords";
 import type { Scales } from "../types/Scales";
 import { lickToPlayNotes, MIDI_TUNING } from "../audio/utils";
 import { getLicksForShape } from "../constants/licks";
+import { DEFAULT_KEY_KEY, DEFAULT_SCALE_KEY } from "../constants/preferences";
 import { getDoubleStopsForKey } from "../constants/doubleStops";
 import { getTriadsForKey, type CagedShape } from "../constants/triads";
 
@@ -23,8 +24,8 @@ const Home = () => {
   const [selectedLickId, setSelectedLickId] = useState<string | null>(null);
 
   const [settings, setSettings] = useState({
-    key: "C",
-    scale: "majorPentatonic",
+    key: localStorage.getItem(DEFAULT_KEY_KEY) ?? "C",
+    scale: localStorage.getItem(DEFAULT_SCALE_KEY) ?? "majorPentatonic",
     tuning: "standard",
     frets: 15,
     showNotes: false,

@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import { supabase } from "../../services/supabase";
 import { useUser } from "../../hooks/useUser";
 import { useTheme } from "../../context/ThemeContext";
-import { IoSunnyOutline, IoMoonOutline } from "react-icons/io5";
+import { IoSunnyOutline, IoMoonOutline, IoSettingsOutline, IoLogOutOutline } from "react-icons/io5";
 import { FaRegCircleUser } from "react-icons/fa6";
-import { IoLogOutOutline } from "react-icons/io5";
 
 import "./Navbar.scss";
 
@@ -14,7 +13,7 @@ interface Props {
 }
 
 const Navbar = ({ onAuthOpen }: Props) => {
-  const user = useUser();
+  const { user } = useUser();
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -36,7 +35,7 @@ const Navbar = ({ onAuthOpen }: Props) => {
 
   return (
     <div className="navbar">
-      <div className="content">
+      <div className="nav-content">
         <div className="logo">
           <p>Guitlab</p>
         </div>
@@ -59,7 +58,7 @@ const Navbar = ({ onAuthOpen }: Props) => {
             </>
           )}
         </ul>
-        <ul className="settings">
+        <ul className="nav-settings">
           {!user && (
             <button
               className="theme-toggle"
@@ -91,6 +90,12 @@ const Navbar = ({ onAuthOpen }: Props) => {
                         )}
                         {theme === "dark" ? "Light mode" : "Dark mode"}
                       </button>
+                    </li>
+                    <li>
+                      <Link to="/settings" onClick={() => setMenuOpen(false)}>
+                        <IoSettingsOutline size={14} />
+                        Settings
+                      </Link>
                     </li>
                     <li>
                       <button onClick={handleLogout}>

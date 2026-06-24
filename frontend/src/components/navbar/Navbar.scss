@@ -11,7 +11,8 @@
   height: 65px;
   background-color: var.$primaryDark;
   padding: 0 1rem;
-  .content {
+
+  .nav-content {
     margin: 0 auto;
     display: flex;
     width: 100%;
@@ -21,7 +22,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
 
     p {
       font-weight: 400;
@@ -37,6 +37,8 @@
     align-items: center;
     justify-content: center;
     margin-left: auto;
+    padding-right: 0.5rem;
+    
     li {
       font-size: 14px;
       padding: 10px;
@@ -60,7 +62,7 @@
     }
   }
 
-  .settings {
+  .nav-settings {
     display: flex;
     gap: 1rem;
     display: flex;
@@ -131,17 +133,11 @@
           text-overflow: ellipsis;
         }
 
-        ul {
-          li {
-            button {
-              display: flex;
-              align-items: center;
-              gap: 10px;
-            }
-          }
-        }
-
-        button {
+        ul li button,
+        ul li a {
+          display: flex;
+          align-items: center;
+          gap: 10px;
           background: none;
           border: none;
           cursor: pointer;
@@ -151,13 +147,10 @@
           padding: 0.4rem 0.5rem;
           width: 100%;
           border-radius: 4px;
+          text-decoration: none;
+
           &:hover {
             background-color: var(--bg-secondary);
-          }
-
-          &.theme-row {
-            display: flex;
-            align-items: center;
           }
         }
       }
