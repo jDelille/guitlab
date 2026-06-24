@@ -6,6 +6,7 @@ import AuthModal from "./components/auth/AuthModal";
 import Home from "./pages/Home";
 import Training from "./pages/Training";
 import Drill from "./pages/Drill";
+import ResetPassword from "./pages/ResetPassword";
 import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
@@ -21,10 +22,11 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/training" element={<Training />} />
             <Route path="/drill/:drillId" element={<Drill />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
           </Routes>
         </div>
         <Footer />
-        {authMode && <AuthModal onClose={() => setAuthMode(null)} />}
+        {authMode && <AuthModal onClose={() => setAuthMode(null)} initialMode={authMode} />}
       </div>
     </BrowserRouter>
     </ThemeProvider>

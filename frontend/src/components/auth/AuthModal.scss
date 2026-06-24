@@ -19,7 +19,18 @@
   max-width: 380px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+
+  .title {
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 24px;
+    font-family: "Anton", sans-serif;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 1rem;
+  }
 
   .auth-tabs {
     display: flex;
@@ -40,6 +51,155 @@
         color: var(--text-primary);
         border-bottom: 2px solid var(--accent);
       }
+    }
+  }
+
+  .auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1rem 0 0.75rem;
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: var(--border-color);
+    }
+
+    span {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+  }
+
+  .google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.65rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: var.$transition;
+
+    &:hover {
+      border-color: var(--text-secondary);
+    }
+  }
+
+  .auth-switch {
+    margin-top: 1rem;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+
+    button {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 13px;
+      cursor: pointer;
+      padding: 0;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .auth-confirm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+
+    &__heading {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    &__body {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+
+      strong { color: var(--text-primary); }
+    }
+  }
+
+  .auth-hint-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+
+  .forgot-link {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+    margin-top: -0.25rem;
+
+    &:hover { color: var(--text-primary); }
+  }
+
+  .password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    input {
+      width: 100%;
+      padding-right: 2.5rem;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 0;
+
+      &:hover { color: var(--text-primary); }
+    }
+  }
+
+  .password-hints {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    li {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 150ms ease;
+
+      &.met { color: #22c55e; }
     }
   }
 

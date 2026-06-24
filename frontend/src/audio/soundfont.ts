@@ -1,21 +1,30 @@
-import { Soundfont, Reverb } from "smplr";
+import { Soundfont } from "smplr";
 
 const audioContext = new AudioContext();
 let instrument: ReturnType<typeof Soundfont> | null = null;
+let currentInstrumentName = "acoustic_guitar_nylon";
 
 export function getAudioContext() {
   return audioContext;
+}
+
+export function getCurrentInstrumentName() {
+  return currentInstrumentName;
+}
+
+export function setInstrument(name: string) {
+  currentInstrumentName = name;
+  instrument = null;
 }
 
 export async function getInstrument() {
   if (!instrument) {
     await audioContext.resume();
     instrument = Soundfont(audioContext, {
-      instrument: "acoustic_guitar_nylon",
-      kit: "FluidR3_GM",
+      instrument: currentInstrumentName,
+      kit: "MusyngKite",
     });
     await instrument.load;
-    instrument.output.addEffect("reverb", Reverb(audioContext), 0.00);
   }
 
   return instrument;

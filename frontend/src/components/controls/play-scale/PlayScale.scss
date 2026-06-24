@@ -102,6 +102,36 @@
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   }
 
+  &__menu-instrument-row {
+    all: unset;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 7px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 4px;
+
+    &:hover {
+      background-color: var(--bg-elevated);
+    }
+  }
+
+  &__menu-instrument-name {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text-primary);
+  }
+
+  &__menu-instrument-change {
+    font-size: 11px;
+    color: var(--accent);
+  }
+
   &__menu-label {
     display: block;
     font-size: 11px;

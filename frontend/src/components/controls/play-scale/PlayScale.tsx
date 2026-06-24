@@ -2,6 +2,9 @@ import { useRef, useState, useEffect } from "react";
 import { FaPlay, FaStop } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { GiMetronome } from "react-icons/gi";
+import { MdMusicNote } from "react-icons/md";
+import InstrumentPicker, { INSTRUMENTS } from "./InstrumentPicker";
+import { getCurrentInstrumentName } from "../../../audio/soundfont";
 import "./PlayScale.scss";
 
 type Direction = "asc" | "desc" | "both";
@@ -32,6 +35,8 @@ const SOUNDS: { label: string; value: MetronomeSound; freq: number; type: Oscill
 
 const PlayScale = ({ settings, setSettings }: PlayScaleProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [selectedInstrument, setSelectedInstrument] = useState(getCurrentInstrumentName);
   const [metronomeActive, setMetronomeActive] = useState(false);
   const [metronomeVolume, setMetronomeVolume] = useState(0.3);
   const [metronomeSound, setMetronomeSound] = useState<MetronomeSound>("click");
@@ -156,9 +161,28 @@ const PlayScale = ({ settings, setSettings }: PlayScaleProps) => {
           <IoSettingsOutline size={15} />
         </button>
 
+        {pickerOpen && (
+          <InstrumentPicker
+            current={selectedInstrument}
+            onSelect={(name) => setSelectedInstrument(name)}
+            onClose={() => setPickerOpen(false)}
+          />
+        )}
+
         {menuOpen && (
           <div className="play-scale__menu">
-            <span className="play-scale__menu-label">Direction</span>
+            <button
+              className="play-scale__menu-instrument-row"
+              onClick={() => { setMenuOpen(false); setPickerOpen(true); }}
+            >
+              <MdMusicNote size={13} />
+              <span className="play-scale__menu-instrument-name">
+                {INSTRUMENTS.find((i) => i.name === selectedInstrument)?.label ?? selectedInstrument}
+              </span>
+              <span className="play-scale__menu-instrument-change">Change</span>
+            </button>
+
+            <span className="play-scale__menu-label" style={{ marginTop: "8px" }}>Direction</span>
             <ul>
               {DIRECTIONS.map(({ label, value }) => (
                 <li key={value}>

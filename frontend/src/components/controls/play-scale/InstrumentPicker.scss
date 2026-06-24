@@ -1,0 +1,153 @@
+@use "../../../scss/variables" as var;
+
+.instrument-picker-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.instrument-picker {
+  background-color: var(--bg-secondary);
+  border: var.$border;
+  border-radius: 10px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 480px;
+  max-height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: var.$transition;
+
+    &:hover {
+      color: var(--text-primary);
+      background-color: var(--bg-primary);
+    }
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__group-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+}
+
+.instrument-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-primary);
+  transition: var.$transition;
+
+  &--active {
+    border-color: var(--accent);
+    background-color: rgba(var(--accent-rgb, 99, 102, 241), 0.06);
+  }
+
+  &__label {
+    font-size: 13px;
+    color: var(--text-primary);
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__preview {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background: none;
+    color: var(--text-secondary);
+    font-size: 12px;
+    cursor: pointer;
+    transition: var.$transition;
+    white-space: nowrap;
+
+    &:hover {
+      color: var(--text-primary);
+      border-color: var(--text-secondary);
+    }
+
+    &--playing {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+  }
+
+  &__select {
+    padding: 0.3rem 0.75rem;
+    border-radius: 4px;
+    border: none;
+    background-color: var(--accent);
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    transition: var.$transition;
+    white-space: nowrap;
+
+    &:hover:not(:disabled) {
+      opacity: 0.85;
+    }
+
+    &--current {
+      background-color: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      cursor: default;
+    }
+
+    &:disabled {
+      cursor: default;
+    }
+  }
+}
