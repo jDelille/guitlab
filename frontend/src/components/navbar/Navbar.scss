@@ -11,10 +11,12 @@
   height: 65px;
   background-color: var.$primaryDark;
   padding: 0 1rem;
+  position: relative;
 
   .nav-content {
     margin: 0 auto;
     display: flex;
+    align-items: center;
     width: 100%;
     @include mix.contentWidth();
   }
@@ -38,6 +40,10 @@
     justify-content: center;
     margin-left: auto;
     padding-right: 0.5rem;
+
+    @include bp.mobile {
+      display: none;
+    }
     
     li {
       font-size: 14px;
@@ -62,12 +68,40 @@
     }
   }
 
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    margin-left: auto;
+
+    .bar {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background-color: var(--text-primary);
+      border-radius: 2px;
+      transition: opacity 0.2s;
+    }
+
+    @include bp.mobile {
+      display: flex;
+    }
+  }
+
   .nav-settings {
     display: flex;
     gap: 1rem;
-    display: flex;
     align-items: center;
     justify-content: center;
+
+    @include bp.mobile {
+      display: none;
+    }
 
     .user-email {
       font-size: 13px;
@@ -152,6 +186,71 @@
           &:hover {
             background-color: var(--bg-secondary);
           }
+        }
+      }
+    }
+  }
+
+  .mobile-menu {
+    display: none;
+    position: absolute;
+    top: 65px;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    background-color: var(--bg-primary);
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    padding: 1rem 1.25rem 1.5rem;
+
+    @include bp.mobile {
+      display: block;
+    }
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+
+      li {
+        a,
+        button {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          width: 100%;
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--text-primary);
+          text-decoration: none;
+          padding: 0.9rem 0rem;
+          border-radius: 10px;
+          text-align: left;
+          letter-spacing: 0.01em;
+          transition: background-color 0.15s;
+
+          &:hover {
+            background-color: var(--bg-elevated);
+          }
+
+          svg {
+            color: var(--text-secondary);
+            flex-shrink: 0;
+          }
+        }
+
+        &:last-child a,
+        &:last-child button {
+          color: var(--text-secondary);
+          font-size: 14px;
+          font-weight: 400;
+          margin-top: 0.25rem;
+          border-top: 1px solid var(--border-color);
+          border-radius: 0;
+          padding-top: 1rem;
         }
       }
     }

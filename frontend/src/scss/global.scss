@@ -7,6 +7,30 @@
 
 :root {
   // background
+  --bg-primary: #fff;
+  --bg-secondary: #F0F4F9;
+  --bg-elevated: #ffffff;
+  --bg-elevated-hovered: #E7E8EB;
+
+  // fretboard
+  --bg-fretboard: #fcfbfb;
+  --high-string-color: #bebfc7;
+  --low-string-color: #a9aab3;
+
+  // border
+  --border-color: #e2e0e0;
+
+  // text
+  --text-primary: #18181b;
+  --text-secondary: #555555;
+  --text-muted: #999999;
+
+  // accents
+  --accent: #0066ff;
+}
+
+[data-theme="dark"] {
+  // background
   --bg-primary: #0a0a0a;
   --bg-secondary: #171717;
   --bg-elevated: #252525;
@@ -24,30 +48,6 @@
   --text-primary: #ffffff;
   --text-secondary: #888888;
   --text-muted: #555555;
-
-  // accents
-  --accent: #0066ff;
-}
-
-[data-theme="light"] {
-  // background
-  --bg-primary: #fff; //#e8e8e8
-  --bg-secondary: #F0F4F9;
-  --bg-elevated: #ffffff;
-  --bg-elevated-hovered: #E7E8EB;
-
-  // fretboard
-  --bg-fretboard: #fcfbfb;
-  --high-string-color: #bebfc7;
-  --low-string-color: #a9aab3;
-
-  // border
-  --border-color: #e2e0e0;
-
-  // text
-  --text-primary: #18181b;
-  --text-secondary: #555555;
-  --text-muted: #999999;
 
   // accents
   --accent: #0066ff;

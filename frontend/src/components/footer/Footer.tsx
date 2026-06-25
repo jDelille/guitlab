@@ -37,17 +37,35 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-<div className="footer-col">
+        <div className="footer-col">
           <p className="footer-col__title">Socials</p>
           <ul>
             <li>
-              <a href="https://github.com/jDelille" target="_blank" rel="noreferrer">GitHub</a>
+              <a
+                href="https://github.com/jDelille"
+                target="_blank"
+                rel="noreferrer"
+              >
+                GitHub
+              </a>
             </li>
             <li>
-              <a href="https://justindelille.vercel.app/" target="_blank" rel="noreferrer">Portfolio</a>
+              <a
+                href="https://justindelille.vercel.app/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Portfolio
+              </a>
             </li>
             <li>
-              <a href="https://www.linkedin.com/in/justin-delille/" target="_blank" rel="noreferrer">LinkedIn</a>
+              <a
+                href="https://www.linkedin.com/in/justin-delille/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                LinkedIn
+              </a>
             </li>
           </ul>
         </div>

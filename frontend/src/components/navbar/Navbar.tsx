@@ -16,11 +16,13 @@ const Navbar = ({ onAuthOpen }: Props) => {
   const { user } = useUser();
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = () => {
     supabase.auth.signOut();
     setMenuOpen(false);
+    setMobileOpen(false);
   };
 
   useEffect(() => {
@@ -39,32 +41,21 @@ const Navbar = ({ onAuthOpen }: Props) => {
         <div className="logo">
           <p>Guitlab</p>
         </div>
-        <ul className="links">
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/training">The Lab</Link>
-          </li>
 
+        <ul className="links">
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/training">The Lab</Link></li>
           {!user && (
             <>
-              <li>
-                <button onClick={() => onAuthOpen("login")} className="auth-btn">Login</button>
-              </li>
-              <li>
-                <button onClick={() => onAuthOpen("signup")} className="auth-btn">Sign Up</button>
-              </li>
+              <li><button onClick={() => onAuthOpen("login")} className="auth-btn">Login</button></li>
+              <li><button onClick={() => onAuthOpen("signup")} className="auth-btn">Sign Up</button></li>
             </>
           )}
         </ul>
+
         <ul className="nav-settings">
           {!user && (
-            <button
-              className="theme-toggle"
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-            >
+            <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
               <IoSunnyOutline color="var(--text-primary)" />
             </button>
           )}
@@ -83,24 +74,18 @@ const Navbar = ({ onAuthOpen }: Props) => {
                   <ul>
                     <li>
                       <button className="theme-row" onClick={toggleTheme}>
-                        {theme === "dark" ? (
-                          <IoSunnyOutline size={14} />
-                        ) : (
-                          <IoMoonOutline size={14} />
-                        )}
+                        {theme === "dark" ? <IoSunnyOutline size={14} /> : <IoMoonOutline size={14} />}
                         {theme === "dark" ? "Light mode" : "Dark mode"}
                       </button>
                     </li>
                     <li>
                       <Link to="/settings" onClick={() => setMenuOpen(false)}>
-                        <IoSettingsOutline size={14} />
-                        Settings
+                        <IoSettingsOutline size={14} />Settings
                       </Link>
                     </li>
                     <li>
                       <button onClick={handleLogout}>
-                        <IoLogOutOutline size={14} />
-                        Logout
+                        <IoLogOutOutline size={14} />Logout
                       </button>
                     </li>
                   </ul>
@@ -109,7 +94,56 @@ const Navbar = ({ onAuthOpen }: Props) => {
             </div>
           )}
         </ul>
+
+        <button
+          className="hamburger"
+          onClick={() => setMobileOpen((o) => !o)}
+          aria-label="Toggle menu"
+        >
+          <span className={mobileOpen ? "bar bar--open" : "bar"} />
+          <span className={mobileOpen ? "bar bar--open" : "bar"} />
+          <span className={mobileOpen ? "bar bar--open" : "bar"} />
+        </button>
       </div>
+
+      {mobileOpen && (
+        <div className="mobile-menu">
+          <ul>
+            <li><Link to="/" onClick={() => setMobileOpen(false)}>Home</Link></li>
+            <li><Link to="/training" onClick={() => setMobileOpen(false)}>The Lab</Link></li>
+            {!user && (
+              <>
+                <li>
+                  <button onClick={() => { onAuthOpen("login"); setMobileOpen(false); }}>Login</button>
+                </li>
+                <li>
+                  <button onClick={() => { onAuthOpen("signup"); setMobileOpen(false); }}>Sign Up</button>
+                </li>
+              </>
+            )}
+            {user && (
+              <>
+                <li>
+                  <Link to="/settings" onClick={() => setMobileOpen(false)}>
+                    <IoSettingsOutline size={14} />Settings
+                  </Link>
+                </li>
+                <li>
+                  <button onClick={handleLogout}>
+                    <IoLogOutOutline size={14} />Logout
+                  </button>
+                </li>
+              </>
+            )}
+            <li>
+              <button onClick={() => { toggleTheme(); setMobileOpen(false); }}>
+                {theme === "dark" ? <IoSunnyOutline size={14} /> : <IoMoonOutline size={14} />}
+                {theme === "dark" ? "Light mode" : "Dark mode"}
+              </button>
+            </li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

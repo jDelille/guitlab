@@ -1,5 +1,5 @@
 @use "../../scss/variables" as var;
-
+@use "../../scss/breakpoints" as bp;
 .auth-overlay {
   position: fixed;
   inset: 0;
@@ -19,6 +19,29 @@
   max-width: 380px;
   display: flex;
   flex-direction: column;
+
+  @include bp.mobile() {
+    height: 100vh;
+    justify-content: center;
+    border-radius: 0;
+    min-width: 100vw;
+  }
+
+  .auth-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+    border-radius: 4px;
+
+    &:hover { color: var(--text-primary); }
+  }
 
   .title {
     font-weight: 400;

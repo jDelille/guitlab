@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../../services/supabase";
 import { FcGoogle } from "react-icons/fc";
-import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import { IoEyeOutline, IoEyeOffOutline, IoCloseOutline } from "react-icons/io5";
 import "./AuthModal.scss";
 
 type Mode = "login" | "signup" | "forgot";
@@ -102,6 +102,7 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
     return (
       <div className="auth-overlay" onClick={onClose}>
         <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
+          <button className="auth-close" onClick={onClose} aria-label="Close"><IoCloseOutline size={20} /></button>
           <p className="title">Guitlab</p>
           <div className="auth-confirm">
             <p className="auth-confirm__heading">Check your email</p>
@@ -116,6 +117,7 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
   return (
     <div className="auth-overlay" onClick={onClose}>
       <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="auth-close" onClick={onClose} aria-label="Close"><IoCloseOutline size={20} /></button>
         <p className="title">Guitlab</p>
 
         {mode === "forgot" ? (
