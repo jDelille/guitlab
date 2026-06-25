@@ -11,6 +11,7 @@ const CONTROLS = [
   { label: "All Notes", short: "All", key: "showAllCagedScales" },
   { label: "Triads", short: "Triads", key: "showTriads" },
   { label: "Double Stops", short: "Dbl Stops", key: "showDoubleStops" },
+  { label: "1-4-5", short: "1-4-5", key: "show145" },
 ];
 
 const OverlayControls = ({ settings, setSettings }: OverlayControlsProps) => {

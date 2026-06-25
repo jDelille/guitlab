@@ -1,7 +1,7 @@
 import { SHAPE_COLORS } from "../components/chords/constants";
 import type { CagedKeyData, ShapeName } from "../constants/CagedChords";
 import { SHAPE_ROOT_FRETS } from "../constants/shapeRootFrets";
-import { CHORD_TEMPLATES, MINOR_CHORD_TEMPLATES } from "../constants/shapes/chordTemplates";
+import { CHORD_TEMPLATES, MINOR_CHORD_TEMPLATES, DOM7_CHORD_TEMPLATES } from "../constants/shapes/chordTemplates";
 import { buildCagedShape } from "./buildCagedShape";
 import getNoteFromDegree from "./getNoteFromDegree";
 
@@ -37,6 +37,13 @@ export function buildCagedChords(key: string): CagedKeyData {
         note: getNoteFromDegree(normalizedKey, n.degree),
       }));
 
+      const dom7Template = DOM7_CHORD_TEMPLATES[shapeName];
+      const dom7Notes = dom7Template.notes.map((n) => ({
+        ...n,
+        fret: n.fret !== null ? n.fret + offset : null,
+        note: getNoteFromDegree(normalizedKey, n.degree),
+      }));
+
       return [
         shapeName,
         {
@@ -48,6 +55,7 @@ export function buildCagedChords(key: string): CagedKeyData {
           color: SHAPE_COLORS[shapeName],
           ...buildCagedShape(normalizedKey, shapeName, offset),
           minorChord: minorNotes,
+          dom7Chord: dom7Notes,
         },
       ];
     })

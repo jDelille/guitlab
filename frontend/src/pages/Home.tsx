@@ -34,6 +34,7 @@ const Home = () => {
     showAllCagedScales: false,
     showDoubleStops: false,
     showScaleWithDoubleStops: false,
+    show145: false,
     flipped: false,
     flipFretboard: false,
     flipStrings: false,
@@ -121,13 +122,19 @@ const Home = () => {
 
         const toPlayNotes = (arr: any[]) =>
           arr
-            .filter((n) => n.fret !== null)
+            .filter((n) => n.fret !== null && n.fret >= 0 && !n.isOctaveExtension)
             .map((n) => ({ midi: MIDI_TUNING[n.string] + n.fret!, string: n.string, fret: n.fret! }))
             .sort((a, b) => a.string !== b.string ? b.string - a.string : a.fret - b.fret);
 
         shapesToPlay.forEach((shapeName) => {
           const scaleData = getShapesForKey(settings.key)[shapeName][settings.scale as Scales];
-          notes.push(...toPlayNotes(scaleData.filter((n) => !n.isOctaveExtension)));
+          const primaryRoot = scaleData.find((n) => n.isRoot && !n.isOctaveExtension);
+          if (!primaryRoot || primaryRoot.fret === null) return;
+
+          const shiftedData = primaryRoot.fret < 0
+            ? scaleData.map((n) => ({ ...n, fret: n.fret !== null ? n.fret + 12 : null }))
+            : scaleData;
+          notes.push(...toPlayNotes(shiftedData));
         });
 
         playScale(

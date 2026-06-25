@@ -10,4 +10,7 @@ export const SCALE_LABELS: Record<string, string> = {
   minorArpeggio: "Minor Arpeggio",
   minorPentatonic: "Minor Pentatonic",
   minorScale: "Minor Scale",
+  dom7Chord: "Dom7 Chord",
+  dom7Arpeggio: "Dom7 Arpeggio",
+  dom7Scale: "Dom7 Scale",
 };

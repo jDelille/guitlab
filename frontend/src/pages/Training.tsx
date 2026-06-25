@@ -91,16 +91,16 @@ const Training = () => {
               naturally, and knowing all five shapes means you can find that
               sound anywhere on the neck.
             </p>
-            <li className="coming-soon">
-              <div className="drill-link">
+            <li>
+              <Link to="/drill/dom7-caged-chords" className="drill-link">
                 <div className="text">
                   <span>Dom7 Chords</span>
                   <p className="drills-description">
                     Learn the 5 dominant 7th chord shapes that make up CAGED
                   </p>
                 </div>
-                <span className="coming-soon-label">Coming soon</span>
-              </div>
+                <DrillBox drillId="dom7-caged-chords" />
+              </Link>
             </li>
           </ul>
 

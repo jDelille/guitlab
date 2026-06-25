@@ -28,17 +28,22 @@ const Chords = ({
 }: ChordsProps) => {
   const [chordQuality, setChordQuality] = useState<"major" | "minor" | "dom7">("major");
 
-  const SCALE_QUALITY_MAP: Record<string, { major: string; minor: string }> = {
-    arpeggio:        { major: "arpeggio",        minor: "minorArpeggio"   },
-    majorPentatonic: { major: "majorPentatonic", minor: "minorPentatonic" },
-    majorScale:      { major: "majorScale",      minor: "minorScale"      },
-    minorArpeggio:   { major: "arpeggio",        minor: "minorArpeggio"   },
-    minorPentatonic: { major: "majorPentatonic", minor: "minorPentatonic" },
-    minorScale:      { major: "majorScale",      minor: "minorScale"      },
+  const SCALE_QUALITY_MAP: Record<string, { major: string; minor: string; dom7: string }> = {
+    arpeggio:        { major: "arpeggio",        minor: "minorArpeggio",   dom7: "dom7Arpeggio" },
+    majorPentatonic: { major: "majorPentatonic", minor: "minorPentatonic", dom7: "dom7Scale"    },
+    majorScale:      { major: "majorScale",      minor: "minorScale",      dom7: "dom7Scale"    },
+    minorArpeggio:   { major: "arpeggio",        minor: "minorArpeggio",   dom7: "dom7Arpeggio" },
+    minorPentatonic: { major: "majorPentatonic", minor: "minorPentatonic", dom7: "dom7Scale"    },
+    minorScale:      { major: "majorScale",      minor: "minorScale",      dom7: "dom7Scale"    },
+    dom7Chord:       { major: "arpeggio",        minor: "minorArpeggio",   dom7: "dom7Chord"    },
+    dom7Arpeggio:    { major: "arpeggio",        minor: "minorArpeggio",   dom7: "dom7Arpeggio" },
+    dom7Scale:       { major: "majorScale",      minor: "minorScale",      dom7: "dom7Scale"    },
   };
 
   useEffect(() => {
-    if (scale.includes("minor") || scale.includes("Minor")) {
+    if (scale.startsWith("dom7")) {
+      setChordQuality("dom7");
+    } else if (scale.includes("minor") || scale.includes("Minor")) {
       setChordQuality("minor");
     } else {
       setChordQuality("major");
@@ -47,11 +52,9 @@ const Chords = ({
 
   const handleQualityChange = (quality: "major" | "minor" | "dom7") => {
     setChordQuality(quality);
-    if (quality !== "dom7") {
-      const mapped = SCALE_QUALITY_MAP[scale]?.[quality];
-      if (mapped) {
-        setSettings((s: any) => ({ ...s, scale: mapped }));
-      }
+    const mapped = SCALE_QUALITY_MAP[scale]?.[quality];
+    if (mapped) {
+      setSettings((s: any) => ({ ...s, scale: mapped }));
     }
   };
 

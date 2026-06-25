@@ -94,7 +94,6 @@ export const G_SHAPE_BASE: ShapePatterns = {
     { string: 2, fret: 5, degree: "R", isRoot: true, isMuted: false },
     { string: 2, fret: 7, degree: 2, isRoot: false, isMuted: false },
     { string: 2, fret: 8, degree: "b3", isRoot: false, isMuted: false },
-    
 
     { string: 1, fret: 6, degree: 4, isRoot: false, isMuted: false },
     { string: 1, fret: 8, degree: 5, isRoot: false, isMuted: false },
@@ -113,40 +112,42 @@ export const G_SHAPE_BASE: ShapePatterns = {
   ],
 
   dom7Arpeggio: [
-    { string: 5, fret: -3, degree: 5, isRoot: false, isMuted: false },
-    { string: 5, fret: 0, degree: "R", isRoot: true, isMuted: false },
-    { string: 4, fret: -1, degree: 3, isRoot: false, isMuted: false },
-    { string: 4, fret: 2, degree: 5, isRoot: false, isMuted: false },
-    { string: 3, fret: -1, degree: "b7", isRoot: false, isMuted: false },
-    { string: 3, fret: 2, degree: "R", isRoot: true, isMuted: false },
-    { string: 2, fret: 2, degree: 3, isRoot: false, isMuted: false },
-    { string: 1, fret: 2, degree: 5, isRoot: false, isMuted: false },
-    { string: 0, fret: -1, degree: "b7", isRoot: false, isMuted: false },
-    { string: 0, fret: 2, degree: "R", isRoot: true, isMuted: false },
+    { string: 5, fret: 8, degree: "R", isRoot: true, isMuted: false },
+
+    { string: 4, fret: 7, degree: 3, isRoot: false, isMuted: false },
+
+    { string: 3, fret: 5, degree: 5, isRoot: false, isMuted: false },
+    { string: 3, fret: 8, degree: "b7", isRoot: false, isMuted: false },
+
+    { string: 2, fret: 5, degree: "R", isRoot: true, isMuted: false },
+
+    { string: 1, fret: 5, degree: 3, isRoot: false, isMuted: false },
+    { string: 1, fret: 8, degree: 5, isRoot: false, isMuted: false },
+
+    { string: 0, fret: 6, degree: "b7", isRoot: false, isMuted: false },
+    { string: 0, fret: 8, degree: "R", isRoot: true, isMuted: false },
   ],
 
   dom7Scale: [
-    { string: 5, fret: -3, degree: 5, isRoot: false, isMuted: false },
-    { string: 5, fret: 0, degree: "R", isRoot: true, isMuted: false },
-    { string: 5, fret: 2, degree: 2, isRoot: false, isMuted: false },
+    { string: 5, fret: 8, degree: "R", isRoot: true, isMuted: false },
 
-    { string: 4, fret: -1, degree: 3, isRoot: false, isMuted: false },
-    { string: 4, fret: 0, degree: 4, isRoot: false, isMuted: false },
-    { string: 4, fret: 2, degree: 5, isRoot: false, isMuted: false },
+    { string: 4, fret: 5, degree: 2, isRoot: false, isMuted: false },
+    { string: 4, fret: 7, degree: 3, isRoot: false, isMuted: false },
+    { string: 4, fret: 8, degree: 4, isRoot: false, isMuted: false },
 
-    { string: 3, fret: -2, degree: 6, isRoot: false, isMuted: false },
-    { string: 3, fret: -1, degree: "b7", isRoot: false, isMuted: false },
-    { string: 3, fret: 2, degree: "R", isRoot: true, isMuted: false },
+    { string: 3, fret: 5, degree: 5, isRoot: false, isMuted: false },
+    { string: 3, fret: 7, degree: 6, isRoot: false, isMuted: false },
+    { string: 3, fret: 8, degree: "b7", isRoot: false, isMuted: false },
 
-    { string: 2, fret: -1, degree: 2, isRoot: false, isMuted: false },
-    { string: 2, fret: 2, degree: 3, isRoot: false, isMuted: false },
-    { string: 2, fret: 3, degree: 4, isRoot: false, isMuted: false },
+    { string: 2, fret: 5, degree: "R", isRoot: true, isMuted: false },
+    { string: 2, fret: 7, degree: 2, isRoot: false, isMuted: false },
 
-    { string: 1, fret: -1, degree: 5, isRoot: false, isMuted: false },
-    { string: 1, fret: 2, degree: 6, isRoot: false, isMuted: false },
+    { string: 1, fret: 5, degree: 3, isRoot: false, isMuted: false },
+    { string: 1, fret: 6, degree: 4, isRoot: false, isMuted: false },
+    { string: 1, fret: 8, degree: 5, isRoot: false, isMuted: false },
 
-    { string: 0, fret: -1, degree: "b7", isRoot: false, isMuted: false },
-    { string: 0, fret: 0, degree: "R", isRoot: true, isMuted: false },
-    { string: 0, fret: 2, degree: 2, isRoot: false, isMuted: false },
+    { string: 0, fret: 5, degree: 6, isRoot: false, isMuted: false },
+    { string: 0, fret: 6, degree: "b7", isRoot: false, isMuted: false },
+    { string: 0, fret: 8, degree: "R", isRoot: true, isMuted: false },
   ],
 };

@@ -13,8 +13,25 @@ const SCALE_LABELS: Record<string, string> = {
   majorScale: "Major Scale",
   minorArpeggio: "Minor Arpeggio",
   minorPentatonic: "Minor Pentatonic",
-  minorScale: "Minor Scale"
+  minorScale: "Minor Scale",
+  dom7Arpeggio: "Dom7 Arpeggio",
+  dom7Scale: "Dom7 Scale",
 };
+
+const SCALE_SECTIONS = [
+  {
+    label: "Major",
+    scales: ["arpeggio", "majorPentatonic", "majorScale"],
+  },
+  {
+    label: "Minor",
+    scales: ["minorArpeggio", "minorPentatonic", "minorScale"],
+  },
+  {
+    label: "Dom7",
+    scales: ["dom7Arpeggio", "dom7Scale"],
+  },
+];
 
 const ScaleControl = ({ scales, settings, setSettings }: ScaleControlProps) => {
   const [open, setOpen] = useState(false);
@@ -58,15 +75,24 @@ const ScaleControl = ({ scales, settings, setSettings }: ScaleControlProps) => {
 
       {open && (
         <div className="scale-control__menu">
-          {scales.map((scale) => (
-            <button
-              key={scale}
-              className={`scale-control__option ${settings.scale === scale ? "scale-control__option--active" : ""}`}
-              onClick={() => select(scale)}
-            >
-              {SCALE_LABELS[scale] ?? scale}
-            </button>
-          ))}
+          {SCALE_SECTIONS.map(({ label, scales: sectionScales }) => {
+            const available = sectionScales.filter((s) => scales.includes(s));
+            if (!available.length) return null;
+            return (
+              <div key={label} className="scale-control__section">
+                <span className="scale-control__section-label">{label}</span>
+                {available.map((scale) => (
+                  <button
+                    key={scale}
+                    className={`scale-control__option ${settings.scale === scale ? "scale-control__option--active" : ""}`}
+                    onClick={() => select(scale)}
+                  >
+                    {SCALE_LABELS[scale] ?? scale}
+                  </button>
+                ))}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

@@ -24,18 +24,18 @@ export function buildCagedShape(
     throw new Error(`Unknown shape: ${shape}`);
   }
 
-  const applyKeyToShape = (arr: any[]) => {
+  const applyKeyToShape = (arr: any[], noOctaves = false) => {
     const notes: any[] = [];
 
     arr
       .map((n) => ({
         ...n,
-        fret: n.fret + offset,
+        fret: n.fret !== null ? n.fret + offset : null,
         note: getNoteFromDegree(root, n.degree),
       }))
       .forEach((n) => {
         notes.push(n);
-        if (n.fret + 12 <= 20) {
+        if (!noOctaves && n.fret !== null && n.fret + 12 <= 20) {
           notes.push({ ...n, fret: n.fret + 12, isOctaveExtension: true });
         }
       });
@@ -51,7 +51,7 @@ export function buildCagedShape(
     minorArpeggio: applyKeyToShape(base.minorArpeggio),
     minorPentatonic: applyKeyToShape(base.minorPentatonic),
     minorScale: applyKeyToShape(base.minorScale),
-    dom7Chord: applyKeyToShape(base.dom7Chord),
+    dom7Chord: applyKeyToShape(base.dom7Chord, true),
     dom7Arpeggio: applyKeyToShape(base.dom7Arpeggio),
     dom7Scale: applyKeyToShape(base.dom7Scale),
   };

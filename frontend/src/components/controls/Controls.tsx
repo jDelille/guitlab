@@ -12,7 +12,10 @@ const SCALES = [
   "majorScale",
   "minorArpeggio",
   "minorPentatonic",
-  "minorScale"
+  "minorScale",
+  "dom7Chord",
+  "dom7Arpeggio",
+  "dom7Scale",
 ];
 
 interface ControlsProps {
