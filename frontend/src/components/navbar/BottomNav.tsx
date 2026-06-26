@@ -1,7 +1,12 @@
-import { useRef, useState } from "react";
-import { IoSearchOutline } from "react-icons/io5";
+import { useState } from "react";
+import { FaPlay, FaStop } from "react-icons/fa";
 import { RiMenuLine } from "react-icons/ri";
-import SearchMenu from "./SearchMenu";
+import { useSettings } from "../../context/SettingsContext";
+import PlaybackSheet from "./PlaybackSheet";
+import BackingTrackModal, {
+  type BackingTrack,
+} from "../controls/play-scale/BackingTrackModal";
+import FloatingPlayer from "../controls/play-scale/FloatingPlayer";
 import "./BottomNav.scss";
 
 interface Props {
@@ -10,50 +15,60 @@ interface Props {
 }
 
 const BottomNav = ({ isOpen, onToggle }: Props) => {
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [playbackOpen, setPlaybackOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [activeTrack, setActiveTrack] = useState<BackingTrack | null>(null);
+  const { settings } = useSettings();
 
-  const openSearch = () => setSearchOpen(true);
+  const handleMenuToggle = () => {
+    setPlaybackOpen(false);
+    onToggle();
+  };
 
-  const closeSearch = () => {
-    setSearchOpen(false);
-    setQuery("");
+  const handleOpenBackingTrack = () => {
+    setPlaybackOpen(false);
+    setModalOpen(true);
   };
 
   return (
     <>
       <div className="bottom-nav">
-        <div
-          className={`bottom-nav__search${searchOpen ? " bottom-nav__search--open" : ""}`}
-          onClick={!searchOpen ? openSearch : undefined}
+        <button
+          className={`bottom-nav__play-btn${settings.playScale ? " bottom-nav__play-btn--active" : ""}`}
+          onClick={() => setPlaybackOpen(true)}
+          aria-label="Playback controls"
         >
-          <IoSearchOutline size={15} />
-          {searchOpen ? (
-            <input
-              ref={inputRef}
-              className="bottom-nav__search-input"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onBlur={closeSearch}
-              onKeyDown={(e) => e.key === "Escape" && closeSearch()}
-              placeholder="Search scales..."
-              autoFocus
-            />
-          ) : (
-            <span>Search</span>
-          )}
-        </div>
+          {settings.playScale ? <FaStop size={13} /> : <FaPlay size={13} />}
+          <span>{settings.playScale ? "Playing" : "Play"}</span>
+        </button>
         <button
           className={`bottom-nav__menu-btn${isOpen ? " bottom-nav__menu-btn--open" : ""}`}
-          onClick={onToggle}
+          onClick={handleMenuToggle}
           aria-label="Toggle menu"
         >
           <RiMenuLine size={18} />
         </button>
       </div>
 
-      {searchOpen && <SearchMenu query={query} onClose={closeSearch} />}
+      {playbackOpen && (
+        <PlaybackSheet
+          onClose={() => setPlaybackOpen(false)}
+          onOpenBackingTrack={handleOpenBackingTrack}
+          activeTrack={activeTrack}
+        />
+      )}
+
+      {modalOpen && (
+        <BackingTrackModal
+          onClose={() => setModalOpen(false)}
+          onPlay={(track) => setActiveTrack(track)}
+          activeTrackId={activeTrack?.id ?? null}
+        />
+      )}
+
+      {activeTrack && (
+        <FloatingPlayer track={activeTrack} onClose={() => setActiveTrack(null)} />
+      )}
     </>
   );
 };

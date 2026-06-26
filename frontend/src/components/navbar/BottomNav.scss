@@ -13,8 +13,8 @@
   transform: translateX(-50%);
   z-index: 300;
   align-items: center;
-  gap: 12px;
-  padding: 8px 8px 8px 18px;
+  gap: 8px;
+  padding: 6px;
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 50px;
@@ -22,30 +22,21 @@
   backdrop-filter: blur(12px);
   white-space: nowrap;
 
-  &__search {
+  &__play-btn {
+    all: unset;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 500;
     color: var(--text-muted);
-    font-size: 13px;
     cursor: pointer;
-    width: auto;
-    transition: width 0.2s ease;
+    transition: color 0.15s, background-color 0.15s;
 
-    &--open {
-      width: 160px;
-      cursor: default;
-    }
-  }
-
-  &__search-input {
-    all: unset;
-    font-size: 13px;
-    color: var(--text-primary);
-    width: 100%;
-
-    &::placeholder {
-      color: var(--text-muted);
+    &--active {
+      color: var(--accent);
     }
   }
 
