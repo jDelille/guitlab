@@ -1,8 +1,8 @@
-# uncaged
+# Guitlab
 
 > Play freely. Break out of the box.
 
-Inspired by Guthrie Trapp, Uncaged transforms the CAGED system from static boxes into a living, playable map of the fretboard, so you can move between chord shapes, scales, arpeggios, and licks with confidence, and finally understand how everything connects.
+Inspired by Guthrie Trapp, Guitlab transforms the CAGED system from static boxes into a living, playable map of the fretboard, so you can move between chord shapes, scales, arpeggios, and licks with confidence, and finally understand how everything connects.
 
 ---
 
@@ -32,7 +32,7 @@ Inspired by Guthrie Trapp, Uncaged transforms the CAGED system from static boxes
 **Audio Playback**
 - Play scales ascending, descending, or both directions
 - Adjustable BPM (40–240)
-- Acoustic guitar sound powered by [smplr](https://github.com/danigb/smplr) — no setup, no downloads
+- Acoustic guitar sound powered by [smplr](https://github.com/danigb/smplr). No setup, no downloads
 
 **Tunings**
 - Standard (EADGBe)
