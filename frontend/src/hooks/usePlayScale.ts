@@ -6,7 +6,6 @@ import { lickToPlayNotes, MIDI_TUNING } from "../audio/utils";
 import { getLicksForShape } from "../constants/licks";
 import { getDoubleStopsForKey } from "../constants/doubleStops";
 import { getTriadsForKey, type CagedShape } from "../constants/triads";
-import { getPatternForKey, MINOR_145 } from "../constants/patterns";
 import { useSettings } from "../context/SettingsContext";
 
 type ActivePositions = { string: number; fret: number }[] | null;
@@ -47,18 +46,6 @@ export function usePlayScale({
         pairs,
         settings.playScaleBpm,
         setActivePositions,
-        onComplete,
-      ).then((stop) => {
-        if (cleaned) stop();
-        else cancel = stop;
-      });
-    } else if (settings.show145) {
-      const patternNotes = getPatternForKey(MINOR_145, settings.key).notes;
-      playScale(
-        lickToPlayNotes(patternNotes),
-        settings.playScaleBpm,
-        settings.playScaleDirection,
-        (pos) => setActivePositions(pos ? [pos] : null),
         onComplete,
       ).then((stop) => {
         if (cleaned) stop();
@@ -159,7 +146,6 @@ export function usePlayScale({
     settings.playScaleBpm,
     settings.showDoubleStops,
     settings.showTriads,
-    settings.show145,
     settings.showAllCagedScales,
     settings.key,
     settings.scale,

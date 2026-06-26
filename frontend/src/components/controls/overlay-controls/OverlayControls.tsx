@@ -6,7 +6,6 @@ const CONTROLS: { label: string; short: string; key: keyof Settings }[] = [
   { label: "Degrees", short: "Degrees", key: "showDegrees" },
   { label: "Triads", short: "Triads", key: "showTriads" },
   { label: "Double Stops", short: "Dbl Stops", key: "showDoubleStops" },
-  { label: "1-4-5", short: "1-4-5", key: "show145" },
 ];
 
 const OverlayControls = () => {

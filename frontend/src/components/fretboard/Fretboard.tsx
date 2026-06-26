@@ -114,8 +114,7 @@ const Fretboard = ({
     (settings.showDoubleStops &&
       !showAll &&
       !settings.showScaleWithDoubleStops) ||
-    (settings.showTriads && !showAll) ||
-    settings.show145;
+    (settings.showTriads && !showAll);
     
   const activeMap = showAll
     ? allShapesNoteMap

@@ -116,6 +116,21 @@
       position: relative;
     }
 
+    .sign-in-btn {
+      all: unset;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      padding: 10px;
+      border-radius: 6px;
+
+      &:hover {
+        background-color: var(--bg-hovered);
+      }
+    }
+
     .theme-toggle,
     .bell {
       background: none;

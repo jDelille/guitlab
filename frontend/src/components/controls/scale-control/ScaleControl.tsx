@@ -14,7 +14,7 @@ const SCALE_LABELS: Record<string, string> = {
   minorPentatonic: "Minor Pentatonic",
   minorScale: "Minor Scale",
   dom7Arpeggio: "Dom7 Arpeggio",
-  dom7Scale: "Dom7 Scale",
+  dom7Scale: "Dom7 Scale (Mixolydian)",
 };
 
 const SCALE_SECTIONS = [

@@ -5,7 +5,6 @@ import Controls from "../components/controls/Controls";
 import { type ShapeName } from "../constants/CagedChords";
 import type { Scales } from "../types/Scales";
 import { getLicksForShape } from "../constants/licks";
-import { getPatternForKey, MINOR_145 } from "../constants/patterns";
 import { useSettings } from "../context/SettingsContext";
 import { usePlayScale } from "../hooks/usePlayScale";
 
@@ -26,11 +25,14 @@ const Home = () => {
 
   const handleShapeToggle = (shapeName: ShapeName) => {
     setCagedChord(shapeName);
+    if (settings.showTriads) {
+      setSelectedShapes(new Set([shapeName]));
+      setSettings((s: any) => ({ ...s, showAllCagedScales: false }));
+      return;
+    }
     const next = new Set(selectedShapes);
     if (next.has(shapeName)) {
-      if (next.size === 1) {
-        return;
-      }
+      if (next.size === 1) return;
       next.delete(shapeName);
     } else {
       next.add(shapeName);
@@ -48,15 +50,13 @@ const Home = () => {
         showChordTones={showChordTones}
         activePositions={activePositions}
         lickNotes={
-          settings.show145
-            ? getPatternForKey(MINOR_145, settings.key).notes
-            : selectedLickId
-              ? (getLicksForShape(
-                  cagedChord,
-                  settings.scale as Scales,
-                  settings.key,
-                ).find((l) => l.id === selectedLickId)?.notes ?? null)
-              : null
+          selectedLickId
+            ? (getLicksForShape(
+                cagedChord,
+                settings.scale as Scales,
+                settings.key,
+              ).find((l) => l.id === selectedLickId)?.notes ?? null)
+            : null
         }
       />
       <Chords

@@ -12,7 +12,6 @@ export interface Settings {
   showAllCagedScales: boolean;
   showDoubleStops: boolean;
   showScaleWithDoubleStops: boolean;
-  show145: boolean;
   flipped: boolean;
   flipFretboard: boolean;
   flipStrings: boolean;
@@ -32,7 +31,6 @@ const DEFAULT_SETTINGS: Settings = {
   showAllCagedScales: false,
   showDoubleStops: false,
   showScaleWithDoubleStops: false,
-  show145: false,
   flipped: false,
   flipFretboard: false,
   flipStrings: false,
