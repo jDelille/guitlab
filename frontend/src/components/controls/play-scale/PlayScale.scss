@@ -1,11 +1,11 @@
 @use "../../../scss/variables" as var;
+@use "../../../scss/breakpoints" as bp;
 
 .play-scale {
   min-height: 50px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex: 1;
+  gap: 7px;
   background-color: var(--bg-secondary);
   color: #fff;
   border-radius: 6px;
@@ -15,8 +15,8 @@
   &__btn {
     all: unset;
     cursor: pointer;
-    color: var(--text-primary);
-    background-color: var(--bg-primary);
+    color: var(--text-secondary);
+    background-color: var(--bg-elevated);
     border-radius: 6px;
     width: 32px;
     height: 32px;
@@ -24,19 +24,44 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    transition: transform 0.1s ease, background-color 0.1s ease;
+
+    &:active {
+      transform: scale(0.88);
+    }
 
     &--active {
       color: var(--accent, #9b59b6);
     }
+
+    &--active-blue {
+      color: #3b82f6;
+    }
+
+    &:hover {
+      background-color: var(--bg-elevated-hovered);
+      color: var(--text-primary);
+    }
+
+    &--active:hover {
+      color: var(--accent, #9b59b6);
+    }
+
+    &--active-blue:hover {
+      color: #3b82f6;
+    }
   }
+
 
   &__bpm {
     display: flex;
     align-items: center;
     gap: 8px;
     color: var(--text-primary);
-    font-size: 13px;
+    font-size: 12px;
+    font-weight: 500;
     flex: 1;
+    min-width: 0;
 
     input[type="range"] {
       appearance: none;
@@ -45,44 +70,81 @@
       background-color: var(--bg-elevated);
       cursor: pointer;
       flex: 1;
-    }
+      min-width: 0;
 
-    input[type="range"]::-webkit-slider-thumb {
-      appearance: none;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--text-primary);
-    }
-
-    input[type="range"]::-moz-range-thumb {
-      width: 12px;
-      height: 12px;
-      border: none;
-      border-radius: 50%;
-      background: #fff;
+      &::-webkit-slider-thumb {
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
     }
 
     span {
-      width: 59px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
+
+    @include bp.laptop {
+      display: none;
+    }
+  }
+
+  &__bpm-dropdown {
+    display: none;
+
+    @include bp.laptop {
+      display: block;
+    }
+  }
+
+  &__bpm-btn {
+    all: unset;
+    cursor: pointer;
+    color: var(--text-primary);
+    background-color: var(--bg-elevated);
+    border-radius: 6px;
+    padding: 0 10px;
+    height: 32px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: var(--bg-elevated-hovered);
+    }
+  }
+
+  &__menu--bpm {
+    min-width: 200px;
+    span { width: 30px; }
   }
 
   &__settings-wrapper {
     position: relative;
+    flex-shrink: 0;
   }
 
   &__settings-btn {
     all: unset;
     cursor: pointer;
     color: var(--text-secondary);
-    background-color: var(--bg-primary);
+    background-color: var(--bg-elevated);
     border-radius: 6px;
     width: 32px;
     height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.1s ease, background-color 0.1s ease;
+
+    &:active {
+      transform: scale(0.88);
+    }
 
     &:hover {
       color: var(--text-primary);
@@ -198,7 +260,7 @@
       &.active {
         font-weight: 600;
         color: var(--accent, #9b59b6);
-        background-color: var(--bg-primary);
+        background-color: var(--bg-elevated);
       }
     }
   }

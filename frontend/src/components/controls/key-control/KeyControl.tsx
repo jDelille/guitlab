@@ -1,12 +1,13 @@
+import { useSettings } from "../../../context/SettingsContext";
 import "./KeyControl.scss";
 
 interface KeyControlProps {
   notes: string[];
-  settings: any;
-  setSettings: any;
 }
 
-const KeyControl = ({ notes, settings, setSettings }: KeyControlProps) => {
+const KeyControl = ({ notes }: KeyControlProps) => {
+  const { settings, setSettings } = useSettings();
+
   return (
     <div className="key-control">
       {notes.map((note) => (

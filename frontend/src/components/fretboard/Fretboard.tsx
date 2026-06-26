@@ -1,9 +1,11 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import type { ChordNote } from "../../constants/CagedChords";
 import { type ShapeName } from "../../constants/CagedChords";
 import { SHAPE_ROOT_FRETS } from "../../constants/shapeRootFrets";
+import { useSettings } from "../../context/SettingsContext";
+import { usePlayback } from "../../context/PlaybackContext";
 import FretNumbers from "./FretNumbers";
 import DoubleStopOverlay from "./DoubleStopOverlay";
 import {
@@ -20,17 +22,16 @@ import {
   getNoteBackground,
   getNoteOutline,
   getDisplayValue,
+  getKeyPitch,
+  STANDARD_TUNING,
   type NoteMapEntry,
 } from "./fretboardUtils";
 import "./Fretboard.scss";
 
 interface FretboardProps {
-  keyName: string;
-  scale: string;
   cagedChord: string;
   selectedShapes: Set<ShapeName>;
   showChordTones: boolean;
-  settings: any;
   activePositions?: { string: number; fret: number }[] | null;
   lickNotes?: ChordNote[] | null;
 }
@@ -39,39 +40,42 @@ const STRINGS = Array.from({ length: 6 }, (_, i) => i);
 const FRETS = Array.from({ length: 21 }, (_, i) => i);
 
 const Fretboard = ({
-  keyName,
-  scale,
   cagedChord,
   selectedShapes,
   showChordTones,
-  settings,
   activePositions,
   lickNotes,
 }: FretboardProps) => {
+  const { settings } = useSettings();
+  const { currentBackingChord } = usePlayback();
   const fretboardRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
 
   const { allShapesNoteMap, selectedShapesNoteMap } = useShapeNoteMaps(
-    keyName,
-    scale,
+    settings.key,
+    settings.scale,
     selectedShapes,
   );
   const lickNoteMap = useLickNoteMap(lickNotes);
+
   const {
     pairs: doubleStopPairs,
     map: doubleStopsMap,
     insideBracketSet,
-  } = useDoubleStops(keyName, settings.showDoubleStops);
+  } = useDoubleStops(settings.key, settings.showDoubleStops);
+
   const { map: triadsMap } = useTriads(
-    keyName,
+    settings.key,
     cagedChord,
     settings.showTriads,
   );
 
   useEffect(() => {
     const el = fretboardRef.current;
-    if (!el) return;
+    if (!el) {
+      return;
+    }
     const ro = new ResizeObserver(([entry]) =>
       setContainerWidth(entry.contentRect.width),
     );
@@ -82,7 +86,7 @@ const Fretboard = ({
   useEffect(() => {
     const wrapper = wrapperRef.current;
     if (!wrapper) return;
-    const rootFret = SHAPE_ROOT_FRETS[cagedChord as ShapeName]?.[keyName];
+    const rootFret = SHAPE_ROOT_FRETS[cagedChord as ShapeName]?.[settings.key];
     if (rootFret === undefined) return;
     if (rootFret <= 2) {
       wrapper.scrollTo({ left: 0, behavior: "smooth" });
@@ -93,14 +97,26 @@ const Fretboard = ({
       left: NUT_WIDTH + (rootFret - 2) * fretWidth,
       behavior: "smooth",
     });
-  }, [cagedChord, keyName]);
+  }, [cagedChord, settings.key]);
+
+  const chordTonePitches = useMemo(() => {
+    if (!currentBackingChord) return null;
+    const keyPitch = getKeyPitch(settings.key);
+    if (keyPitch === -1) return null;
+    const rootPitch = (keyPitch + currentBackingChord.offset) % 12;
+    const intervals = currentBackingChord.quality === "major" ? [0, 4, 7] : [0, 3, 7];
+    return new Set(intervals.map((i) => (rootPitch + i) % 12));
+  }, [currentBackingChord, settings.key]);
 
   const showAll = settings.showAllCagedScales;
+
   const hideScales =
     (settings.showDoubleStops &&
       !showAll &&
       !settings.showScaleWithDoubleStops) ||
-    (settings.showTriads && !showAll);
+    (settings.showTriads && !showAll) ||
+    settings.show145;
+    
   const activeMap = showAll
     ? allShapesNoteMap
     : hideScales
@@ -159,6 +175,8 @@ const Fretboard = ({
               const noteColor = toGradient(activeNote?.colors ?? []);
               const noteDimColor = toGradient(activeNote?.dimColors ?? []);
               const noteName = getNoteName(stringNumber, fret);
+              const notePitch = (STANDARD_TUNING[stringNumber] + fret) % 12;
+              const isChordTone = isActive && !!chordTonePitches?.has(notePitch);
 
               const styleParams = {
                 isLickNote,
@@ -197,6 +215,8 @@ const Fretboard = ({
                         cursor: "pointer",
                         boxShadow: isHighlighted
                           ? "0 0 0 2px var(--text-primary), 0 0 10px 2px rgba(255,255,255,0.6)"
+                          : isChordTone
+                          ? "0 0 0 2px #f59e0b, 0 0 6px 2px rgba(245,158,11,0.45)"
                           : "none",
                       }}
                     >
@@ -205,14 +225,14 @@ const Fretboard = ({
                         isActive,
                         isDoubleStop,
                         isTriad,
-                        showIntervals: settings.showIntervals,
+                        showDegrees: settings.showDegrees,
                         showNotes: settings.showNotes,
                         lickDegree: lickNote?.degree,
                         noteName,
                         noteData,
                         stringNumber,
                         fret,
-                        keyName,
+                        keyName: settings.key,
                       })}
                     </div>
                   </div>

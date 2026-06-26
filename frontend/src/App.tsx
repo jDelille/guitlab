@@ -12,32 +12,43 @@ import Settings from "./pages/Settings";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import { ThemeProvider } from "./context/ThemeContext";
+import { SettingsProvider } from "./context/SettingsContext";
+import { PlaybackProvider } from "./context/PlaybackContext";
 
 function App() {
   const [authMode, setAuthMode] = useState<"login" | "signup" | null>(null);
 
   return (
-    <ThemeProvider>
-    <BrowserRouter>
-      <div className="page">
-        <div className="layout">
-          <Navbar onAuthOpen={(mode) => setAuthMode(mode)} />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/training" element={<Training />} />
-            <Route path="/drill/:drillId" element={<Drill />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/how-to-guide" element={<HowToGuide />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<TermsOfService />} />
-          </Routes>
-        </div>
-        <Footer />
-        {authMode && <AuthModal onClose={() => setAuthMode(null)} initialMode={authMode} />}
-      </div>
-    </BrowserRouter>
-    </ThemeProvider>
+    <SettingsProvider>
+      <PlaybackProvider>
+      <ThemeProvider>
+        <BrowserRouter>
+          <div className="page">
+            <div className="layout">
+              <Navbar onAuthOpen={(mode) => setAuthMode(mode)} />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/training" element={<Training />} />
+                <Route path="/drill/:drillId" element={<Drill />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/how-to-guide" element={<HowToGuide />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<TermsOfService />} />
+              </Routes>
+            </div>
+            <Footer />
+            {authMode && (
+              <AuthModal
+                onClose={() => setAuthMode(null)}
+                initialMode={authMode}
+              />
+            )}
+          </div>
+        </BrowserRouter>
+      </ThemeProvider>
+      </PlaybackProvider>
+    </SettingsProvider>
   );
 }
 

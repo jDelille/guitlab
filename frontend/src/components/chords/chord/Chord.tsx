@@ -5,6 +5,7 @@ import {
   type ShapeName,
 } from "../../../constants/CagedChords";
 import { SHAPE_COLORS } from "../constants";
+import { useSettings } from "../../../context/SettingsContext";
 import "./Chord.scss";
 
 interface ChordProps {
@@ -12,10 +13,6 @@ interface ChordProps {
   selectedShapes: Set<ShapeName>;
   onToggle: (shape: ShapeName) => void;
   chordQuality: "major" | "minor" | "dom7";
-  showAllCagedScales: boolean;
-  showDoubleStops: boolean;
-  showScaleWithDoubleStops: boolean;
-  setSettings: any;
 }
 
 export default function Chord({
@@ -23,11 +20,8 @@ export default function Chord({
   selectedShapes,
   onToggle,
   chordQuality,
-  showAllCagedScales,
-  showDoubleStops,
-  showScaleWithDoubleStops,
-  setSettings,
 }: ChordProps) {
+  const { settings, setSettings } = useSettings();
   const DISPLAY_FRETS = 5;
 
   const color = SHAPE_COLORS[shape.shape];
@@ -63,6 +57,8 @@ export default function Chord({
 
   const isActive = selectedShapes.has(shape.shape);
 
+  const { showAllCagedScales, showDoubleStops, showScaleWithDoubleStops } = settings;
+
   const handleChordClick = (shapeName: ShapeName) => {
     if (showDoubleStops) {
       if (isActive && showScaleWithDoubleStops) {
@@ -84,6 +80,10 @@ export default function Chord({
         boxShadow:
           showAllCagedScales || (isActive && (!showDoubleStops || showScaleWithDoubleStops))
             ? `inset 0 0 0 2px ${color}`
+            : undefined,
+        border:
+          showAllCagedScales || (isActive && (!showDoubleStops || showScaleWithDoubleStops))
+            ? "1px solid transparent"
             : undefined,
         opacity:
           showAllCagedScales
