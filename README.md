@@ -6,7 +6,7 @@ Inspired by Guthrie Trapp, Guitlab transforms the CAGED system from static boxes
 
 ---
 
-<img width="1919" height="957" alt="image" src="https://github.com/user-attachments/assets/175de3ef-44dc-4622-86a0-3d6184ea6ec3" />
+<img width="1906" height="956" alt="image" src="https://github.com/user-attachments/assets/f45d8ebd-8445-4efb-a865-74ec1dbc2555" />
 
 --- 
 
