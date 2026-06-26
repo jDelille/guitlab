@@ -1,10 +1,15 @@
-# uncaged
+# Guitlab
 
 > Play freely. Break out of the box.
 
-Inspired by Guthrie Trapp, Uncaged transforms the CAGED system from static boxes into a living, playable map of the fretboard — so you can move between chord shapes, scales, arpeggios, and licks with confidence, and finally understand how everything connects.
+Inspired by Guthrie Trapp, Guitlab transforms the CAGED system from static boxes into a living, playable map of the fretboard, so you can move between chord shapes, scales, arpeggios, and licks with confidence, and finally understand how everything connects.
 
 ---
+
+<img width="1906" height="956" alt="image" src="https://github.com/user-attachments/assets/f45d8ebd-8445-4efb-a865-74ec1dbc2555" />
+
+--- 
+
 
 ## Features
 
@@ -27,18 +32,20 @@ Inspired by Guthrie Trapp, Uncaged transforms the CAGED system from static boxes
 **Audio Playback**
 - Play scales ascending, descending, or both directions
 - Adjustable BPM (40–240)
-- Acoustic guitar sound powered by [smplr](https://github.com/danigb/smplr) — no setup, no downloads
+- Acoustic guitar sound powered by [smplr](https://github.com/danigb/smplr). No setup, no downloads
+- Play any backing track from youtube so enhance your practice
 
 **Tunings**
 - Standard (EADGBe)
-- Drop D, Open G, Open D, Open E
-- DADGAD, Half Step Down, Full Step Down
+- Drop D, Open G, Open D, Open E (coming soon)
+- DADGAD, Half Step Down, Full Step Down (coming soon)
 
 ---
 
 ## Stack
 
 - **React 19** + **TypeScript**
+- **Python** + **FastAPI** for the REST API
 - **Vite**
 - **Zustand** for state management
 - **Tonal.js** for music theory primitives
@@ -49,7 +56,7 @@ Inspired by Guthrie Trapp, Uncaged transforms the CAGED system from static boxes
 
 ## Built with Claude
 
-Uncaged was developed alongside **Claude** (Anthropic), used as a real engineering collaborator — not just for boilerplate, but for audio API decisions, feature design, and shipping faster without cutting corners.
+Uncaged was developed alongside **Claude** (Anthropic), used as a real engineering collaborator, not just for boilerplate, but for audio API decisions, feature design, and shipping faster without cutting corners.
 
 In 2026, the best software is built by pairing human taste and domain knowledge with AI execution. This project is a working example of that.
 
