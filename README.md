@@ -33,17 +33,19 @@ Inspired by Guthrie Trapp, Guitlab transforms the CAGED system from static boxes
 - Play scales ascending, descending, or both directions
 - Adjustable BPM (40–240)
 - Acoustic guitar sound powered by [smplr](https://github.com/danigb/smplr). No setup, no downloads
+- Play any backing track from youtube so enhance your practice
 
 **Tunings**
 - Standard (EADGBe)
-- Drop D, Open G, Open D, Open E
-- DADGAD, Half Step Down, Full Step Down
+- Drop D, Open G, Open D, Open E (coming soon)
+- DADGAD, Half Step Down, Full Step Down (coming soon)
 
 ---
 
 ## Stack
 
 - **React 19** + **TypeScript**
+- **Python** + **FastAPI** for the REST API
 - **Vite**
 - **Zustand** for state management
 - **Tonal.js** for music theory primitives
