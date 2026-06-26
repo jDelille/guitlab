@@ -39,6 +39,11 @@ export function getNoteName(string: number, fret: number): string {
   return NOTES[(open + fret) % 12];
 }
 
+export function getKeyPitch(keyName: string): number {
+  const pitch = NOTES.indexOf(keyName);
+  return pitch !== -1 ? pitch : GuitarConstants.notesFlat.indexOf(keyName);
+}
+
 export function getDegree(string: number, fret: number, keyName: string): string {
   const notePitch = (STANDARD_TUNING[string] + fret) % 12;
   const rootPitch =
@@ -145,8 +150,8 @@ export function getDisplayValue(params: {
   isActive: boolean;
   isDoubleStop: boolean;
   isTriad: boolean;
-  showIntervals: boolean;
   showNotes: boolean;
+  showDegrees: boolean;
   lickDegree: any;
   noteName: string;
   noteData: any;
@@ -154,9 +159,9 @@ export function getDisplayValue(params: {
   fret: number;
   keyName: string;
 }): string {
-  const { isLickNote, isActive, isDoubleStop, isTriad, showIntervals, showNotes, lickDegree, noteName, noteData, stringNumber, fret, keyName } = params;
-  if (isLickNote && !isActive) return showIntervals ? lickDegree : showNotes ? noteName : "";
-  if (isDoubleStop || isTriad) return showIntervals ? getDegree(stringNumber, fret, keyName) : showNotes ? noteName : "";
-  if (isActive) return showIntervals ? noteData?.degree : showNotes ? noteName : "";
+  const { isLickNote, isActive, isDoubleStop, isTriad, showDegrees, showNotes, lickDegree, noteName, noteData, stringNumber, fret, keyName } = params;
+  if (isLickNote && !isActive) return showDegrees ? lickDegree : showNotes ? noteName : "";
+  if (isDoubleStop || isTriad) return showDegrees ? getDegree(stringNumber, fret, keyName) : showNotes ? noteName : "";
+  if (isActive) return showDegrees ? noteData?.degree : showNotes ? noteName : "";
   return noteName;
 }

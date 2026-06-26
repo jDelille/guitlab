@@ -1,31 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { getShapesForKey, type ShapeName } from "../../constants/CagedChords";
 import Chord from "./chord/Chord";
+import { useSettings } from "../../context/SettingsContext";
 import "./Chords.scss";
 
 interface ChordsProps {
-  keyName: string;
-  scale: string;
   selectedShapes: Set<ShapeName>;
   onShapeToggle: (shape: ShapeName) => void;
-  showAll: boolean;
-  setShowAll: (val: boolean) => void;
-  showAllCagedScales: boolean;
-  showDoubleStops: boolean;
-  showScaleWithDoubleStops: boolean;
-  setSettings: any;
 }
 
-const Chords = ({
-  selectedShapes,
-  onShapeToggle,
-  keyName,
-  scale,
-  setSettings,
-  showAllCagedScales,
-  showDoubleStops,
-  showScaleWithDoubleStops,
-}: ChordsProps) => {
+const Chords = ({ selectedShapes, onShapeToggle }: ChordsProps) => {
+  const { settings, setSettings } = useSettings();
   const [chordQuality, setChordQuality] = useState<"major" | "minor" | "dom7">("major");
 
   const SCALE_QUALITY_MAP: Record<string, { major: string; minor: string; dom7: string }> = {
@@ -41,24 +26,24 @@ const Chords = ({
   };
 
   useEffect(() => {
-    if (scale.startsWith("dom7")) {
+    if (settings.scale.startsWith("dom7")) {
       setChordQuality("dom7");
-    } else if (scale.includes("minor") || scale.includes("Minor")) {
+    } else if (settings.scale.includes("minor") || settings.scale.includes("Minor")) {
       setChordQuality("minor");
     } else {
       setChordQuality("major");
     }
-  }, [scale]);
+  }, [settings.scale]);
 
   const handleQualityChange = (quality: "major" | "minor" | "dom7") => {
     setChordQuality(quality);
-    const mapped = SCALE_QUALITY_MAP[scale]?.[quality];
+    const mapped = SCALE_QUALITY_MAP[settings.scale]?.[quality];
     if (mapped) {
       setSettings((s: any) => ({ ...s, scale: mapped }));
     }
   };
 
-  const shapes = getShapesForKey(keyName);
+  const shapes = getShapesForKey(settings.key);
   const chordsRef = useRef<HTMLDivElement>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -110,10 +95,6 @@ const Chords = ({
                 selectedShapes={selectedShapes}
                 onToggle={onShapeToggle}
                 chordQuality={chordQuality}
-                showAllCagedScales={showAllCagedScales}
-                showDoubleStops={showDoubleStops}
-                showScaleWithDoubleStops={showScaleWithDoubleStops}
-                setSettings={setSettings}
               />
             </div>
           ))}

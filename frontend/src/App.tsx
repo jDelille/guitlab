@@ -6,6 +6,8 @@ import AuthModal from "./components/auth/AuthModal";
 import Home from "./pages/Home";
 import { ThemeProvider } from "./context/ThemeContext";
 import { NotificationsProvider } from "./context/NotificationContext";
+import { SettingsProvider } from "./context/SettingsContext";
+import { PlaybackProvider } from "./context/PlaybackContext";
 
 const Training = lazy(() => import("./pages/Training"));
 const Drill = lazy(() => import("./pages/Drill"));
@@ -21,6 +23,8 @@ function App() {
   return (
     <ThemeProvider>
     <NotificationsProvider>
+    <SettingsProvider>
+    <PlaybackProvider>
     <BrowserRouter>
       <div className="page">
         <div className="layout">
@@ -42,6 +46,8 @@ function App() {
         {authMode && <AuthModal onClose={() => setAuthMode(null)} initialMode={authMode} />}
       </div>
     </BrowserRouter>
+    </PlaybackProvider>
+    </SettingsProvider>
     </NotificationsProvider>
     </ThemeProvider>
   );

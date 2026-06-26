@@ -2,7 +2,6 @@ import KeyControl from "./key-control/KeyControl";
 import ScaleControl from "./scale-control/ScaleControl";
 import OverlayControls from "./overlay-controls/OverlayControls";
 import PlayScale from "./play-scale/PlayScale";
-import type { ShapeName } from "../../constants/CagedChords";
 import "./Controls.scss";
 
 const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
@@ -18,44 +17,28 @@ const SCALES = [
   "dom7Scale",
 ];
 
-interface ControlsProps {
-  settings: any;
-  setSettings: any;
-  cagedChord: ShapeName;
-  selectedLickId: string | null;
-  setSelectedLickId: (id: string | null) => void;
-}
-
-export default function Controls({ settings, setSettings }: ControlsProps) {
+export default function Controls() {
   return (
     <div className="controls">
       <div className="keys">
         <p className="label">Key</p>
-        <KeyControl
-          notes={NOTES}
-          settings={settings}
-          setSettings={setSettings}
-        />
+        <KeyControl notes={NOTES} />
       </div>
 
       <div className="flex">
         <div className="group">
           <p className="label">Scale / Arpeggio</p>
-          <ScaleControl
-            scales={SCALES}
-            settings={settings}
-            setSettings={setSettings}
-          />
+          <ScaleControl scales={SCALES} />
         </div>
 
         <div className="group-2">
           <p className="label">Overlay</p>
-          <OverlayControls settings={settings} setSettings={setSettings} />
+          <OverlayControls />
         </div>
 
         <div className="group">
-          <p className="label">Play Scale / Metronome</p>
-          <PlayScale settings={settings} setSettings={setSettings} />
+          <p className="label">Playback</p>
+          <PlayScale />
         </div>
       </div>
     </div>

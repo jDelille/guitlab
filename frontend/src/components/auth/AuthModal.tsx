@@ -14,7 +14,10 @@ interface Props {
 const MIN_PASSWORD_LENGTH = 8;
 
 const passwordHints = (password: string) => [
-  { label: "At least 8 characters", met: password.length >= MIN_PASSWORD_LENGTH },
+  {
+    label: "At least 8 characters",
+    met: password.length >= MIN_PASSWORD_LENGTH,
+  },
   { label: "One uppercase letter", met: /[A-Z]/.test(password) },
   { label: "One number", met: /[0-9]/.test(password) },
 ];
@@ -34,7 +37,7 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
   const hints = passwordHints(password);
   const passwordValid = hints.every((h) => h.met);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -44,8 +47,11 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
         redirectTo: `${window.location.origin}/reset-password`,
       });
       setLoading(false);
-      if (error) setError(error.message);
-      else setForgotSent(true);
+      if (error) {
+        setError(error.message);
+      } else {
+        setForgotSent(true);
+      }
       return;
     }
 
@@ -71,10 +77,16 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
         }
         loginEmail = data.email;
       }
-      const { error } = await supabase.auth.signInWithPassword({ email: loginEmail, password });
+      const { error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password,
+      });
       setLoading(false);
-      if (error) setError(error.message);
-      else onClose();
+      if (error) {
+        setError(error.message);
+      } else {
+        onClose();
+      }
     } else {
       const { data, error } = await supabase.auth.signUp({ email, password });
       if (error) {
@@ -83,7 +95,10 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
         return;
       }
       if (data.user) {
-        await supabase.from("profiles").update({ username }).eq("id", data.user.id);
+        await supabase
+          .from("profiles")
+          .update({ username })
+          .eq("id", data.user.id);
       }
       setLoading(false);
       setSignupDone(true);
@@ -102,12 +117,19 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
     return (
       <div className="auth-overlay" onClick={onClose}>
         <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
-          <button className="auth-close" onClick={onClose} aria-label="Close"><IoCloseOutline size={20} /></button>
+          <button className="auth-close" onClick={onClose} aria-label="Close">
+            <IoCloseOutline size={20} />
+          </button>
           <p className="title">Guitlab</p>
           <div className="auth-confirm">
             <p className="auth-confirm__heading">Check your email</p>
-            <p className="auth-confirm__body">We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.</p>
-            <button className="auth-submit" onClick={onClose}>Done</button>
+            <p className="auth-confirm__body">
+              We sent a confirmation link to <strong>{email}</strong>. Click it
+              to activate your account.
+            </p>
+            <button className="auth-submit" onClick={onClose}>
+              Done
+            </button>
           </div>
         </div>
       </div>
@@ -117,19 +139,30 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
   return (
     <div className="auth-overlay" onClick={onClose}>
       <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="auth-close" onClick={onClose} aria-label="Close"><IoCloseOutline size={20} /></button>
+        <button className="auth-close" onClick={onClose} aria-label="Close">
+          <IoCloseOutline size={20} />
+        </button>
         <p className="title">Guitlab</p>
 
         {mode === "forgot" ? (
           forgotSent ? (
             <div className="auth-confirm">
               <p className="auth-confirm__heading">Email sent</p>
-              <p className="auth-confirm__body">Check <strong>{email}</strong> for a password reset link.</p>
-              <button className="auth-submit" onClick={() => switchMode("login")}>Back to login</button>
+              <p className="auth-confirm__body">
+                Check <strong>{email}</strong> for a password reset link.
+              </p>
+              <button
+                className="auth-submit"
+                onClick={() => switchMode("login")}
+              >
+                Back to login
+              </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
-              <p className="auth-hint-text">Enter your email and we'll send you a reset link.</p>
+              <p className="auth-hint-text">
+                Enter your email and we'll send you a reset link.
+              </p>
               <input
                 type="email"
                 placeholder="Email"
@@ -138,11 +171,17 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
                 required
               />
               {error && <p className="auth-error">{error}</p>}
-              <button type="submit" className="auth-submit" disabled={loading || !email}>
+              <button
+                type="submit"
+                className="auth-submit"
+                disabled={loading || !email}
+              >
                 {loading ? "..." : "Send reset link"}
               </button>
               <p className="auth-switch">
-                <button type="button" onClick={() => switchMode("login")}>Back to login</button>
+                <button type="button" onClick={() => switchMode("login")}>
+                  Back to login
+                </button>
               </p>
             </form>
           )
@@ -183,8 +222,16 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <button type="button" className="password-toggle" onClick={() => setShowPassword((v) => !v)}>
-                  {showPassword ? <IoEyeOffOutline size={16} /> : <IoEyeOutline size={16} />}
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword((v) => !v)}
+                >
+                  {showPassword ? (
+                    <IoEyeOffOutline size={16} />
+                  ) : (
+                    <IoEyeOutline size={16} />
+                  )}
                 </button>
               </div>
 
@@ -199,7 +246,11 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
               )}
 
               {mode === "login" && (
-                <button type="button" className="forgot-link" onClick={() => switchMode("forgot")}>
+                <button
+                  type="button"
+                  className="forgot-link"
+                  onClick={() => switchMode("forgot")}
+                >
                   Forgot password?
                 </button>
               )}
@@ -219,19 +270,32 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
               </button>
             </form>
 
-            <div className="auth-divider"><span>or</span></div>
+            <div className="auth-divider">
+              <span>or</span>
+            </div>
 
             <button
               className="google-btn"
-              onClick={() => supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: window.location.origin } })}
+              onClick={() =>
+                supabase.auth.signInWithOAuth({
+                  provider: "google",
+                  options: { redirectTo: window.location.origin },
+                })
+              }
             >
               <FcGoogle size={18} />
               Continue with Google
             </button>
 
             <p className="auth-switch">
-              {mode === "login" ? "Don't have an account?" : "Already have an account?"}
-              <button onClick={() => switchMode(mode === "login" ? "signup" : "login")}>
+              {mode === "login"
+                ? "Don't have an account?"
+                : "Already have an account?"}
+              <button
+                onClick={() =>
+                  switchMode(mode === "login" ? "signup" : "login")
+                }
+              >
                 {mode === "login" ? "Sign up" : "Log in"}
               </button>
             </p>

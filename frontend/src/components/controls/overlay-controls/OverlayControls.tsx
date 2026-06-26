@@ -1,27 +1,27 @@
+import { useSettings, type Settings } from "../../../context/SettingsContext";
 import "./OverlayControls.scss";
 
-interface OverlayControlsProps {
-  settings: any;
-  setSettings: any;
-}
-
-const CONTROLS = [
+const CONTROLS: { label: string; short: string; key: keyof Settings }[] = [
   { label: "Note Names", short: "Notes", key: "showNotes" },
-  { label: "Intervals", short: "Intervals", key: "showIntervals" },
-  { label: "All Notes", short: "All", key: "showAllCagedScales" },
+  { label: "Degrees", short: "Degrees", key: "showDegrees" },
   { label: "Triads", short: "Triads", key: "showTriads" },
   { label: "Double Stops", short: "Dbl Stops", key: "showDoubleStops" },
   { label: "1-4-5", short: "1-4-5", key: "show145" },
 ];
 
-const OverlayControls = ({ settings, setSettings }: OverlayControlsProps) => {
-  const toggle = (key: string) =>
+const OverlayControls = () => {
+  const { settings, setSettings } = useSettings();
+
+  const toggle = (key: keyof Settings) =>
     setSettings((s: any) => ({
       ...s,
       [key]: !s[key],
-      ...(key === "showNotes" && !s.showNotes && { showIntervals: false }),
-      ...(key === "showIntervals" && !s.showIntervals && { showNotes: false }),
-      ...(key === "showDoubleStops" && { showScaleWithDoubleStops: false, ...((!s.showDoubleStops) && { showTriads: false }) }),
+      ...(key === "showNotes" && !s.showNotes && { showDegrees: false }),
+      ...(key === "showDegrees" && !s.showDegrees && { showNotes: false }),
+      ...(key === "showDoubleStops" && {
+        showScaleWithDoubleStops: false,
+        ...(!s.showDoubleStops && { showTriads: false }),
+      }),
       ...(key === "showTriads" && !s.showTriads && { showDoubleStops: false }),
     }));
 

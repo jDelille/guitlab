@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect } from "react";
+import { useSettings } from "../../../context/SettingsContext";
 import "./ScaleControl.scss";
 
 interface ScaleControlProps {
   scales: string[];
-  settings: any;
-  setSettings: any;
 }
 
 const SCALE_LABELS: Record<string, string> = {
@@ -33,7 +32,9 @@ const SCALE_SECTIONS = [
   },
 ];
 
-const ScaleControl = ({ scales, settings, setSettings }: ScaleControlProps) => {
+const ScaleControl = ({ scales }: ScaleControlProps) => {
+  const { settings, setSettings } = useSettings();
+
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
