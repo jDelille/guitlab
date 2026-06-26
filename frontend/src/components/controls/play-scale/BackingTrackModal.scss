@@ -189,6 +189,32 @@
     text-overflow: ellipsis;
   }
 
+  &__edit-input {
+    flex: 1;
+    background: var(--bg-primary);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 13px;
+    padding: 2px 6px;
+    outline: none;
+  }
+
+  &__edit {
+    all: unset;
+    cursor: pointer;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-radius: 4px;
+    flex-shrink: 0;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+
   &__delete {
     all: unset;
     cursor: pointer;

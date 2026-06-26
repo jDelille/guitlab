@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { FaPlay } from "react-icons/fa";
-import { MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline, MdEdit } from "react-icons/md";
 import { supabase } from "../../../services/supabase";
 import { useUser } from "../../../hooks/useUser";
 import "./BackingTrackModal.scss";
@@ -65,7 +65,6 @@ const BackingTrackModal = ({ onClose, onPlay, activeTrackId }: Props) => {
   const [embedInput, setEmbedInput] = useState("");
   const [parseError, setParseError] = useState("");
 
-  // If logged in, sync from DB (DB is source of truth for authenticated users)
   useEffect(() => {
     if (!user) return;
     supabase
@@ -100,17 +99,18 @@ const BackingTrackModal = ({ onClose, onPlay, activeTrackId }: Props) => {
         .insert({ title: parsed.title, youtube_id: parsed.youtubeId, user_id: user.id })
         .select()
         .single();
-      if (error || !data) return;
+      if (error || !data) {
+        setParseError("Failed to save track. Please try again.");
+        return;
+      }
       newTrack = { id: data.id, title: data.title, youtubeId: data.youtube_id };
     } else {
       newTrack = { id: crypto.randomUUID(), youtubeId: parsed.youtubeId, title: parsed.title };
     }
 
-    setSavedTracks((prev) => {
-      const updated = [newTrack, ...prev];
-      saveLocal(updated);
-      return updated;
-    });
+    const updated = [newTrack, ...savedTracks];
+    saveLocal(updated);
+    setSavedTracks(updated);
     setEmbedInput("");
     setParseError("");
     onPlay(newTrack);
@@ -118,13 +118,20 @@ const BackingTrackModal = ({ onClose, onPlay, activeTrackId }: Props) => {
   };
 
   const handleDelete = async (id: string) => {
-    setSavedTracks((prev) => {
-      const updated = prev.filter((t) => t.id !== id);
-      saveLocal(updated);
-      return updated;
-    });
+    const updated = savedTracks.filter((t) => t.id !== id);
+    saveLocal(updated);
+    setSavedTracks(updated);
     if (user) {
       await supabase.from("user_backing_tracks").delete().eq("id", id);
+    }
+  };
+
+  const handleRename = async (id: string, title: string) => {
+    const updated = savedTracks.map((t) => (t.id === id ? { ...t, title } : t));
+    saveLocal(updated);
+    setSavedTracks(updated);
+    if (user) {
+      await supabase.from("user_backing_tracks").update({ title }).eq("id", id);
     }
   };
 
@@ -170,6 +177,7 @@ const BackingTrackModal = ({ onClose, onPlay, activeTrackId }: Props) => {
                   active={activeTrackId === track.id}
                   onPlay={() => { onPlay(track); onClose(); }}
                   onDelete={() => handleDelete(track.id)}
+                  onRename={(title) => handleRename(track.id, title)}
                 />
               ))}
             </>
@@ -195,23 +203,55 @@ const TrackRow = ({
   active,
   onPlay,
   onDelete,
+  onRename,
 }: {
   track: BackingTrack;
   active: boolean;
   onPlay: () => void;
   onDelete?: () => void;
-}) => (
-  <div className={`bt-track${active ? " bt-track--active" : ""}`}>
-    <button className="bt-track__play" onClick={onPlay}>
-      <FaPlay size={10} />
-    </button>
-    <span className="bt-track__title">{track.title}</span>
-    {onDelete && (
-      <button className="bt-track__delete" onClick={onDelete}>
-        <MdDeleteOutline size={16} />
+  onRename?: (title: string) => void;
+}) => {
+  const [editing, setEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(track.title);
+
+  const save = () => {
+    const trimmed = editTitle.trim();
+    if (trimmed && trimmed !== track.title) onRename?.(trimmed);
+    setEditing(false);
+  };
+
+  return (
+    <div className={`bt-track${active ? " bt-track--active" : ""}`}>
+      <button className="bt-track__play" onClick={onPlay}>
+        <FaPlay size={10} />
       </button>
-    )}
-  </div>
-);
+      {editing ? (
+        <input
+          className="bt-track__edit-input"
+          value={editTitle}
+          onChange={(e) => setEditTitle(e.target.value)}
+          onBlur={save}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") save();
+            if (e.key === "Escape") { setEditTitle(track.title); setEditing(false); }
+          }}
+          autoFocus
+        />
+      ) : (
+        <span className="bt-track__title">{track.title}</span>
+      )}
+      {onRename && !editing && (
+        <button className="bt-track__edit" onClick={() => { setEditTitle(track.title); setEditing(true); }}>
+          <MdEdit size={14} />
+        </button>
+      )}
+      {onDelete && !editing && (
+        <button className="bt-track__delete" onClick={onDelete}>
+          <MdDeleteOutline size={16} />
+        </button>
+      )}
+    </div>
+  );
+};
 
 export default BackingTrackModal;
