@@ -18,7 +18,7 @@ const Home = () => {
   );
   const [showChordTones] = useState<boolean>(false);
   const [activePositions, setActivePositions] = useState<ActivePositions>(null);
-  const [selectedLickId, setSelectedLickId] = useState<string | null>(null);
+  const [selectedLickId] = useState<string | null>(null);
 
   const { settings, setSettings } = useSettings();
 
