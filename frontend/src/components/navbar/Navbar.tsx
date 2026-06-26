@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import { supabase } from "../../services/supabase";
 import { useUser } from "../../hooks/useUser";
 import { useTheme } from "../../context/ThemeContext";
+import { useNotifications } from "../../context/NotificationContext";
 import { IoSunnyOutline, IoMoonOutline, IoSettingsOutline, IoLogOutOutline } from "react-icons/io5";
-import { FaRegCircleUser } from "react-icons/fa6";
+import { FaRegBell } from "react-icons/fa";
+import { RiMenuLine } from "react-icons/ri";
+import NotificationPanel from "./NotificationPanel";
 
 import "./Navbar.scss";
 
@@ -15,9 +18,12 @@ interface Props {
 const Navbar = ({ onAuthOpen }: Props) => {
   const { user } = useUser();
   const { theme, toggleTheme } = useTheme();
+  const { unreadCount } = useNotifications();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const notifRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = () => {
     supabase.auth.signOut();
@@ -29,6 +35,9 @@ const Navbar = ({ onAuthOpen }: Props) => {
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setMenuOpen(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setNotifOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -59,6 +68,22 @@ const Navbar = ({ onAuthOpen }: Props) => {
               <IoSunnyOutline color="var(--text-primary)" />
             </button>
           )}
+          <div className="notifications-wrapper" ref={notifRef}>
+            <button
+              className="bell"
+              aria-label="Notifications"
+              onClick={() => setNotifOpen((o) => !o)}
+            >
+              <FaRegBell
+                color={unreadCount > 0 ? "var(--red)" : "var(--text-primary)"}
+                size={18}
+              />
+              {unreadCount > 0 && (
+                <span className="bell__badge">{unreadCount}</span>
+              )}
+            </button>
+            <NotificationPanel isOpen={notifOpen} onClose={() => setNotifOpen(false)} />
+          </div>
           {user && (
             <div className="user-menu-wrapper" ref={menuRef}>
               <button
@@ -66,31 +91,29 @@ const Navbar = ({ onAuthOpen }: Props) => {
                 onClick={() => setMenuOpen((o) => !o)}
                 aria-label="User menu"
               >
-                <FaRegCircleUser />
+                <RiMenuLine color="var(--text-primary)" size={18}/>
               </button>
-              {menuOpen && (
-                <div className="user-menu">
-                  <span className="user-menu-email">{user.email}</span>
-                  <ul>
-                    <li>
-                      <button className="theme-row" onClick={toggleTheme}>
-                        {theme === "dark" ? <IoSunnyOutline size={14} /> : <IoMoonOutline size={14} />}
-                        {theme === "dark" ? "Light mode" : "Dark mode"}
-                      </button>
-                    </li>
-                    <li>
-                      <Link to="/settings" onClick={() => setMenuOpen(false)}>
-                        <IoSettingsOutline size={14} />Settings
-                      </Link>
-                    </li>
-                    <li>
-                      <button onClick={handleLogout}>
-                        <IoLogOutOutline size={14} />Logout
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              )}
+              <div className={`user-menu${menuOpen ? " user-menu--open" : ""}`}>
+                <span className="user-menu-email">{user.email}</span>
+                <ul>
+                  <li>
+                    <button className="theme-row" onClick={toggleTheme}>
+                      {theme === "dark" ? <IoSunnyOutline size={14} /> : <IoMoonOutline size={14} />}
+                      {theme === "dark" ? "Light mode" : "Dark mode"}
+                    </button>
+                  </li>
+                  <li>
+                    <Link to="/settings" onClick={() => setMenuOpen(false)}>
+                      <IoSettingsOutline size={14} />Settings
+                    </Link>
+                  </li>
+                  <li>
+                    <button onClick={handleLogout}>
+                      <IoLogOutOutline size={14} />Logout
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
           )}
         </ul>

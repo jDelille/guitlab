@@ -91,4 +91,32 @@ def save_drill_progress(body: DrillProgressBody, authorization: str | None = Hea
                 "total_points": current + points_earned
             }).eq("id", str(user.id)).execute()
 
+    # Check for drill completion (35 perfect combos) and notify once
+    if body.score == 100:
+        completed_count = (
+            supabase.table("drill_progress")
+            .select("id", count="exact")
+            .eq("user_id", str(user.id))
+            .eq("drill_id", body.drill_id)
+            .eq("best_score", 100)
+            .execute()
+        )
+        if completed_count.count == 35:
+            notif_key = f"drill_complete:{body.drill_id}"
+            already_notified = (
+                supabase.table("notifications")
+                .select("id")
+                .eq("user_id", str(user.id))
+                .eq("key", notif_key)
+                .execute()
+            )
+            if not already_notified.data:
+                drill_label = body.drill_id.replace("-", " ").title()
+                supabase.table("notifications").insert({
+                    "user_id": str(user.id),
+                    "key": notif_key,
+                    "title": f"{drill_label} — Complete!",
+                    "body": f"You've mastered all 35 combinations. Keep pushing — try a harder difficulty!",
+                }).execute()
+
     return {"points_earned": points_earned}

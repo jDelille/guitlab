@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Soundfont } from "smplr";
 import { FaPlay, FaStop } from "react-icons/fa";
 import { getAudioContext, setInstrument } from "../../../audio/soundfont";
 import "./InstrumentPicker.scss";
@@ -44,6 +43,7 @@ const InstrumentPicker = ({ current, onSelect, onClose }: Props) => {
     setPreviewing(name);
     const ctx = getAudioContext();
     await ctx.resume();
+    const { Soundfont } = await import("smplr");
     const temp = Soundfont(ctx, { instrument: name, kit: "MusyngKite" });
     await temp.load;
     PREVIEW_NOTES.forEach((note, i) => {
