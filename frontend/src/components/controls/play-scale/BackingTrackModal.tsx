@@ -87,7 +87,9 @@ const BackingTrackModal = ({ onClose, onPlay, activeTrackId }: Props) => {
   const handleAdd = async () => {
     const parsed = parseEmbed(embedInput);
     if (!parsed) {
-      setParseError("Couldn't parse embed code. Make sure you copied the full <iframe> from YouTube.");
+      setParseError(
+        "Couldn't parse embed code. Make sure you copied the full <iframe> from YouTube.",
+      );
       return;
     }
 
@@ -96,7 +98,11 @@ const BackingTrackModal = ({ onClose, onPlay, activeTrackId }: Props) => {
     if (user) {
       const { data, error } = await supabase
         .from("user_backing_tracks")
-        .insert({ title: parsed.title, youtube_id: parsed.youtubeId, user_id: user.id })
+        .insert({
+          title: parsed.title,
+          youtube_id: parsed.youtubeId,
+          user_id: user.id,
+        })
         .select()
         .single();
       if (error || !data) {
@@ -105,7 +111,11 @@ const BackingTrackModal = ({ onClose, onPlay, activeTrackId }: Props) => {
       }
       newTrack = { id: data.id, title: data.title, youtubeId: data.youtube_id };
     } else {
-      newTrack = { id: crypto.randomUUID(), youtubeId: parsed.youtubeId, title: parsed.title };
+      newTrack = {
+        id: crypto.randomUUID(),
+        youtubeId: parsed.youtubeId,
+        title: parsed.title,
+      };
     }
 
     const updated = [newTrack, ...savedTracks];
@@ -148,7 +158,8 @@ const BackingTrackModal = ({ onClose, onPlay, activeTrackId }: Props) => {
         <div className="bt-modal__add">
           <span className="bt-modal__section-label">Add a track</span>
           <p className="bt-modal__hint">
-            On YouTube, click Share → Embed, then copy the full &lt;iframe&gt; code and paste it below.
+            On YouTube, click Share → Embed, then copy the full &lt;iframe&gt;
+            code and paste it below.
             {!user && " Sign in to sync your tracks across devices."}
           </p>
           <div className="bt-modal__input-row">
@@ -156,10 +167,17 @@ const BackingTrackModal = ({ onClose, onPlay, activeTrackId }: Props) => {
               className="bt-modal__textarea"
               placeholder='<iframe ... src="https://www.youtube.com/embed/..." ...></iframe>'
               value={embedInput}
-              onChange={(e) => { setEmbedInput(e.target.value); setParseError(""); }}
+              onChange={(e) => {
+                setEmbedInput(e.target.value);
+                setParseError("");
+              }}
               rows={3}
             />
-            <button className="bt-modal__add-btn" onClick={handleAdd} disabled={!embedInput.trim()}>
+            <button
+              className="bt-modal__add-btn"
+              onClick={handleAdd}
+              disabled={!embedInput.trim()}
+            >
               Add
             </button>
           </div>
@@ -175,7 +193,10 @@ const BackingTrackModal = ({ onClose, onPlay, activeTrackId }: Props) => {
                   key={track.id}
                   track={track}
                   active={activeTrackId === track.id}
-                  onPlay={() => { onPlay(track); onClose(); }}
+                  onPlay={() => {
+                    onPlay(track);
+                    onClose();
+                  }}
                   onDelete={() => handleDelete(track.id)}
                   onRename={(title) => handleRename(track.id, title)}
                 />
@@ -189,7 +210,10 @@ const BackingTrackModal = ({ onClose, onPlay, activeTrackId }: Props) => {
               key={track.id}
               track={track}
               active={activeTrackId === track.id}
-              onPlay={() => { onPlay(track); onClose(); }}
+              onPlay={() => {
+                onPlay(track);
+                onClose();
+              }}
             />
           ))}
         </div>
@@ -233,7 +257,10 @@ const TrackRow = ({
           onBlur={save}
           onKeyDown={(e) => {
             if (e.key === "Enter") save();
-            if (e.key === "Escape") { setEditTitle(track.title); setEditing(false); }
+            if (e.key === "Escape") {
+              setEditTitle(track.title);
+              setEditing(false);
+            }
           }}
           autoFocus
         />
@@ -241,7 +268,13 @@ const TrackRow = ({
         <span className="bt-track__title">{track.title}</span>
       )}
       {onRename && !editing && (
-        <button className="bt-track__edit" onClick={() => { setEditTitle(track.title); setEditing(true); }}>
+        <button
+          className="bt-track__edit"
+          onClick={() => {
+            setEditTitle(track.title);
+            setEditing(true);
+          }}
+        >
           <MdEdit size={14} />
         </button>
       )}

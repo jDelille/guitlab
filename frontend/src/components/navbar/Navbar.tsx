@@ -8,6 +8,8 @@ import { IoSunnyOutline, IoMoonOutline, IoSettingsOutline, IoLogOutOutline } fro
 import { FaRegBell } from "react-icons/fa";
 import { RiMenuLine } from "react-icons/ri";
 import NotificationPanel from "./NotificationPanel";
+import MobileMenu from "./MobileMenu";
+import BottomNav from "./BottomNav";
 
 import "./Navbar.scss";
 
@@ -52,18 +54,33 @@ const Navbar = ({ onAuthOpen }: Props) => {
         </div>
 
         <ul className="links">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/training">The Lab</Link></li>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/training">The Lab</Link>
+          </li>
         </ul>
 
         <ul className="nav-settings">
           {!user && (
             <>
-              <button className="sign-in-btn" onClick={() => onAuthOpen("login")}>
+              <button
+                className="sign-in-btn"
+                onClick={() => onAuthOpen("login")}
+              >
                 Login
               </button>
-              <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
-                {theme === "dark" ? <IoSunnyOutline color="var(--text-primary)" /> : <IoMoonOutline color="var(--text-primary)" />}
+              <button
+                className="theme-toggle"
+                onClick={toggleTheme}
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? (
+                  <IoSunnyOutline color="var(--text-primary)" />
+                ) : (
+                  <IoMoonOutline color="var(--text-primary)" />
+                )}
               </button>
             </>
           )}
@@ -76,14 +93,19 @@ const Navbar = ({ onAuthOpen }: Props) => {
                   onClick={() => setNotifOpen((o) => !o)}
                 >
                   <FaRegBell
-                    color={unreadCount > 0 ? "var(--red)" : "var(--text-primary)"}
+                    color={
+                      unreadCount > 0 ? "var(--red)" : "var(--text-primary)"
+                    }
                     size={18}
                   />
                   {unreadCount > 0 && (
                     <span className="bell__badge">{unreadCount}</span>
                   )}
                 </button>
-                <NotificationPanel isOpen={notifOpen} onClose={() => setNotifOpen(false)} />
+                <NotificationPanel
+                  isOpen={notifOpen}
+                  onClose={() => setNotifOpen(false)}
+                />
               </div>
               <div className="user-menu-wrapper" ref={menuRef}>
                 <button
@@ -93,23 +115,31 @@ const Navbar = ({ onAuthOpen }: Props) => {
                 >
                   <RiMenuLine color="var(--text-primary)" size={18} />
                 </button>
-                <div className={`user-menu${menuOpen ? " user-menu--open" : ""}`}>
+                <div
+                  className={`user-menu${menuOpen ? " user-menu--open" : ""}`}
+                >
                   <span className="user-menu-email">{user.email}</span>
                   <ul>
                     <li>
                       <button className="theme-row" onClick={toggleTheme}>
-                        {theme === "dark" ? <IoSunnyOutline size={14} /> : <IoMoonOutline size={14} />}
+                        {theme === "dark" ? (
+                          <IoSunnyOutline size={14} />
+                        ) : (
+                          <IoMoonOutline size={14} />
+                        )}
                         {theme === "dark" ? "Light mode" : "Dark mode"}
                       </button>
                     </li>
                     <li>
                       <Link to="/settings" onClick={() => setMenuOpen(false)}>
-                        <IoSettingsOutline size={14} />Settings
+                        <IoSettingsOutline size={14} />
+                        Settings
                       </Link>
                     </li>
                     <li>
                       <button onClick={handleLogout}>
-                        <IoLogOutOutline size={14} />Logout
+                        <IoLogOutOutline size={14} />
+                        Logout
                       </button>
                     </li>
                   </ul>
@@ -130,39 +160,16 @@ const Navbar = ({ onAuthOpen }: Props) => {
         </button>
       </div>
 
-      {mobileOpen && (
-        <div className="mobile-menu">
-          <ul>
-            <li><Link to="/" onClick={() => setMobileOpen(false)}>Home</Link></li>
-            <li><Link to="/training" onClick={() => setMobileOpen(false)}>The Lab</Link></li>
-            {!user && (
-              <li>
-                <button onClick={() => { onAuthOpen("login"); setMobileOpen(false); }}>Login</button>
-              </li>
-            )}
-            {user && (
-              <>
-                <li>
-                  <Link to="/settings" onClick={() => setMobileOpen(false)}>
-                    <IoSettingsOutline size={14} />Settings
-                  </Link>
-                </li>
-                <li>
-                  <button onClick={handleLogout}>
-                    <IoLogOutOutline size={14} />Logout
-                  </button>
-                </li>
-              </>
-            )}
-            <li>
-              <button onClick={() => { toggleTheme(); setMobileOpen(false); }}>
-                {theme === "dark" ? <IoSunnyOutline size={14} /> : <IoMoonOutline size={14} />}
-                {theme === "dark" ? "Light mode" : "Dark mode"}
-              </button>
-            </li>
-          </ul>
-        </div>
-      )}
+      <MobileMenu
+        isOpen={mobileOpen}
+        user={user}
+        onClose={() => setMobileOpen(false)}
+        onAuthOpen={onAuthOpen}
+        onLogout={handleLogout}
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
+      <BottomNav isOpen={mobileOpen} onToggle={() => setMobileOpen((o) => !o)} />
     </div>
   );
 };

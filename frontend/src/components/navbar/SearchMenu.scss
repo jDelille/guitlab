@@ -1,0 +1,77 @@
+@use "../../scss/breakpoints" as bp;
+
+.search-menu {
+  display: none;
+
+  @include bp.mobile {
+    display: flex;
+    flex-direction: column;
+  }
+
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 260;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.2);
+  padding: 0 1.25rem 3rem;
+  max-height: 70vh;
+  overflow-y: auto;
+  animation: searchSlideUp 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  padding-bottom: 5.5rem;
+  &__handle {
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: var(--border-color);
+    margin: 12px auto 16px;
+    flex-shrink: 0;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__result {
+    all: unset;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem 0.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background-color: var(--bg-elevated);
+    }
+  }
+
+  &__key {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    width: 32px;
+    flex-shrink: 0;
+  }
+
+  &__scale {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+}
+
+@keyframes searchSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

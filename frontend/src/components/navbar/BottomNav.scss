@@ -1,0 +1,86 @@
+@use "../../scss/breakpoints" as bp;
+
+.bottom-nav {
+  display: none;
+
+  @include bp.mobile {
+    display: flex;
+  }
+
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 8px 18px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+  white-space: nowrap;
+
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    width: auto;
+    transition: width 0.2s ease;
+
+    &--open {
+      width: 160px;
+      cursor: default;
+    }
+  }
+
+  &__search-input {
+    all: unset;
+    font-size: 13px;
+    color: var(--text-primary);
+    width: 100%;
+
+    &::placeholder {
+      color: var(--text-muted);
+    }
+  }
+
+  &__menu-btn {
+    all: unset;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--bg-elevated);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    flex-shrink: 0;
+    transition:
+      transform 0.1s ease,
+      background-color 0.15s;
+
+    &:hover {
+      background-color: var(--bg-elevated-hovered);
+    }
+
+    &:active {
+      transform: scale(0.88);
+    }
+
+    &--open {
+      background-color: var(--accent);
+      color: #fff;
+
+      &:hover {
+        background-color: var(--accent);
+        opacity: 0.9;
+      }
+    }
+  }
+}
