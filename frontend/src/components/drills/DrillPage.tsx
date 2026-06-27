@@ -6,6 +6,7 @@ import type { Scales } from "../../types/Scales";
 import DrillFretboard from "../drill-fretboard/DrillFretboard";
 import DrillRoadmap from "./DrillRoadmap";
 import LoadingScreen from "../ui/LoadingScreen";
+import AuthModal from "../auth/AuthModal";
 import { supabase } from "../../services/supabase";
 import {
   DRILL_CONFIG,
@@ -25,6 +26,8 @@ const DrillPage = () => {
   const [progress, setProgress] = useState<ComboProgress[]>([]);
   const [loading, setLoading] = useState(true);
   const [difficulty] = useState("Novice");
+  const [isGuest, setIsGuest] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const scales = config ? [config.scaleKey] : (["majorPentatonic"] as Scales[]);
   const next = getNextCombo([], scales);
@@ -41,7 +44,7 @@ const DrillPage = () => {
   useEffect(() => {
     async function fetchProgress() {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) { setLoading(false); return; }
+      if (!session) { setIsGuest(true); setLoading(false); return; }
 
       const progressRes = await fetch(`${import.meta.env.VITE_API_URL}/drill-progress`, {
         headers: { Authorization: `Bearer ${session.access_token}` },
@@ -118,6 +121,10 @@ const DrillPage = () => {
   };
 
   const handleNext = () => {
+    if (isGuest) {
+      setShowAuthModal(true);
+      return;
+    }
     const combo = getNextCombo(progress, scales);
     setKey(combo.key);
     setShape(combo.shape);
@@ -183,6 +190,10 @@ const DrillPage = () => {
           </div>
         )}
       </div>
+
+      {showAuthModal && (
+        <AuthModal onClose={() => setShowAuthModal(false)} initialMode="signup" />
+      )}
 
       <div className="drill-controls-wrapper">
         <DrillRoadmap

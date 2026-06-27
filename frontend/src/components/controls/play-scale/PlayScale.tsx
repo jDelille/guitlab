@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+﻿import { useRef, useState, useEffect } from "react";
 import { FaPlay, FaStop } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { TbMusic, TbMusicPause } from "react-icons/tb";
@@ -10,6 +10,7 @@ import FloatingPlayer from "./FloatingPlayer";
 import { getCurrentInstrumentName } from "../../../audio/soundfont";
 import "./PlayScale.scss";
 import { useSettings } from "../../../context/SettingsContext";
+import { PiMetronomeBold } from "react-icons/pi";
 
 type Direction = "asc" | "desc" | "both";
 type MetronomeSound = "click" | "wood" | "soft";
@@ -142,67 +143,69 @@ const PlayScale = () => {
 
   return (
     <div className="play-scale">
-      <button
-        className="play-scale__btn"
-        onClick={() => set({ playScale: !settings.playScale })}
-        aria-label={settings.playScale ? "Stop" : "Play scale"}
-      >
-        {settings.playScale ? <FaStop size={12} /> : <FaPlay size={12} />}
-      </button>
-
-      <button
-        className={`play-scale__btn ${metronomeActive ? "play-scale__btn--active" : ""}`}
-        onClick={toggleMetronome}
-        aria-label={metronomeActive ? "Stop metronome" : "Start metronome"}
-      >
-        <GiMetronome size={15} />
-      </button>
-
-      <button
-        className={`play-scale__btn ${activeTrack ? "play-scale__btn--active-blue" : ""}`}
-        onClick={() => setModalOpen(true)}
-        aria-label="Backing track"
-      >
-        {activeTrack ? <TbMusicPause size={16} /> : <TbMusic size={16} />}
-      </button>
-
-      <div className="play-scale__bpm">
-        <input
-          type="range"
-          min={40}
-          max={240}
-          value={settings.playScaleBpm}
-          onChange={(e) => set({ playScaleBpm: Number(e.target.value) })}
-          aria-label="BPM"
-        />
-        <span>{settings.playScaleBpm} BPM</span>
-      </div>
-
-      <div className="play-scale__settings-wrapper play-scale__bpm-dropdown" ref={bpmRef}>
+      <div className="play-scale__scroll">
         <button
-          className="play-scale__bpm-btn"
-          onClick={() => setBpmOpen((o) => !o)}
-          aria-label="BPM"
+          className="play-scale__btn"
+          onClick={() => set({ playScale: !settings.playScale })}
+          aria-label={settings.playScale ? "Stop" : "Play scale"}
         >
-          {settings.playScaleBpm} BPM
+          {settings.playScale ? <FaStop size={12} /> : <FaPlay size={12} />}
         </button>
 
-        {bpmOpen && (
-          <div className="play-scale__menu play-scale__menu--bpm">
-            <span className="play-scale__menu-label">BPM</span>
-            <div className="play-scale__menu-volume">
-              <input
-                type="range"
-                min={40}
-                max={240}
-                value={settings.playScaleBpm}
-                onChange={(e) => set({ playScaleBpm: Number(e.target.value) })}
-                aria-label="BPM"
-              />
-              <span>{settings.playScaleBpm}</span>
+        <button
+          className={`play-scale__btn ${metronomeActive ? "play-scale__btn--active" : ""}`}
+          onClick={toggleMetronome}
+          aria-label={metronomeActive ? "Stop metronome" : "Start metronome"}
+        >
+          <PiMetronomeBold size={15} />
+        </button>
+
+        <button
+          className={`play-scale__btn ${activeTrack ? "play-scale__btn--active-blue" : ""}`}
+          onClick={() => setModalOpen(true)}
+          aria-label="Backing track"
+        >
+          {activeTrack ? <TbMusicPause size={16} /> : <TbMusic size={16} />}
+        </button>
+
+        <div className="play-scale__bpm">
+          <input
+            type="range"
+            min={40}
+            max={240}
+            value={settings.playScaleBpm}
+            onChange={(e) => set({ playScaleBpm: Number(e.target.value) })}
+            aria-label="BPM"
+          />
+          <span>{settings.playScaleBpm} BPM</span>
+        </div>
+
+        <div className="play-scale__settings-wrapper play-scale__bpm-dropdown" ref={bpmRef}>
+          <button
+            className="play-scale__bpm-btn"
+            onClick={() => setBpmOpen((o) => !o)}
+            aria-label="BPM"
+          >
+            {settings.playScaleBpm} BPM
+          </button>
+
+          {bpmOpen && (
+            <div className="play-scale__menu play-scale__menu--bpm">
+              <span className="play-scale__menu-label">BPM</span>
+              <div className="play-scale__menu-volume">
+                <input
+                  type="range"
+                  min={40}
+                  max={240}
+                  value={settings.playScaleBpm}
+                  onChange={(e) => set({ playScaleBpm: Number(e.target.value) })}
+                  aria-label="BPM"
+                />
+                <span>{settings.playScaleBpm}</span>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       <div className="play-scale__settings-wrapper" ref={menuRef}>
