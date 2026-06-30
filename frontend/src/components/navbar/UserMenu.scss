@@ -1,0 +1,155 @@
+@use "../../scss/variables" as var;
+
+.user-menu-wrapper {
+  position: relative;
+
+  &__trigger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    padding: 10px;
+    border-radius: 6px;
+    transition: transform 0.1s ease;
+
+    &:focus { outline: none; }
+
+    &:hover {
+      background-color: var(--bg-hovered);
+      color: var.$accent;
+    }
+
+    &:active { transform: scale(0.88); }
+  }
+}
+
+.user-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  width: 280px;
+  transform: translateY(-6px) scale(0.97);
+  pointer-events: none;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  padding: 0.6rem;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0s 0.15s;
+
+  &--open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  &__header {
+    padding: 0.5rem 0.5rem;
+  }
+
+  &__email {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  &__link {
+    all: unset;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.6rem 0.6rem;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background-color 0.12s;
+
+    &:hover {
+      background-color: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    // background-color: var(--border-color);
+  }
+
+  &__stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    padding: 0.6rem 0;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0.9rem 1rem;
+    background-color: var(--bg-elevated);
+    border-radius: 6px;
+    
+  }
+
+  &__stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    
+  }
+
+  &__stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  &__logout {
+    all: unset;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding: 0.5rem 1.1rem;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 6px;
+
+    &:hover {
+      background-color: var(--bg-elevated-hovered);
+      color: var(--text-primary);
+    }
+  }
+}

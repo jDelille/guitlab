@@ -104,7 +104,8 @@ const Fretboard = ({
     const keyPitch = getKeyPitch(settings.key);
     if (keyPitch === -1) return null;
     const rootPitch = (keyPitch + currentBackingChord.offset) % 12;
-    const intervals = currentBackingChord.quality === "major" ? [0, 4, 7] : [0, 3, 7];
+    const intervals =
+      currentBackingChord.quality === "major" ? [0, 4, 7] : [0, 3, 7];
     return new Set(intervals.map((i) => (rootPitch + i) % 12));
   }, [currentBackingChord, settings.key]);
 
@@ -115,7 +116,7 @@ const Fretboard = ({
       !showAll &&
       !settings.showScaleWithDoubleStops) ||
     (settings.showTriads && !showAll);
-    
+
   const activeMap = showAll
     ? allShapesNoteMap
     : hideScales
@@ -123,7 +124,7 @@ const Fretboard = ({
       : selectedShapesNoteMap;
 
   return (
-    <div className="fretboard-wrapper" ref={wrapperRef}>
+    <div className="fretboard-wrapper" id="tour-fretboard" ref={wrapperRef}>
       <FretNumbers
         numberOfFrets={21}
         startFret={0}
@@ -175,7 +176,8 @@ const Fretboard = ({
               const noteDimColor = toGradient(activeNote?.dimColors ?? []);
               const noteName = getNoteName(stringNumber, fret);
               const notePitch = (STANDARD_TUNING[stringNumber] + fret) % 12;
-              const isChordTone = isActive && !!chordTonePitches?.has(notePitch);
+              const isChordTone =
+                isActive && !!chordTonePitches?.has(notePitch);
 
               const styleParams = {
                 isLickNote,
@@ -215,8 +217,8 @@ const Fretboard = ({
                         boxShadow: isHighlighted
                           ? "0 0 0 2px var(--text-primary), 0 0 10px 2px rgba(255,255,255,0.6)"
                           : isChordTone
-                          ? "0 0 0 2px #f59e0b, 0 0 6px 2px rgba(245,158,11,0.45)"
-                          : "none",
+                            ? "0 0 0 2px #f59e0b, 0 0 6px 2px rgba(245,158,11,0.45)"
+                            : "none",
                       }}
                     >
                       {getDisplayValue({

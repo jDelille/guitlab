@@ -59,7 +59,7 @@ const Chords = ({ selectedShapes, onShapeToggle }: ChordsProps) => {
   };
 
   return (
-    <div className="chords">
+    <div className="chords" id="tour-chords">
       <div className="chords-header">
         <p className="section-label">
           {chordQuality === "dom7" ? "Dom7 Chords" : `${chordQuality === "major" ? "Major" : "Minor"} CAGED Chords`}

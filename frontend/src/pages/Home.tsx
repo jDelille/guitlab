@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Fretboard from "../components/fretboard/Fretboard";
 import Chords from "../components/chords/Chords";
 import Controls from "../components/controls/Controls";
@@ -7,6 +7,8 @@ import type { Scales } from "../types/Scales";
 import { getLicksForShape } from "../constants/licks";
 import { useSettings } from "../context/SettingsContext";
 import { usePlayScale } from "../hooks/usePlayScale";
+import { maybeStartTour } from "../tour/tour";
+import "../tour/tour.scss";
 
 type ActivePositions = { string: number; fret: number }[] | null;
 
@@ -22,6 +24,10 @@ const Home = () => {
   const { settings, setSettings } = useSettings();
 
   usePlayScale({ cagedChord, selectedShapes, selectedLickId, setActivePositions });
+
+  useEffect(() => {
+    maybeStartTour();
+  }, []);
 
   const handleShapeToggle = (shapeName: ShapeName) => {
     setCagedChord(shapeName);

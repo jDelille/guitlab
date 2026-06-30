@@ -20,23 +20,23 @@ const SCALES = [
 export default function Controls() {
   return (
     <div className="controls">
-      <div className="keys">
+      <div className="keys" id="tour-key">
         <p className="label">Key</p>
         <KeyControl notes={NOTES} />
       </div>
 
       <div className="flex">
-        <div className="group">
+        <div className="group" id="tour-scale">
           <p className="label">Scale / Arpeggio</p>
           <ScaleControl scales={SCALES} />
         </div>
 
-        <div className="group-2">
+        <div className="group-2" id="tour-overlay">
           <p className="label">Overlay</p>
           <OverlayControls />
         </div>
 
-        <div className="group">
+        <div className="group" id="tour-playback">
           <p className="label">Playback</p>
           <PlayScale />
         </div>

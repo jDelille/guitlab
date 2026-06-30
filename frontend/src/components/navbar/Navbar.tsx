@@ -1,16 +1,15 @@
-import { useRef, useState, useEffect } from "react";
+﻿import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../../services/supabase";
 import { useUser } from "../../hooks/useUser";
 import { useTheme } from "../../context/ThemeContext";
 import { useNotifications } from "../../context/NotificationContext";
-import { IoSunnyOutline, IoMoonOutline, IoSettingsOutline, IoLogOutOutline } from "react-icons/io5";
+import { IoSunnyOutline, IoMoonOutline } from "react-icons/io5";
 import { FaRegBell } from "react-icons/fa";
-import { RiMenuLine } from "react-icons/ri";
 import NotificationPanel from "./NotificationPanel";
+import UserMenu from "./UserMenu";
 import MobileMenu from "./MobileMenu";
 import BottomNav from "./BottomNav";
-
 import "./Navbar.scss";
 
 interface Props {
@@ -21,23 +20,17 @@ const Navbar = ({ onAuthOpen }: Props) => {
   const { user } = useUser();
   const { theme, toggleTheme } = useTheme();
   const { unreadCount } = useNotifications();
-  const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
   const notifRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = () => {
     supabase.auth.signOut();
-    setMenuOpen(false);
     setMobileOpen(false);
   };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuOpen(false);
-      }
       if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
         setNotifOpen(false);
       }
@@ -49,38 +42,25 @@ const Navbar = ({ onAuthOpen }: Props) => {
   return (
     <div className="navbar">
       <div className="nav-content">
-        <div className="logo">
+        <Link to="/" className="logo">
           <p>Guitlab</p>
-        </div>
+        </Link>
 
         <ul className="links">
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/training">The Lab</Link>
-          </li>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/training" id="tour-lab">The Lab</Link></li>
         </ul>
 
         <ul className="nav-settings">
           {!user && (
             <>
-              <button
-                className="sign-in-btn"
-                onClick={() => onAuthOpen("login")}
-              >
+              <button className="sign-in-btn" onClick={() => onAuthOpen("login")}>
                 Login
               </button>
-              <button
-                className="theme-toggle"
-                onClick={toggleTheme}
-                aria-label="Toggle theme"
-              >
-                {theme === "dark" ? (
-                  <IoSunnyOutline color="var(--text-primary)" />
-                ) : (
-                  <IoMoonOutline color="var(--text-primary)" />
-                )}
+              <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+                {theme === "dark"
+                  ? <IoSunnyOutline color="var(--text-primary)" />
+                  : <IoMoonOutline color="var(--text-primary)" />}
               </button>
             </>
           )}
@@ -93,58 +73,19 @@ const Navbar = ({ onAuthOpen }: Props) => {
                   onClick={() => setNotifOpen((o) => !o)}
                 >
                   <FaRegBell
-                    color={
-                      unreadCount > 0 ? "var(--red)" : "var(--text-primary)"
-                    }
+                    color={unreadCount > 0 ? "var(--red)" : "var(--text-primary)"}
                     size={18}
                   />
-                  {unreadCount > 0 && (
-                    <span className="bell__badge">{unreadCount}</span>
-                  )}
+                  {unreadCount > 0 && <span className="bell__badge">{unreadCount}</span>}
                 </button>
-                <NotificationPanel
-                  isOpen={notifOpen}
-                  onClose={() => setNotifOpen(false)}
-                />
+                <NotificationPanel isOpen={notifOpen} onClose={() => setNotifOpen(false)} />
               </div>
-              <div className="user-menu-wrapper" ref={menuRef}>
-                <button
-                  className="user-icon-btn"
-                  onClick={() => setMenuOpen((o) => !o)}
-                  aria-label="User menu"
-                >
-                  <RiMenuLine color="var(--text-primary)" size={18} />
-                </button>
-                <div
-                  className={`user-menu${menuOpen ? " user-menu--open" : ""}`}
-                >
-                  <span className="user-menu-email">{user.email}</span>
-                  <ul>
-                    <li>
-                      <button className="theme-row" onClick={toggleTheme}>
-                        {theme === "dark" ? (
-                          <IoSunnyOutline size={14} />
-                        ) : (
-                          <IoMoonOutline size={14} />
-                        )}
-                        {theme === "dark" ? "Light mode" : "Dark mode"}
-                      </button>
-                    </li>
-                    <li>
-                      <Link to="/settings" onClick={() => setMenuOpen(false)}>
-                        <IoSettingsOutline size={14} />
-                        Settings
-                      </Link>
-                    </li>
-                    <li>
-                      <button onClick={handleLogout}>
-                        <IoLogOutOutline size={14} />
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              <UserMenu
+                user={user}
+                theme={theme}
+                toggleTheme={toggleTheme}
+                onLogout={handleLogout}
+              />
             </>
           )}
         </ul>

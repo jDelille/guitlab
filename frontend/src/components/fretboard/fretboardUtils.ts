@@ -1,4 +1,9 @@
-import { getShapesForKey, withAlpha, type ShapeName, type ChordNote } from "../../constants/CagedChords";
+import {
+  getShapesForKey,
+  withAlpha,
+  type ShapeName,
+  type ChordNote,
+} from "../../constants/CagedChords";
 import { SHAPE_COLORS } from "../chords/constants";
 import { getInstrument } from "../../audio/soundfont";
 import GuitarConstants from "../../constants/GuitarConstants";
@@ -14,8 +19,18 @@ export const NOTE_RADIUS = 12.5;
 export const SHAPE_ORDER: ShapeName[] = ["C", "A", "G", "E", "D"];
 
 export const DEGREE_LABELS: Record<number, string> = {
-  0: "R", 1: "b2", 2: "2", 3: "b3", 4: "3", 5: "4",
-  6: "b5", 7: "5", 8: "b6", 9: "6", 10: "b7", 11: "7",
+  0: "R",
+  1: "b2",
+  2: "2",
+  3: "b3",
+  4: "3",
+  5: "4",
+  6: "b5",
+  7: "5",
+  8: "b6",
+  9: "6",
+  10: "b7",
+  11: "7",
 };
 
 export type NoteMapEntry = { note: any; colors: string[]; dimColors: string[] };
@@ -44,7 +59,11 @@ export function getKeyPitch(keyName: string): number {
   return pitch !== -1 ? pitch : GuitarConstants.notesFlat.indexOf(keyName);
 }
 
-export function getDegree(string: number, fret: number, keyName: string): string {
+export function getDegree(
+  string: number,
+  fret: number,
+  keyName: string,
+): string {
   const notePitch = (STANDARD_TUNING[string] + fret) % 12;
   const rootPitch =
     NOTES.indexOf(keyName) !== -1
@@ -61,7 +80,10 @@ export function buildShapeNoteMap(
 ): Map<string, NoteMapEntry> {
   const intermediate = new Map<
     string,
-    { note: any; entries: { color: string; dimColor: string; effectiveBaseFret: number }[] }
+    {
+      note: any;
+      entries: { color: string; dimColor: string; effectiveBaseFret: number }[];
+    }
   >();
 
   shapeNames.forEach((shapeName) => {
@@ -70,19 +92,30 @@ export function buildShapeNoteMap(
     const baseFret = allShapes[shapeName].baseFret;
     allShapes[shapeName][scale as Scales].forEach((note: ChordNote) => {
       const key = `${note.string}-${note.fret}`;
-      const effectiveBaseFret = note.isOctaveExtension ? baseFret + 12 : baseFret;
+      const effectiveBaseFret = note.isOctaveExtension
+        ? baseFret + 12
+        : baseFret;
       const existing = intermediate.get(key);
       if (existing) {
-        existing.entries.push({ color: shapeColor, dimColor: dim, effectiveBaseFret });
+        existing.entries.push({
+          color: shapeColor,
+          dimColor: dim,
+          effectiveBaseFret,
+        });
       } else {
-        intermediate.set(key, { note, entries: [{ color: shapeColor, dimColor: dim, effectiveBaseFret }] });
+        intermediate.set(key, {
+          note,
+          entries: [{ color: shapeColor, dimColor: dim, effectiveBaseFret }],
+        });
       }
     });
   });
 
   const map = new Map<string, NoteMapEntry>();
   intermediate.forEach((value, key) => {
-    const sorted = [...value.entries].sort((a, b) => a.effectiveBaseFret - b.effectiveBaseFret);
+    const sorted = [...value.entries].sort(
+      (a, b) => a.effectiveBaseFret - b.effectiveBaseFret,
+    );
     map.set(key, {
       note: value.note,
       colors: sorted.map((e) => e.color),
@@ -111,10 +144,22 @@ export function getNoteBackground(params: {
   noteColor: string;
   noteDimColor: string;
 }): string {
-  const { isLickNote, isActive, isDoubleStop, isTriad, isTriadPlaying, isActiveTriad, isInsideBracket, noteData, noteColor, noteDimColor } = params;
+  const {
+    isLickNote,
+    isActive,
+    isDoubleStop,
+    isTriad,
+    isTriadPlaying,
+    isActiveTriad,
+    isInsideBracket,
+    noteData,
+    noteColor,
+    noteDimColor,
+  } = params;
   if (isLickNote && !isActive) return "rgba(251,191,36,0.15)";
   if (isDoubleStop) return "rgba(155,89,182,0.85)";
-  if (isTriad) return `rgba(${TRIAD_COLOR},${isTriadPlaying && !isActiveTriad ? 0.25 : 0.85})`;
+  if (isTriad)
+    return `rgba(${TRIAD_COLOR},${isTriadPlaying && !isActiveTriad ? 0.25 : 0.85})`;
   if (isActive) return noteData?.isRoot ? noteColor : noteDimColor;
   if (isInsideBracket) return "rgba(155,89,182,0.1)";
   return "var(--bg-fretboard)";
@@ -131,7 +176,17 @@ export function getNoteOutline(params: {
   noteData: any;
   hideScales: boolean;
 }): string {
-  const { isLickNote, isDoubleStop, isTriad, isTriadPlaying, isActiveTriad, isActive, showChordTones, noteData, hideScales } = params;
+  const {
+    isLickNote,
+    isDoubleStop,
+    isTriad,
+    isTriadPlaying,
+    isActiveTriad,
+    isActive,
+    showChordTones,
+    noteData,
+    hideScales,
+  } = params;
   if (isLickNote) return "2px solid #fbbf24";
   if (isDoubleStop) return "2px solid rgba(155,89,182,1)";
   if (isTriad) {
@@ -159,9 +214,29 @@ export function getDisplayValue(params: {
   fret: number;
   keyName: string;
 }): string {
-  const { isLickNote, isActive, isDoubleStop, isTriad, showDegrees, showNotes, lickDegree, noteName, noteData, stringNumber, fret, keyName } = params;
-  if (isLickNote && !isActive) return showDegrees ? lickDegree : showNotes ? noteName : "";
-  if (isDoubleStop || isTriad) return showDegrees ? getDegree(stringNumber, fret, keyName) : showNotes ? noteName : "";
-  if (isActive) return showDegrees ? noteData?.degree : showNotes ? noteName : "";
+  const {
+    isLickNote,
+    isActive,
+    isDoubleStop,
+    isTriad,
+    showDegrees,
+    showNotes,
+    lickDegree,
+    noteName,
+    noteData,
+    stringNumber,
+    fret,
+    keyName,
+  } = params;
+  if (isLickNote && !isActive)
+    return showDegrees ? lickDegree : showNotes ? noteName : "";
+  if (isDoubleStop || isTriad)
+    return showDegrees
+      ? getDegree(stringNumber, fret, keyName)
+      : showNotes
+        ? noteName
+        : "";
+  if (isActive)
+    return showDegrees ? noteData?.degree : showNotes ? noteName : "";
   return noteName;
 }

@@ -88,7 +88,11 @@ const AuthModal = ({ onClose, initialMode = "login" }: Props) => {
         onClose();
       }
     } else {
-      const { data, error } = await supabase.auth.signUp({ email, password });
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: window.location.origin },
+      });
       if (error) {
         setLoading(false);
         setError(error.message);

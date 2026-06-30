@@ -1,0 +1,73 @@
+.guitlab-tour {
+  background-color: var(--bg-secondary);
+  font-family: inherit;
+  
+  .driver-popover-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    
+  }
+
+  .driver-popover-description {
+    font-size: 13px;
+    
+    color: var(--text-secondary);
+  }
+
+  .driver-popover-progress-text {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .driver-popover-footer {
+    margin-top: 14px;
+    gap: 6px;
+  }
+
+  .driver-popover-prev-btn,
+  .driver-popover-next-btn,
+  .driver-popover-close-btn {
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 7px;
+    padding: 6px 12px;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    transition: background-color 0.12s;
+
+    &:hover {
+      background: var(--bg-elevated-hovered);
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .driver-popover-next-btn {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+
+    &:hover {
+      opacity: 0.88;
+      background: var(--accent);
+    }
+  }
+
+  .driver-popover-close-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+
+    &:hover {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+  }
+}
