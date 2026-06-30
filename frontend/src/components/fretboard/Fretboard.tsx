@@ -63,7 +63,7 @@ const Fretboard = ({
     pairs: doubleStopPairs,
     map: doubleStopsMap,
     insideBracketSet,
-  } = useDoubleStops(settings.key, settings.showDoubleStops);
+  } = useDoubleStops(settings.key, settings.scale, settings.showDoubleStops);
 
   const { map: triadsMap } = useTriads(
     settings.key,

@@ -1,4 +1,5 @@
 import { useSettings, type Settings } from "../../../context/SettingsContext";
+import TriadHint from "./TriadHint";
 import "./OverlayControls.scss";
 
 const CONTROLS: { label: string; short: string; key: keyof Settings }[] = [
@@ -25,18 +26,21 @@ const OverlayControls = () => {
     }));
 
   return (
-    <div className="overlay-controls">
-      {CONTROLS.map(({ label, short, key }) => (
-        <button
-          key={key}
-          className={settings[key] ? "activeBtn" : ""}
-          onClick={() => toggle(key)}
-        >
-          <span className="label-full">{label}</span>
-          <span className="label-short">{short}</span>
-        </button>
-      ))}
-    </div>
+    <>
+      <div className="overlay-controls">
+        {CONTROLS.map(({ label, short, key }) => (
+          <button
+            key={key}
+            className={settings[key] ? "activeBtn" : ""}
+            onClick={() => toggle(key)}
+          >
+            <span className="label-full">{label}</span>
+            <span className="label-short">{short}</span>
+          </button>
+        ))}
+      </div>
+      <TriadHint visible={settings.showTriads} />
+    </>
   );
 };
 

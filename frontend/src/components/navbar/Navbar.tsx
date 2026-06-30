@@ -90,15 +90,24 @@ const Navbar = ({ onAuthOpen }: Props) => {
           )}
         </ul>
 
-        <button
-          className="hamburger"
-          onClick={() => setMobileOpen((o) => !o)}
-          aria-label="Toggle menu"
-        >
-          <span className={mobileOpen ? "bar bar--open" : "bar"} />
-          <span className={mobileOpen ? "bar bar--open" : "bar"} />
-          <span className={mobileOpen ? "bar bar--open" : "bar"} />
-        </button>
+        {user && (
+          <div className="mobile-actions">
+            <div className="notifications-wrapper" ref={notifRef}>
+              <button
+                className="bell"
+                aria-label="Notifications"
+                onClick={() => setNotifOpen((o) => !o)}
+              >
+                <FaRegBell
+                  color={unreadCount > 0 ? "var(--red)" : "var(--text-primary)"}
+                  size={18}
+                />
+                {unreadCount > 0 && <span className="bell__badge">{unreadCount}</span>}
+              </button>
+              <NotificationPanel isOpen={notifOpen} onClose={() => setNotifOpen(false)} />
+            </div>
+          </div>
+        )}
       </div>
 
       <MobileMenu

@@ -34,10 +34,10 @@ export function useLickNoteMap(lickNotes?: ChordNote[] | null) {
   }, [lickNotes]);
 }
 
-export function useDoubleStops(keyName: string, showDoubleStops: boolean) {
+export function useDoubleStops(keyName: string, scale: string, showDoubleStops: boolean) {
   const pairs = useMemo(
-    () => (showDoubleStops ? getDoubleStopsForKey(keyName) : []),
-    [keyName, showDoubleStops],
+    () => (showDoubleStops ? getDoubleStopsForKey(keyName, scale) : []),
+    [keyName, scale, showDoubleStops],
   );
 
   const map = useMemo(() => {

@@ -5,27 +5,40 @@ export interface DoubleStopPair {
   frets: [number, number]; // [fret on string1, fret on string2] in key of C
 }
 
-// Template in key of C
+// Template in key of C major
 export const DOUBLE_STOPS_C: DoubleStopPair[] = [
-  // B + high e string pattern
-  { strings: [1, 0], frets: [13, 12] },
-  { strings: [1, 0], frets: [15, 13] },
-  { strings: [1, 0], frets: [17, 15] },
+  // B + high e
+  { strings: [1, 0], frets: [13, 12] }, // C–E
+  { strings: [1, 0], frets: [15, 13] }, // D–F
+  { strings: [1, 0], frets: [17, 15] }, // E–G
 
-  // G + high e string  pattern
-  { strings: [2, 0], frets: [9, 8] },
-  { strings: [2, 0], frets: [10, 10] },
-  { strings: [2, 0], frets: [12, 12] },
+  // G + high e
+  { strings: [2, 0], frets: [9, 8] },   // E–C
+  { strings: [2, 0], frets: [10, 10] }, // F–D
+  { strings: [2, 0], frets: [12, 12] }, // G–E
 
-  // D + b  pattern
-  { strings: [3, 1], frets: [2, 1] },
-  { strings: [3, 1], frets: [3, 3] },
-  { strings: [3, 1], frets: [5, 5] },
+  // D + B
+  { strings: [3, 1], frets: [2, 1] },   // E–C
+  { strings: [3, 1], frets: [3, 3] },   // F–D
+  { strings: [3, 1], frets: [5, 5] },   // G–E
+];
 
-  // // A + g  pattern
-  // { strings: [4, 2], frets: [7, 5] },
-  // { strings: [4, 2], frets: [8, 7] },
-  // { strings: [4, 2], frets: [10, 9] },
+// Template in key of C minor — only the b3 (E→Eb) changes in these pairs
+export const DOUBLE_STOPS_C_MINOR: DoubleStopPair[] = [
+  // B + high e
+  { strings: [1, 0], frets: [13, 11] }, // C–Eb
+  { strings: [1, 0], frets: [15, 13] }, // D–F  (unchanged)
+  { strings: [1, 0], frets: [16, 15] }, // Eb–G
+
+  // G + high e
+  { strings: [2, 0], frets: [8, 8] },   // Eb–C
+  { strings: [2, 0], frets: [10, 10] }, // F–D  (unchanged)
+  { strings: [2, 0], frets: [12, 11] }, // G–Eb
+
+  // D + B
+  { strings: [3, 1], frets: [1, 1] },   // Eb–C
+  { strings: [3, 1], frets: [3, 3] },   // F–D  (unchanged)
+  { strings: [3, 1], frets: [5, 4] },   // G–Eb
 ];
 
 // Semitone offset from C to the target key, based on high e string (string 0)
@@ -45,10 +58,13 @@ function getTransposeOffset(key: string): number {
   return rootFret - cFret; 
 }
 
-export function getDoubleStopsForKey(key: string): DoubleStopPair[] {
-  const offset = getTransposeOffset(key);
+const MINOR_SCALES = new Set(["minorScale", "minorPentatonic", "minorArpeggio"]);
 
-  return DOUBLE_STOPS_C.map((pair) => ({
+export function getDoubleStopsForKey(key: string, scale = "majorScale"): DoubleStopPair[] {
+  const offset = getTransposeOffset(key);
+  const template = MINOR_SCALES.has(scale) ? DOUBLE_STOPS_C_MINOR : DOUBLE_STOPS_C;
+
+  return template.map((pair) => ({
     strings: pair.strings,
     frets: [pair.frets[0] + offset, pair.frets[1] + offset] as [number, number],
   })).filter(

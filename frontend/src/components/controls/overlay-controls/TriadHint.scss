@@ -1,0 +1,65 @@
+.triad-hint {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px 16px;
+  width: 280px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 300;
+  animation: triad-hint-in 0.22s ease forwards;
+
+  &--closing {
+    animation: triad-hint-out 0.22s ease forwards;
+  }
+
+  &__text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 12px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  &__btn {
+    all: unset;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 6px;
+    background-color: var(--accent);
+    color: #fff;
+    transition: opacity 0.12s;
+
+    &:hover { opacity: 0.85; }
+
+    &--mute {
+      background-color: var(--bg-elevated);
+      color: var(--text-muted);
+
+      &:hover {
+        background-color: var(--bg-elevated-hovered);
+        color: var(--text-primary);
+        opacity: 1;
+      }
+    }
+  }
+}
+
+@keyframes triad-hint-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes triad-hint-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(10px); }
+}

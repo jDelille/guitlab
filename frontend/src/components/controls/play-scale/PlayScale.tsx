@@ -2,7 +2,6 @@
 import { FaPlay, FaStop } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { TbMusic, TbMusicPause } from "react-icons/tb";
-import { GiMetronome } from "react-icons/gi";
 import { MdMusicNote } from "react-icons/md";
 import InstrumentPicker, { INSTRUMENTS } from "./InstrumentPicker";
 import BackingTrackModal, { type BackingTrack } from "./BackingTrackModal";
