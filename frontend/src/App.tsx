@@ -10,6 +10,8 @@ import { SettingsProvider } from "./context/SettingsContext";
 import { PlaybackProvider } from "./context/PlaybackContext";
 
 const Training = lazy(() => import("./pages/Training"));
+const ChordFinder = lazy(() => import("./pages/ChordFinder"));
+const PitchTest = lazy(() => import("./pages/PitchTest"));
 const Drill = lazy(() => import("./pages/Drill"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const HowToGuide = lazy(() => import("./pages/HowToGuide"));
@@ -33,12 +35,14 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/training" element={<Training />} />
+              <Route path="/chord-finder" element={<ChordFinder />} />
               <Route path="/drill/:drillId" element={<Drill />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/how-to-guide" element={<HowToGuide />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/pitch-test" element={<PitchTest />} />
             </Routes>
           </Suspense>
         </div>

@@ -46,6 +46,7 @@ const UserMenu = ({ user, theme, toggleTheme, onLogout }: Props) => {
 
         <div className="user-menu__links">
           <Link className="user-menu__link" to="/" onClick={close}>Home</Link>
+          <Link className="user-menu__link" to="/chord-finder" onClick={close}>Chord Finder</Link>
           <Link className="user-menu__link" to="/training" onClick={close}>The Lab</Link>
           <Link className="user-menu__link" to="/settings" onClick={close}>Settings</Link>
           <button className="user-menu__link" onClick={toggleTheme}>

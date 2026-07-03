@@ -19,7 +19,6 @@ const Training = () => {
 
   return (
     <div className="page-content">
-      <div className="header"></div>
 
       <div className="training-layout">
         <div className="column">

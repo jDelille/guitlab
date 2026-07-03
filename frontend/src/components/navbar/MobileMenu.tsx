@@ -99,6 +99,7 @@ const MobileMenu = ({ isOpen, user, onClose, onAuthOpen, onLogout, theme, toggle
         {view === "links" && (
           <ul>
             <li><Link to="/" onClick={onClose}>Home</Link></li>
+            <li><Link to="/chord-finder" onClick={onClose}>Chord Finder</Link></li>
             <li><Link to="/training" onClick={onClose}>The Lab</Link></li>
             {!user && (
               <li>

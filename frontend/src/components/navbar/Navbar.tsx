@@ -48,6 +48,7 @@ const Navbar = ({ onAuthOpen }: Props) => {
 
         <ul className="links">
           <li><Link to="/">Home</Link></li>
+          <li><Link to="/chord-finder">Chord Finder</Link></li>
           <li><Link to="/training" id="tour-lab">The Lab</Link></li>
         </ul>
 
