@@ -1,0 +1,128 @@
+[
+  {
+    "title": "Major CAGED Chords",
+    "description": "The foundation of the system - five chord shapes that cover the entire neck.",
+    "drills": [
+      {
+        "id": "major-caged-chords",
+        "name": "Major Chords",
+        "description": "Learn the 5 major chord shapes that make up CAGED",
+        "path": "/drill/major-caged-chords",
+        "comingSoon": false
+      }
+    ]
+  },
+  {
+    "title": "Minor CAGED Chords",
+    "description": "The same five positions, reframed - learn to shift between major and minor anywhere on the neck.",
+    "drills": [
+      {
+        "id": "minor-caged-chords",
+        "name": "Minor Chords",
+        "description": "Learn the 5 minor chord shapes that make up CAGED",
+        "path": "/drill/minor-caged-chords",
+        "comingSoon": false
+      }
+    ]
+  },
+  {
+    "title": "Dom7 CAGED Chords",
+    "description": "The blues backbone - dominant 7th chords add tension that resolves naturally, and knowing all five shapes means you can find that sound anywhere on the neck.",
+    "drills": [
+      {
+        "id": "dom7-caged-chords",
+        "name": "Dom7 Chords",
+        "description": "Learn the 5 dominant 7th chord shapes that make up CAGED",
+        "path": "/drill/dom7-caged-chords",
+        "comingSoon": false
+      }
+    ]
+  },
+  {
+    "title": "Major Scales & Arpeggios",
+    "description": "Scales give you the full picture; arpeggios show you the chord tones inside them. Together they connect your chord shapes to every note on the neck.",
+    "drills": [
+      {
+        "id": "major-scale",
+        "name": "Major Scale",
+        "description": "Map the major scale across all 5 CAGED positions",
+        "path": "/drill/major-scale",
+        "comingSoon": false
+      },
+      {
+        "id": "major-pentatonic",
+        "name": "Major Pentatonic",
+        "description": "Map the major pentatonic across all 5 CAGED positions",
+        "path": "/drill/major-pentatonic",
+        "comingSoon": false
+      },
+      {
+        "id": "major-arpeggio",
+        "name": "Major Arpeggio",
+        "description": "Isolate the chord tones within each major CAGED shape",
+        "path": "/drill/major-arpeggio",
+        "comingSoon": false
+      }
+    ]
+  },
+  {
+    "title": "Minor Scales & Arpeggios",
+    "description": "The minor equivalents of the same five positions - essential for soloing, understanding key changes, and moving fluidly between major and minor tonality.",
+    "drills": [
+      {
+        "id": "minor-scale",
+        "name": "Minor Scale",
+        "description": "Map the natural minor scale across all 5 CAGED positions",
+        "path": "/drill/minor-scale",
+        "comingSoon": false
+      },
+      {
+        "id": "minor-pentatonic",
+        "name": "Minor Pentatonic",
+        "description": "Map the minor pentatonic across all 5 CAGED positions",
+        "path": "/drill/minor-pentatonic",
+        "comingSoon": false
+      },
+      {
+        "id": "minor-arpeggio",
+        "name": "Minor Arpeggio",
+        "description": "Isolate the chord tones within each minor CAGED shape",
+        "path": "/drill/minor-arpeggio",
+        "comingSoon": false
+      }
+    ]
+  },
+  {
+    "title": "Triads",
+    "description": "Triads are the three-note core of every chord - knowing where they sit inside each CAGED shape is what separates players who solo from players who just run scales.",
+    "drills": [
+      {
+        "id": "major-triads",
+        "name": "Major Triads",
+        "description": "Identify the major triad shapes within each CAGED position",
+        "path": null,
+        "comingSoon": true
+      },
+      {
+        "id": "minor-triads",
+        "name": "Minor Triads",
+        "description": "Identify the minor triad shapes within each CAGED position",
+        "path": null,
+        "comingSoon": true
+      }
+    ]
+  },
+  {
+    "title": "Double Stops",
+    "description": "Two notes played together - the building block of country chicken pickin', blues fills, and everything in between. Learn to find them across the neck and your playing gets texture immediately.",
+    "drills": [
+      {
+        "id": "double-stops",
+        "name": "Double Stops",
+        "description": "Locate double stop pairs across all 5 CAGED positions",
+        "path": null,
+        "comingSoon": true
+      }
+    ]
+  }
+]

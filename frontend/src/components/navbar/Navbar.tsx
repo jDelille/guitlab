@@ -23,6 +23,7 @@ const Navbar = ({ onAuthOpen }: Props) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
+  const mobileNotifRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = () => {
     supabase.auth.signOut();
@@ -31,7 +32,10 @@ const Navbar = ({ onAuthOpen }: Props) => {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      const insideDesktop = notifRef.current?.contains(target);
+      const insideMobile = mobileNotifRef.current?.contains(target);
+      if (!insideDesktop && !insideMobile) {
         setNotifOpen(false);
       }
     };
@@ -92,7 +96,7 @@ const Navbar = ({ onAuthOpen }: Props) => {
 
         {user && (
           <div className="mobile-actions">
-            <div className="notifications-wrapper" ref={notifRef}>
+            <div className="notifications-wrapper" ref={mobileNotifRef}>
               <button
                 className="bell"
                 aria-label="Notifications"
