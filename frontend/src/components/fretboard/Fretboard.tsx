@@ -28,6 +28,7 @@ import {
   STANDARD_TUNING,
   type NoteMapEntry,
 } from "./fretboardUtils";
+import { pluckString } from "./stringPluckAnimation";
 
 import "./Fretboard.scss";
 
@@ -240,6 +241,7 @@ const Fretboard = ({
                         }
                         onClick={() => {
                           playNote(stringNumber, fret);
+                          pluckString(stringNumber);
                         }}
                         style={{
                           background: getNoteBackground(styleParams),
@@ -251,7 +253,7 @@ const Fretboard = ({
                           outlineOffset: "2px",
                           cursor: "pointer",
                           boxShadow: isHighlighted
-                            ? "0 0 0 2px var(--text-primary), 0 0 10px 2px rgba(255,255,255,0.6)"
+                            ? "0 0 0 2px var(--bg-fretboard), 0 0 0 4px var(--text-primary), 0 0 10px 2px rgba(255,255,255,0.6)"
                             : isChordTone
                               ? "0 0 0 2px #f59e0b, 0 0 6px 2px rgba(245,158,11,0.45)"
                               : "none",

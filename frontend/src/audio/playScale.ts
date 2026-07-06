@@ -2,6 +2,7 @@ import { getInstrument } from "./soundfont";
 import type { PlayNote } from "./utils";
 import type { DoubleStopPair } from "../constants/doubleStops";
 import type { Triad } from "../constants/triads";
+import { pluckString } from "../components/fretboard/stringPluckAnimation";
 
 const MIDI_TUNING = [64, 59, 55, 50, 45, 40];
 
@@ -29,6 +30,7 @@ export async function playScale(
   orderedNotes.forEach((note, i) => {
     const timer = window.setTimeout(() => {
       instrument.start({ note: note.midi });
+      pluckString(note.string);
       onNote?.({ string: note.string, fret: note.fret });
     }, i * intervalMs);
     timers.push(timer);
@@ -61,6 +63,7 @@ export async function playDoubleStops(
     const timer = window.setTimeout(() => {
       pair.strings.forEach((s, idx) => {
         instrument.start({ note: MIDI_TUNING[s] + pair.frets[idx] });
+        pluckString(s);
       });
       onStep?.(pair.strings.map((s, idx) => ({ string: s, fret: pair.frets[idx] })));
     }, i * intervalMs);
@@ -94,6 +97,7 @@ export async function playTriads(
     const timer = window.setTimeout(() => {
       triad.strings.forEach((s, idx) => {
         instrument.start({ note: MIDI_TUNING[s] + triad.frets[idx] });
+        pluckString(s);
       });
       onStep?.(triad.strings.map((s, idx) => ({ string: s, fret: triad.frets[idx] })));
     }, i * intervalMs);

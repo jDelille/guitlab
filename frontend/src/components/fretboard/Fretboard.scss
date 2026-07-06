@@ -48,26 +48,32 @@
     &:nth-of-type(1):before {
       background-color: var(--high-string-color);
       height: 1.5px;
+      top: 15px;
     }
     &:nth-of-type(2):before {
       background-color: var(--high-string-color);
       height: 2.4px;
+      top: 15px;
     }
     &:nth-of-type(3):before {
       background-color: var(--high-string-color);
       height: 2.5px;
+      top: 15px;
     }
     &:nth-of-type(4):before {
       background-color: var(--low-string-color);
       height: 2.75px;
+      top: 15px;
     }
     &:nth-of-type(5):before {
       background-color: var(--low-string-color);
       height: 3px;
+      top: 15px;
     }
     &:nth-of-type(6):before {
       background-color: var(--low-string-color);
       height: 3.25px;
+      top: 15px;
     }
     .fret {
       display: flex;
