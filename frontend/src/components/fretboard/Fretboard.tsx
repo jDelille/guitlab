@@ -1,11 +1,13 @@
-"use client";
+﻿"use client";
 
 import { useRef, useState, useEffect, useMemo } from "react";
-import type { ChordNote } from "../../constants/CagedChords";
-import { type ShapeName } from "../../constants/CagedChords";
+
+import type { ChordNote, ShapeName } from "../../constants/CagedChords";
 import { SHAPE_ROOT_FRETS } from "../../constants/shapeRootFrets";
+
 import { useSettings } from "../../context/SettingsContext";
 import { usePlayback } from "../../context/PlaybackContext";
+
 import FretNumbers from "./FretNumbers";
 import DoubleStopOverlay from "./DoubleStopOverlay";
 import {
@@ -26,6 +28,7 @@ import {
   STANDARD_TUNING,
   type NoteMapEntry,
 } from "./fretboardUtils";
+
 import "./Fretboard.scss";
 
 interface FretboardProps {
@@ -36,8 +39,12 @@ interface FretboardProps {
   lickNotes?: ChordNote[] | null;
 }
 
-const STRINGS = Array.from({ length: 6 }, (_, i) => i);
-const FRETS = Array.from({ length: 21 }, (_, i) => i);
+const STRINGS = Array.from({ length: 6 }, (_, i) => {
+  return i;
+});
+const FRETS = Array.from({ length: 21 }, (_, i) => {
+  return i;
+});
 
 const Fretboard = ({
   cagedChord,
@@ -71,23 +78,37 @@ const Fretboard = ({
     settings.showTriads,
   );
 
+  /**
+   * Gets the width of the fretboard so the double stop overlay can
+   * properly position itself on top of it.
+   */
   useEffect(() => {
-    const el = fretboardRef.current;
-    if (!el) {
+    const fretboardEl = fretboardRef.current;
+    if (!fretboardEl) {
       return;
     }
-    const ro = new ResizeObserver(([entry]) =>
-      setContainerWidth(entry.contentRect.width),
-    );
-    ro.observe(el);
-    return () => ro.disconnect();
+    const resizeObserver = new ResizeObserver(([resizeEntry]) => {
+      setContainerWidth(resizeEntry.contentRect.width);
+    });
+    resizeObserver.observe(fretboardEl);
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, []);
 
+  /**
+   * Scrolls the fretboard so the selected shape's root fret is in view
+   * whenever the shape or key changes.
+   */
   useEffect(() => {
     const wrapper = wrapperRef.current;
-    if (!wrapper) return;
+    if (!wrapper) {
+      return;
+    }
     const rootFret = SHAPE_ROOT_FRETS[cagedChord as ShapeName]?.[settings.key];
-    if (rootFret === undefined) return;
+    if (rootFret === undefined) {
+      return;
+    }
     if (rootFret <= 2) {
       wrapper.scrollTo({ left: 0, behavior: "smooth" });
       return;
@@ -99,14 +120,26 @@ const Fretboard = ({
     });
   }, [cagedChord, settings.key]);
 
+  /**
+   * Works out which pitch classes belong to the current backing chord, so
+   * matching notes on the fretboard can be highlighted as chord tones.
+   */
   const chordTonePitches = useMemo(() => {
-    if (!currentBackingChord) return null;
+    if (!currentBackingChord) {
+      return null;
+    }
     const keyPitch = getKeyPitch(settings.key);
-    if (keyPitch === -1) return null;
+    if (keyPitch === -1) {
+      return null;
+    }
     const rootPitch = (keyPitch + currentBackingChord.offset) % 12;
     const intervals =
       currentBackingChord.quality === "major" ? [0, 4, 7] : [0, 3, 7];
-    return new Set(intervals.map((i) => (rootPitch + i) % 12));
+    return new Set(
+      intervals.map((interval) => {
+        return (rootPitch + interval) % 12;
+      }),
+    );
   }, [currentBackingChord, settings.key]);
 
   const showAll = settings.showAllCagedScales;
@@ -143,105 +176,109 @@ const Fretboard = ({
           />
         )}
 
-        {STRINGS.map((stringNumber) => (
-          <div
-            key={stringNumber}
-            className={!settings.flipFretboard ? "string" : "stringsFlipped"}
-          >
-            {FRETS.map((fret) => {
-              const key = `${stringNumber}-${fret}`;
-              const activeNote = activeMap.get(key) as NoteMapEntry | undefined;
-              const isActive = !!activeNote;
-              const lickNote = lickNoteMap.get(key);
-              const isLickNote = !!lickNote;
-              const isDoubleStop = doubleStopsMap.has(key);
-              const isTriad = triadsMap.has(key);
-              const isTriadPlaying =
-                settings.showTriads && !!activePositions?.length;
-              const isActiveTriad =
-                isTriad &&
-                !!activePositions?.some(
-                  (p) => p.string === stringNumber && p.fret === fret,
-                );
-              const isInsideBracket =
-                !isDoubleStop && insideBracketSet.has(key);
-              const isHighlighted =
-                (isActive || isLickNote || isDoubleStop || isTriad) &&
-                !!activePositions?.some(
-                  (p) => p.string === stringNumber && p.fret === fret,
-                );
+        {STRINGS.map((stringNumber) => {
+          return (
+            <div
+              key={stringNumber}
+              className={!settings.flipFretboard ? "string" : "stringsFlipped"}
+            >
+              {FRETS.map((fret) => {
+                const key = `${stringNumber}-${fret}`;
+                const activeNote = activeMap.get(key) as NoteMapEntry | undefined;
+                const isActive = !!activeNote;
+                const lickNote = lickNoteMap.get(key);
+                const isLickNote = !!lickNote;
+                const isDoubleStop = doubleStopsMap.has(key);
+                const isTriad = triadsMap.has(key);
+                const isTriadPlaying =
+                  settings.showTriads && !!activePositions?.length;
+                const isActiveTriad =
+                  isTriad &&
+                  !!activePositions?.some((pos) => {
+                    return pos.string === stringNumber && pos.fret === fret;
+                  });
+                const isInsideBracket =
+                  !isDoubleStop && insideBracketSet.has(key);
+                const isHighlighted =
+                  (isActive || isLickNote || isDoubleStop || isTriad) &&
+                  !!activePositions?.some((pos) => {
+                    return pos.string === stringNumber && pos.fret === fret;
+                  });
 
-              const noteData = activeNote?.note;
-              const noteColor = toGradient(activeNote?.colors ?? []);
-              const noteDimColor = toGradient(activeNote?.dimColors ?? []);
-              const noteName = getNoteName(stringNumber, fret);
-              const notePitch = (STANDARD_TUNING[stringNumber] + fret) % 12;
-              const isChordTone =
-                isActive && !!chordTonePitches?.has(notePitch);
+                const noteData = activeNote?.note;
+                const noteColor = toGradient(activeNote?.colors ?? []);
+                const noteDimColor = toGradient(activeNote?.dimColors ?? []);
+                const noteName = getNoteName(stringNumber, fret);
+                const notePitch = (STANDARD_TUNING[stringNumber] + fret) % 12;
+                const isChordTone =
+                  isActive && !!chordTonePitches?.has(notePitch);
 
-              const styleParams = {
-                isLickNote,
-                isActive,
-                isDoubleStop,
-                isTriad,
-                isTriadPlaying,
-                isActiveTriad,
-                isInsideBracket,
-                noteData,
-                noteColor,
-                noteDimColor,
-              };
+                const styleParams = {
+                  isLickNote,
+                  isActive,
+                  isDoubleStop,
+                  isTriad,
+                  isTriadPlaying,
+                  isActiveTriad,
+                  isInsideBracket,
+                  noteData,
+                  noteColor,
+                  noteDimColor,
+                };
 
-              return (
-                <div className="fret" key={key}>
-                  <div className="noteBackground">
-                    <div
-                      className={
-                        noteData?.degree ||
-                        (isLickNote && !isActive) ||
-                        isDoubleStop ||
-                        isTriad
-                          ? "note"
-                          : "ghost-note"
-                      }
-                      onClick={() => playNote(stringNumber, fret)}
-                      style={{
-                        background: getNoteBackground(styleParams),
-                        outline: getNoteOutline({
-                          ...styleParams,
-                          showChordTones,
-                          hideScales,
-                        }),
-                        outlineOffset: "2px",
-                        cursor: "pointer",
-                        boxShadow: isHighlighted
-                          ? "0 0 0 2px var(--text-primary), 0 0 10px 2px rgba(255,255,255,0.6)"
-                          : isChordTone
-                            ? "0 0 0 2px #f59e0b, 0 0 6px 2px rgba(245,158,11,0.45)"
-                            : "none",
-                      }}
-                    >
-                      {getDisplayValue({
-                        isLickNote,
-                        isActive,
-                        isDoubleStop,
-                        isTriad,
-                        showDegrees: settings.showDegrees,
-                        showNotes: settings.showNotes,
-                        lickDegree: lickNote?.degree,
-                        noteName,
-                        noteData,
-                        stringNumber,
-                        fret,
-                        keyName: settings.key,
-                      })}
+                return (
+                  <div className="fret" key={key}>
+                    <div className="noteBackground">
+                      <div
+                        className={
+                          noteData?.degree ||
+                          (isLickNote && !isActive) ||
+                          isDoubleStop ||
+                          isTriad
+                            ? "note"
+                            : "ghost-note"
+                        }
+                        onClick={() => {
+                          playNote(stringNumber, fret);
+                        }}
+                        style={{
+                          background: getNoteBackground(styleParams),
+                          outline: getNoteOutline({
+                            ...styleParams,
+                            showChordTones,
+                            hideScales,
+                          }),
+                          outlineOffset: "2px",
+                          cursor: "pointer",
+                          boxShadow: isHighlighted
+                            ? "0 0 0 2px var(--text-primary), 0 0 10px 2px rgba(255,255,255,0.6)"
+                            : isChordTone
+                              ? "0 0 0 2px #f59e0b, 0 0 6px 2px rgba(245,158,11,0.45)"
+                              : "none",
+                        }}
+                      >
+                        {getDisplayValue({
+                          isLickNote,
+                          isActive,
+                          isDoubleStop,
+                          isTriad,
+                          showDegrees: settings.showDegrees,
+                          showNotes: settings.showNotes,
+                          lickDegree: lickNote?.degree,
+                          noteName,
+                          noteData,
+                          stringNumber,
+                          fret,
+                          keyName: settings.key,
+                        })}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        ))}
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

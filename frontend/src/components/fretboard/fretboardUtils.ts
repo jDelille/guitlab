@@ -35,15 +35,27 @@ export const DEGREE_LABELS: Record<number, string> = {
 
 export type NoteMapEntry = { note: any; colors: string[]; dimColors: string[] };
 
-export function getFretCenterX(fret: number, containerW: number): number {
-  const fw = (containerW - NUT_WIDTH) / 20;
-  return fret === 0 ? NUT_WIDTH / 2 : NUT_WIDTH + (fret - 0.5) * fw;
+/**
+ * Converts a fret number into its pixel x-position on the fretboard, used
+ * to place SVG elements like the double stop connectors.
+ */
+export function getFretCenterX(fret: number, containerWidth: number): number {
+  const fretWidth = (containerWidth - NUT_WIDTH) / 20;
+  if (fret === 0) {
+    return NUT_WIDTH / 2;
+  }
+  return NUT_WIDTH + (fret - 0.5) * fretWidth;
 }
 
 export function getStringCenterY(stringIndex: number): number {
   return stringIndex * STRING_ROW_H + STRING_ROW_H / 2;
 }
 
+/**
+ * Plays a note by converting a string/fret position into a MIDI pitch
+ * (the open string's pitch plus the fret offset) and sending it to the
+ * loaded instrument.
+ */
 export async function playNote(string: number, fret: number) {
   const instrument = await getInstrument();
   instrument.start({ note: MIDI_TUNING[string] + fret });
@@ -54,9 +66,17 @@ export function getNoteName(string: number, fret: number): string {
   return NOTES[(open + fret) % 12];
 }
 
+/**
+ * Looks up a key's pitch class, checking sharp key names first and
+ * falling back to flat key names (e.g. "Bb") since keys can be entered
+ * either way.
+ */
 export function getKeyPitch(keyName: string): number {
   const pitch = NOTES.indexOf(keyName);
-  return pitch !== -1 ? pitch : GuitarConstants.notesFlat.indexOf(keyName);
+  if (pitch !== -1) {
+    return pitch;
+  }
+  return GuitarConstants.notesFlat.indexOf(keyName);
 }
 
 export function getDegree(
@@ -69,10 +89,19 @@ export function getDegree(
     NOTES.indexOf(keyName) !== -1
       ? NOTES.indexOf(keyName)
       : GuitarConstants.notesFlat.indexOf(keyName);
-  if (rootPitch === -1) return "";
+  if (rootPitch === -1) {
+    return "";
+  }
   return DEGREE_LABELS[(notePitch - rootPitch + 12) % 12] ?? "";
 }
 
+/**
+ * Merges the notes from every selected CAGED shape into a single map keyed
+ * by "string-fret", so a fret covered by more than one shape can render
+ * with all of those shapes' colors. Colors are ordered by each shape's
+ * base fret so the color order stays consistent no matter what order the
+ * shapes were selected in.
+ */
 export function buildShapeNoteMap(
   allShapes: ReturnType<typeof getShapesForKey>,
   shapeNames: ShapeName[],
@@ -113,25 +142,46 @@ export function buildShapeNoteMap(
 
   const map = new Map<string, NoteMapEntry>();
   intermediate.forEach((value, key) => {
-    const sorted = [...value.entries].sort(
-      (a, b) => a.effectiveBaseFret - b.effectiveBaseFret,
-    );
+    const sorted = [...value.entries].sort((entryA, entryB) => {
+      return entryA.effectiveBaseFret - entryB.effectiveBaseFret;
+    });
     map.set(key, {
       note: value.note,
-      colors: sorted.map((e) => e.color),
-      dimColors: sorted.map((e) => e.dimColor),
+      colors: sorted.map((entry) => {
+        return entry.color;
+      }),
+      dimColors: sorted.map((entry) => {
+        return entry.dimColor;
+      }),
     });
   });
 
   return map;
 }
 
-export function toGradient(cols: string[]): string {
-  return cols.length > 1
-    ? `linear-gradient(to right, ${cols.map((c, i) => `${c} ${i * (100 / cols.length)}%, ${c} ${(i + 1) * (100 / cols.length)}%`).join(", ")})`
-    : cols[0];
+/**
+ * Builds a CSS background value for a note covered by more than one color
+ * (e.g. shared by multiple CAGED shapes) — a striped linear-gradient split
+ * evenly between each color. Falls back to a single solid color when
+ * there's only one.
+ */
+export function toGradient(colors: string[]): string {
+  if (colors.length > 1) {
+    const stops = colors.map((color, index) => {
+      const start = index * (100 / colors.length);
+      const end = (index + 1) * (100 / colors.length);
+      return `${color} ${start}%, ${color} ${end}%`;
+    });
+    return `linear-gradient(to right, ${stops.join(", ")})`;
+  }
+  return colors[0];
 }
 
+/**
+ * Picks the note's background color. Checked in priority order - a lick
+ * note beats a double stop, which beats a triad, and so on - since a fret
+ * can qualify for more than one state at the same time.
+ */
 export function getNoteBackground(params: {
   isLickNote: boolean;
   isActive: boolean;
@@ -156,15 +206,28 @@ export function getNoteBackground(params: {
     noteColor,
     noteDimColor,
   } = params;
-  if (isLickNote && !isActive) return "rgba(251,191,36,0.15)";
-  if (isDoubleStop) return "rgba(155,89,182,0.85)";
-  if (isTriad)
+  if (isLickNote && !isActive) {
+    return "rgba(251,191,36,0.15)";
+  }
+  if (isDoubleStop) {
+    return "rgba(155,89,182,0.85)";
+  }
+  if (isTriad) {
     return `rgba(${TRIAD_COLOR},${isTriadPlaying && !isActiveTriad ? 0.25 : 0.85})`;
-  if (isActive) return noteData?.isRoot ? noteColor : noteDimColor;
-  if (isInsideBracket) return "rgba(155,89,182,0.1)";
+  }
+  if (isActive) {
+    return noteData?.isRoot ? noteColor : noteDimColor;
+  }
+  if (isInsideBracket) {
+    return "rgba(155,89,182,0.1)";
+  }
   return "var(--bg-fretboard)";
 }
 
+/**
+ * Picks the note's outline style. Same priority-order logic as
+ * getNoteBackground.
+ */
 export function getNoteOutline(params: {
   isLickNote: boolean;
   isDoubleStop: boolean;
@@ -187,8 +250,12 @@ export function getNoteOutline(params: {
     noteData,
     hideScales,
   } = params;
-  if (isLickNote) return "2px solid #fbbf24";
-  if (isDoubleStop) return "2px solid rgba(155,89,182,1)";
+  if (isLickNote) {
+    return "2px solid #fbbf24";
+  }
+  if (isDoubleStop) {
+    return "2px solid rgba(155,89,182,1)";
+  }
   if (isTriad) {
     return isTriadPlaying && !isActiveTriad
       ? `2px solid rgba(${TRIAD_COLOR},0.25)`
@@ -200,6 +267,10 @@ export function getNoteOutline(params: {
   return "none";
 }
 
+/**
+ * Picks what text to show inside a fret cell (a note name or a scale
+ * degree). Same priority-order logic as getNoteBackground.
+ */
 export function getDisplayValue(params: {
   isLickNote: boolean;
   isActive: boolean;
@@ -228,15 +299,18 @@ export function getDisplayValue(params: {
     fret,
     keyName,
   } = params;
-  if (isLickNote && !isActive)
+  if (isLickNote && !isActive) {
     return showDegrees ? lickDegree : showNotes ? noteName : "";
-  if (isDoubleStop || isTriad)
+  }
+  if (isDoubleStop || isTriad) {
     return showDegrees
       ? getDegree(stringNumber, fret, keyName)
       : showNotes
         ? noteName
         : "";
-  if (isActive)
+  }
+  if (isActive) {
     return showDegrees ? noteData?.degree : showNotes ? noteName : "";
+  }
   return noteName;
 }
