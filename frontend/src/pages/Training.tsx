@@ -7,9 +7,11 @@ const Training = () => {
   const { completedDrills } = useUserStats();
 
   const DrillBox = ({ drillId }: { drillId: string }) =>
-    completedDrills.has(drillId)
-      ? <div className="box complete">✓</div>
-      : <div className="box" />;
+    completedDrills.has(drillId) ? (
+      <div className="box complete">✓</div>
+    ) : (
+      <div className="box" />
+    );
 
   // const {
   //   leaderboard,
@@ -20,9 +22,8 @@ const Training = () => {
 
   return (
     <div className="page-content">
-
       <div className="training-layout">
-               <div className="column">
+        <div className="column">
           <nav className="drills-sidebar">
             {drillGroups.map((group) => (
               <div className="drills-sidebar__group" key={group.title}>
@@ -30,7 +31,10 @@ const Training = () => {
                 <ul>
                   {group.drills.map((drill) =>
                     drill.comingSoon ? (
-                      <li key={drill.id} className="drills-sidebar__item is-disabled">
+                      <li
+                        key={drill.id}
+                        className="drills-sidebar__item is-disabled"
+                      >
                         {drill.name}
                       </li>
                     ) : (
@@ -39,7 +43,7 @@ const Training = () => {
                           {drill.name}
                         </Link>
                       </li>
-                    )
+                    ),
                   )}
                 </ul>
               </div>
@@ -80,7 +84,9 @@ const Training = () => {
                     <div className="drill-link">
                       <div className="text">
                         <span>{drill.name}</span>
-                        <p className="drills-description">{drill.description}</p>
+                        <p className="drills-description">
+                          {drill.description}
+                        </p>
                       </div>
                       <span className="coming-soon-label">Coming soon</span>
                     </div>
@@ -90,18 +96,18 @@ const Training = () => {
                     <Link to={drill.path!} className="drill-link">
                       <div className="text">
                         <span>{drill.name}</span>
-                        <p className="drills-description">{drill.description}</p>
+                        <p className="drills-description">
+                          {drill.description}
+                        </p>
                       </div>
                       <DrillBox drillId={drill.id} />
                     </Link>
                   </li>
-                )
+                ),
               )}
             </ul>
           ))}
         </div>
-
- 
       </div>
     </div>
   );

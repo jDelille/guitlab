@@ -49,7 +49,7 @@ const Footer = () => {
                 GitHub
               </a>
             </li>
-            <li>
+            {/* <li>
               <a
                 href="https://justindelille.vercel.app/"
                 target="_blank"
@@ -66,7 +66,7 @@ const Footer = () => {
               >
                 LinkedIn
               </a>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>
