@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import type { ChordNote } from "../../constants/CagedChords";
-import { getShapesForKey, type ShapeName } from "../../constants/CagedChords";
+import { getShapesForKey, withAlpha, type ShapeName } from "../../constants/CagedChords";
 import { getDoubleStopsForKey } from "../../constants/doubleStops";
-import { getTriadsForKey, type CagedShape } from "../../constants/triads";
+import { getTriadsForKey } from "../../constants/triads";
 import { buildShapeNoteMap, SHAPE_ORDER } from "./fretboardUtils";
+import { SHAPE_COLORS } from "../chords/constants";
 
 export function useShapeNoteMaps(keyName: string, scale: string, selectedShapes: Set<ShapeName>) {
   const allShapesNoteMap = useMemo(
@@ -68,18 +69,51 @@ export function useDoubleStops(keyName: string, scale: string, showDoubleStops: 
   return { pairs, map, insideBracketSet };
 }
 
-export function useTriads(keyName: string, cagedChord: string, showTriads: boolean) {
-  const positions = useMemo(
-    () => (showTriads ? getTriadsForKey(keyName, cagedChord as CagedShape) : []),
-    [keyName, cagedChord, showTriads],
-  );
+export interface TriadMapEntry {
+  colors: string[];
+  dimColors: string[];
+}
+
+export function useTriads(
+  keyName: string,
+  selectedShapes: Set<ShapeName>,
+  showTriads: boolean,
+) {
+  const positions = useMemo(() => {
+    if (!showTriads) {
+      return [];
+    }
+    return getTriadsForKey(keyName).filter((triad) => {
+      return selectedShapes.has(triad.shape);
+    });
+  }, [keyName, selectedShapes, showTriads]);
 
   const map = useMemo(() => {
-    const set = new Set<string>();
-    positions.forEach(({ strings, frets }) =>
-      [0, 1, 2].forEach((i) => set.add(`${strings[i]}-${frets[i]}`)),
-    );
-    return set;
+    const grouped = new Map<string, ShapeName[]>();
+    positions.forEach((triad) => {
+      [0, 1, 2].forEach((i) => {
+        const noteKey = `${triad.strings[i]}-${triad.frets[i]}`;
+        const shapes = grouped.get(noteKey) ?? [];
+        shapes.push(triad.shape);
+        grouped.set(noteKey, shapes);
+      });
+    });
+
+    const result = new Map<string, TriadMapEntry>();
+    grouped.forEach((shapes, noteKey) => {
+      const orderedShapes = SHAPE_ORDER.filter((s) => {
+        return shapes.includes(s);
+      });
+      result.set(noteKey, {
+        colors: orderedShapes.map((s) => {
+          return SHAPE_COLORS[s];
+        }),
+        dimColors: orderedShapes.map((s) => {
+          return withAlpha(SHAPE_COLORS[s], 0.55);
+        }),
+      });
+    });
+    return result;
   }, [positions]);
 
   return { positions, map };

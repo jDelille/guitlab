@@ -5,7 +5,7 @@ import type { Scales } from "../types/Scales";
 import { lickToPlayNotes, MIDI_TUNING } from "../audio/utils";
 import { getLicksForShape } from "../constants/licks";
 import { getDoubleStopsForKey } from "../constants/doubleStops";
-import { getTriadsForKey, type CagedShape } from "../constants/triads";
+import { getTriadsForKey } from "../constants/triads";
 import { useSettings } from "../context/SettingsContext";
 
 type ActivePositions = { string: number; fret: number }[] | null;
@@ -52,9 +52,12 @@ export function usePlayScale({
         else cancel = stop;
       });
     } else if (settings.showTriads) {
-      const triads = [
-        ...getTriadsForKey(settings.key, cagedChord as CagedShape),
-      ].sort((a, b) => Math.min(...a.frets) - Math.min(...b.frets));
+      const shapesToPlay = settings.showAllCagedScales
+        ? ALL_SHAPES
+        : ALL_SHAPES.filter((s) => selectedShapes.has(s));
+      const triads = getTriadsForKey(settings.key)
+        .filter((t) => shapesToPlay.includes(t.shape as ShapeName))
+        .sort((a, b) => Math.min(...a.frets) - Math.min(...b.frets));
       playTriads(
         triads,
         settings.playScaleBpm,

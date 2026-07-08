@@ -12,7 +12,6 @@ import type { Scales } from "../../types/Scales";
 export const NOTES = GuitarConstants.notesSharp;
 export const STANDARD_TUNING = GuitarConstants.tuning[0];
 export const MIDI_TUNING = [64, 59, 55, 50, 45, 40];
-export const TRIAD_COLOR = "39,174,96";
 export const NUT_WIDTH = 75;
 export const STRING_ROW_H = 35;
 export const NOTE_RADIUS = 12.5;
@@ -193,6 +192,8 @@ export function getNoteBackground(params: {
   noteData: any;
   noteColor: string;
   noteDimColor: string;
+  triadColor: string;
+  triadDimColor: string;
 }): string {
   const {
     isLickNote,
@@ -205,6 +206,8 @@ export function getNoteBackground(params: {
     noteData,
     noteColor,
     noteDimColor,
+    triadColor,
+    triadDimColor,
   } = params;
   if (isLickNote && !isActive) {
     return "rgba(251,191,36,0.15)";
@@ -213,7 +216,7 @@ export function getNoteBackground(params: {
     return "rgba(155,89,182,0.85)";
   }
   if (isTriad) {
-    return `rgba(${TRIAD_COLOR},${isTriadPlaying && !isActiveTriad ? 0.25 : 0.85})`;
+    return isTriadPlaying && !isActiveTriad ? triadDimColor : triadColor;
   }
   if (isActive) {
     return noteData?.isRoot ? noteColor : noteDimColor;
@@ -226,7 +229,8 @@ export function getNoteBackground(params: {
 
 /**
  * Picks the note's outline style. Same priority-order logic as
- * getNoteBackground.
+ * getNoteBackground. Triad outline colors are always a single solid
+ * color (not a gradient) since CSS outline-color can't render one.
  */
 export function getNoteOutline(params: {
   isLickNote: boolean;
@@ -238,6 +242,8 @@ export function getNoteOutline(params: {
   showChordTones: boolean;
   noteData: any;
   hideScales: boolean;
+  triadOutlineColor: string;
+  triadDimOutlineColor: string;
 }): string {
   const {
     isLickNote,
@@ -249,6 +255,8 @@ export function getNoteOutline(params: {
     showChordTones,
     noteData,
     hideScales,
+    triadOutlineColor,
+    triadDimOutlineColor,
   } = params;
   if (isLickNote) {
     return "2px solid #fbbf24";
@@ -258,8 +266,8 @@ export function getNoteOutline(params: {
   }
   if (isTriad) {
     return isTriadPlaying && !isActiveTriad
-      ? `2px solid rgba(${TRIAD_COLOR},0.25)`
-      : `2px solid rgba(${TRIAD_COLOR},1)`;
+      ? `2px solid ${triadDimOutlineColor}`
+      : `2px solid ${triadOutlineColor}`;
   }
   if (isActive && showChordTones && noteData?.isChordTone && !hideScales) {
     return "2px solid var(--text-primary)";

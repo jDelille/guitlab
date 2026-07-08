@@ -31,11 +31,6 @@ const Home = () => {
 
   const handleShapeToggle = (shapeName: ShapeName) => {
     setCagedChord(shapeName);
-    if (settings.showTriads) {
-      setSelectedShapes(new Set([shapeName]));
-      setSettings((s: any) => ({ ...s, showAllCagedScales: false }));
-      return;
-    }
     const next = new Set(selectedShapes);
     if (next.has(shapeName)) {
       if (next.size === 1) return;

@@ -28,7 +28,7 @@ import {
   STANDARD_TUNING,
   type NoteMapEntry,
 } from "./fretboardUtils";
-import { pluckString } from "./stringPluckAnimation";
+import { pluckString, registerStringLine } from "./stringPluckAnimation";
 
 import "./Fretboard.scss";
 
@@ -46,6 +46,9 @@ const STRINGS = Array.from({ length: 6 }, (_, i) => {
 const FRETS = Array.from({ length: 21 }, (_, i) => {
   return i;
 });
+
+const STRING_THICKNESS = [1.5, 2.4, 2.5, 2.75, 3, 3.25];
+const HIGH_STRING_INDEXES = new Set([0, 1, 2]);
 
 const Fretboard = ({
   cagedChord,
@@ -75,7 +78,7 @@ const Fretboard = ({
 
   const { map: triadsMap } = useTriads(
     settings.key,
-    cagedChord,
+    selectedShapes,
     settings.showTriads,
   );
 
@@ -183,6 +186,18 @@ const Fretboard = ({
               key={stringNumber}
               className={!settings.flipFretboard ? "string" : "stringsFlipped"}
             >
+              <div
+                className="string-line"
+                ref={(el) => {
+                  registerStringLine(stringNumber, el);
+                }}
+                style={{
+                  height: `${STRING_THICKNESS[stringNumber]}px`,
+                  backgroundColor: HIGH_STRING_INDEXES.has(stringNumber)
+                    ? "var(--high-string-color)"
+                    : "var(--low-string-color)",
+                }}
+              />
               {FRETS.map((fret) => {
                 const key = `${stringNumber}-${fret}`;
                 const activeNote = activeMap.get(key) as NoteMapEntry | undefined;
@@ -214,6 +229,12 @@ const Fretboard = ({
                 const isChordTone =
                   isActive && !!chordTonePitches?.has(notePitch);
 
+                const triadEntry = triadsMap.get(key);
+                const triadColors = triadEntry?.colors ?? [];
+                const triadDimColors = triadEntry?.dimColors ?? [];
+                const triadColor = toGradient(triadColors);
+                const triadDimColor = toGradient(triadDimColors);
+
                 const styleParams = {
                   isLickNote,
                   isActive,
@@ -225,6 +246,8 @@ const Fretboard = ({
                   noteData,
                   noteColor,
                   noteDimColor,
+                  triadColor,
+                  triadDimColor,
                 };
 
                 return (
@@ -249,6 +272,8 @@ const Fretboard = ({
                             ...styleParams,
                             showChordTones,
                             hideScales,
+                            triadOutlineColor: triadColors[0],
+                            triadDimOutlineColor: triadDimColors[0],
                           }),
                           outlineOffset: "2px",
                           cursor: "pointer",
