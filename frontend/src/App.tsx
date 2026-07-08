@@ -10,6 +10,7 @@ import { SettingsProvider } from "./context/SettingsContext";
 import { PlaybackProvider } from "./context/PlaybackContext";
 
 const Training = lazy(() => import("./pages/Training"));
+const TabCreator = lazy(() => import("./pages/TabCreator"));
 const Drill = lazy(() => import("./pages/Drill"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const HowToGuide = lazy(() => import("./pages/HowToGuide"));
@@ -33,6 +34,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/training" element={<Training />} />
+              <Route path="/tab-creator" element={<TabCreator />} />
               <Route path="/drill/:drillId" element={<Drill />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/how-to-guide" element={<HowToGuide />} />

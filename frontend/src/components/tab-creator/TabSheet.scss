@@ -1,0 +1,46 @@
+
+.tab-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 1.5rem;
+  background-color: var(--bg-fretboard);
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 20px;
+  font-family: monospace;
+
+  .tab-sheet-string {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .string-label {
+      width: 16px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .string-line {
+      flex: 1;
+      white-space: pre;
+      color: var(--text-primary);
+      letter-spacing: 1px;
+      overflow-x: auto;
+
+      .pending-note {
+        color: var(--accent);
+      }
+    }
+
+    .manual-entry {
+      width: 48px;
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-primary);
+      padding: 2px 6px;
+      font-family: monospace;
+    }
+  }
+}

@@ -83,6 +83,55 @@ export async function playDoubleStops(
   };
 }
 
+export async function playTab(
+  columns: { string: number; fret: number }[][],
+  bpm: number,
+  onStep?: (positions: { string: number; fret: number }[] | null) => void,
+  onComplete?: () => void,
+  loop?: boolean,
+): Promise<() => void> {
+  const instrument = await getInstrument();
+  const intervalMs = (60 / bpm) * 1000;
+  let timers: number[] = [];
+  let stopped = false;
+
+  const scheduleOnce = () => {
+    columns.forEach((column, i) => {
+      const timer = window.setTimeout(() => {
+        column.forEach((note) => {
+          instrument.start({ note: MIDI_TUNING[note.string] + note.fret });
+          pluckString(note.string);
+        });
+        onStep?.(column);
+      }, i * intervalMs);
+      timers.push(timer);
+    });
+
+    const endTimer = window.setTimeout(() => {
+      if (stopped) {
+        return;
+      }
+      onStep?.(null);
+      if (loop) {
+        timers = [];
+        scheduleOnce();
+        return;
+      }
+      onComplete?.();
+    }, columns.length * intervalMs);
+    timers.push(endTimer);
+  };
+
+  scheduleOnce();
+
+  return () => {
+    stopped = true;
+    timers.forEach(clearTimeout);
+    instrument.stop();
+    onStep?.(null);
+  };
+}
+
 export async function playTriads(
   triads: Triad[],
   bpm: number,

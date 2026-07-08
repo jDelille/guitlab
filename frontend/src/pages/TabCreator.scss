@@ -1,0 +1,142 @@
+@use "../scss/mixins" as mix;
+@use "../scss/breakpoints" as bp;
+
+.tab-creator-layout {
+  display: flex;
+  flex-direction: column;
+  
+  height: 100%;
+  width: 100%;
+
+  .tab-creator-header {
+    @include mix.contentWidth();
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+
+    h1 {
+        font-size: 24px;
+        margin-right: auto;
+    }
+
+    button {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-primary);
+      padding: 6px 14px;
+      cursor: pointer;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+    }
+
+    .mode-toggle {
+      display: flex;
+      gap: 4px;
+
+      button.active {
+        background-color: var(--accent);
+        color: white;
+        border-color: var(--accent);
+      }
+    }
+
+    .bpm-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+  }
+
+  .new-section-controls {
+    @include mix.contentWidth();
+    margin: 12px auto 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    select {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-primary);
+      padding: 6px 10px;
+    }
+
+    button {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-primary);
+      padding: 6px 14px;
+      cursor: pointer;
+    }
+
+    .quality-toggle {
+      display: flex;
+      gap: 4px;
+
+      button.active {
+        background-color: var(--accent);
+        color: white;
+        border-color: var(--accent);
+      }
+    }
+  }
+
+  .tab-sections {
+    @include mix.contentWidth();
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .tab-sections-empty {
+      color: var(--text-secondary);
+    }
+
+    .tab-section {
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 12px;
+
+      &.active {
+        border-color: var(--accent);
+      }
+
+      .tab-section-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+
+        .section-chord-label {
+          font-weight: 600;
+          margin-right: auto;
+        }
+
+        button {
+          background-color: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 4px;
+          color: var(--text-primary);
+          padding: 4px 10px;
+          cursor: pointer;
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: default;
+          }
+        }
+      }
+    }
+  }
+}

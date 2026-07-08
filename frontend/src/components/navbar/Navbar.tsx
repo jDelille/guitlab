@@ -51,20 +51,40 @@ const Navbar = ({ onAuthOpen }: Props) => {
         </Link>
 
         <ul className="links">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/training" id="tour-lab">The Lab</Link></li>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/training" id="tour-lab">
+              The Lab
+            </Link>
+          </li>
+           <li>
+            <Link to="/tab-creator" id="tour-lab">
+              Tabs
+            </Link>
+          </li>
         </ul>
 
         <ul className="nav-settings">
           {!user && (
             <>
-              <button className="sign-in-btn" onClick={() => onAuthOpen("login")}>
+              <button
+                className="sign-in-btn"
+                onClick={() => onAuthOpen("login")}
+              >
                 Login
               </button>
-              <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
-                {theme === "dark"
-                  ? <IoSunnyOutline color="var(--text-primary)" />
-                  : <IoMoonOutline color="var(--text-primary)" />}
+              <button
+                className="theme-toggle"
+                onClick={toggleTheme}
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? (
+                  <IoSunnyOutline color="var(--text-primary)" />
+                ) : (
+                  <IoMoonOutline color="var(--text-primary)" />
+                )}
               </button>
             </>
           )}
@@ -77,12 +97,19 @@ const Navbar = ({ onAuthOpen }: Props) => {
                   onClick={() => setNotifOpen((o) => !o)}
                 >
                   <FaRegBell
-                    color={unreadCount > 0 ? "var(--red)" : "var(--text-primary)"}
+                    color={
+                      unreadCount > 0 ? "var(--red)" : "var(--text-primary)"
+                    }
                     size={18}
                   />
-                  {unreadCount > 0 && <span className="bell__badge">{unreadCount}</span>}
+                  {unreadCount > 0 && (
+                    <span className="bell__badge">{unreadCount}</span>
+                  )}
                 </button>
-                <NotificationPanel isOpen={notifOpen} onClose={() => setNotifOpen(false)} />
+                <NotificationPanel
+                  isOpen={notifOpen}
+                  onClose={() => setNotifOpen(false)}
+                />
               </div>
               <UserMenu
                 user={user}
@@ -106,9 +133,14 @@ const Navbar = ({ onAuthOpen }: Props) => {
                   color={unreadCount > 0 ? "var(--red)" : "var(--text-primary)"}
                   size={18}
                 />
-                {unreadCount > 0 && <span className="bell__badge">{unreadCount}</span>}
+                {unreadCount > 0 && (
+                  <span className="bell__badge">{unreadCount}</span>
+                )}
               </button>
-              <NotificationPanel isOpen={notifOpen} onClose={() => setNotifOpen(false)} />
+              <NotificationPanel
+                isOpen={notifOpen}
+                onClose={() => setNotifOpen(false)}
+              />
             </div>
           </div>
         )}
@@ -123,7 +155,10 @@ const Navbar = ({ onAuthOpen }: Props) => {
         theme={theme}
         toggleTheme={toggleTheme}
       />
-      <BottomNav isOpen={mobileOpen} onToggle={() => setMobileOpen((o) => !o)} />
+      <BottomNav
+        isOpen={mobileOpen}
+        onToggle={() => setMobileOpen((o) => !o)}
+      />
     </div>
   );
 };

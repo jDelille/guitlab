@@ -35,3 +35,16 @@ export function lickToPlayNotes(notes: ChordNote[]): PlayNote[] {
       fret: n.fret!,
     }));
 }
+
+// Converts tab-creator notes (plain string/fret pairs) to PlayNotes, preserving order.
+export function tabNotesToPlayNotes(
+  notes: { string: number; fret: number }[],
+): PlayNote[] {
+  return notes.map((note) => {
+    return {
+      midi: MIDI_TUNING[note.string] + note.fret,
+      string: note.string,
+      fret: note.fret,
+    };
+  });
+}

@@ -38,6 +38,7 @@ interface FretboardProps {
   showChordTones: boolean;
   activePositions?: { string: number; fret: number }[] | null;
   lickNotes?: ChordNote[] | null;
+  onNoteClick?: (string: number, fret: number) => void;
 }
 
 const STRINGS = Array.from({ length: 6 }, (_, i) => {
@@ -53,6 +54,7 @@ const Fretboard = ({
   showChordTones,
   activePositions,
   lickNotes,
+  onNoteClick,
 }: FretboardProps) => {
   const { settings } = useSettings();
   const { currentBackingChord } = usePlayback();
@@ -200,11 +202,9 @@ const Fretboard = ({
                   });
                 const isInsideBracket =
                   !isDoubleStop && insideBracketSet.has(key);
-                const isHighlighted =
-                  (isActive || isLickNote || isDoubleStop || isTriad) &&
-                  !!activePositions?.some((pos) => {
-                    return pos.string === stringNumber && pos.fret === fret;
-                  });
+                const isHighlighted = !!activePositions?.some((pos) => {
+                  return pos.string === stringNumber && pos.fret === fret;
+                });
 
                 const noteData = activeNote?.note;
                 const noteColor = toGradient(activeNote?.colors ?? []);
@@ -242,6 +242,7 @@ const Fretboard = ({
                         onClick={() => {
                           playNote(stringNumber, fret);
                           pluckString(stringNumber);
+                          onNoteClick?.(stringNumber, fret);
                         }}
                         style={{
                           background: getNoteBackground(styleParams),
