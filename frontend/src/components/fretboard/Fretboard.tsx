@@ -213,6 +213,13 @@ const Fretboard = ({
                   !!activePositions?.some((pos) => {
                     return pos.string === stringNumber && pos.fret === fret;
                   });
+                const isDoubleStopPlaying =
+                  settings.showDoubleStops && !!activePositions?.length;
+                const isActiveDoubleStop =
+                  isDoubleStop &&
+                  !!activePositions?.some((pos) => {
+                    return pos.string === stringNumber && pos.fret === fret;
+                  });
                 const isInsideBracket =
                   !isDoubleStop && insideBracketSet.has(key);
                 const isHighlighted =
@@ -239,6 +246,8 @@ const Fretboard = ({
                   isLickNote,
                   isActive,
                   isDoubleStop,
+                  isDoubleStopPlaying,
+                  isActiveDoubleStop,
                   isTriad,
                   isTriadPlaying,
                   isActiveTriad,

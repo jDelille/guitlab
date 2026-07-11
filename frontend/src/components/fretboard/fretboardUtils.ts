@@ -46,8 +46,14 @@ export function getFretCenterX(fret: number, containerWidth: number): number {
   return NUT_WIDTH + (fret - 0.5) * fretWidth;
 }
 
+/**
+ * Matches the note dot's actual rendered center, not just the row's
+ * geometric center - the note() mixin nudges dots up 1px via
+ * `position: relative; bottom: 1px`, so the overlay has to account for
+ * that or it renders visibly below the dots it's connecting.
+ */
 export function getStringCenterY(stringIndex: number): number {
-  return stringIndex * STRING_ROW_H + STRING_ROW_H / 2;
+  return stringIndex * STRING_ROW_H + STRING_ROW_H / 2 - 1;
 }
 
 /**
@@ -185,6 +191,8 @@ export function getNoteBackground(params: {
   isLickNote: boolean;
   isActive: boolean;
   isDoubleStop: boolean;
+  isDoubleStopPlaying: boolean;
+  isActiveDoubleStop: boolean;
   isTriad: boolean;
   isTriadPlaying: boolean;
   isActiveTriad: boolean;
@@ -199,6 +207,8 @@ export function getNoteBackground(params: {
     isLickNote,
     isActive,
     isDoubleStop,
+    isDoubleStopPlaying,
+    isActiveDoubleStop,
     isTriad,
     isTriadPlaying,
     isActiveTriad,
@@ -213,7 +223,9 @@ export function getNoteBackground(params: {
     return "rgba(251,191,36,0.15)";
   }
   if (isDoubleStop) {
-    return "rgba(155,89,182,0.85)";
+    return isDoubleStopPlaying && !isActiveDoubleStop
+      ? "rgba(155,89,182,0.35)"
+      : "rgba(155,89,182,0.85)";
   }
   if (isTriad) {
     return isTriadPlaying && !isActiveTriad ? triadDimColor : triadColor;
@@ -235,6 +247,8 @@ export function getNoteBackground(params: {
 export function getNoteOutline(params: {
   isLickNote: boolean;
   isDoubleStop: boolean;
+  isDoubleStopPlaying: boolean;
+  isActiveDoubleStop: boolean;
   isTriad: boolean;
   isTriadPlaying: boolean;
   isActiveTriad: boolean;
@@ -248,6 +262,8 @@ export function getNoteOutline(params: {
   const {
     isLickNote,
     isDoubleStop,
+    isDoubleStopPlaying,
+    isActiveDoubleStop,
     isTriad,
     isTriadPlaying,
     isActiveTriad,
@@ -262,7 +278,9 @@ export function getNoteOutline(params: {
     return "2px solid #fbbf24";
   }
   if (isDoubleStop) {
-    return "2px solid rgba(155,89,182,1)";
+    return isDoubleStopPlaying && !isActiveDoubleStop
+      ? "2px solid rgba(155,89,182,0.45)"
+      : "2px solid rgba(155,89,182,1)";
   }
   if (isTriad) {
     return isTriadPlaying && !isActiveTriad

@@ -37,11 +37,22 @@
 .cell {
   width: 32px;
   height: 32px;
-  border: 1px solid var(--high-string-color);
+  border-top: 1px solid var(--high-string-color);
+  border-bottom: 1px solid var(--high-string-color);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background-color: var(--high-string-color);
+  }
 }
 
 .dot,
@@ -49,7 +60,7 @@
   width: 20px;
   height: 20px;
   position: relative;
-  left: -16px;
+  left: 0px;
   z-index: 2;
   border-radius: 50%;
   background: var(--text-primary)

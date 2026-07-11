@@ -53,11 +53,10 @@
       height: 35px;
       border-right: 3px solid var(--high-string-color);
 
-      &:nth-child(1) {
+      &:nth-child(2) {
         max-width: 75px;
         min-width: 75px;
         background-color: var(--bg-primary);
-
         .ghost-note {
           background-color: var(--bg-primary) !important;
         }

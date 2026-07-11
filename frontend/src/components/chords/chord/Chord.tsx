@@ -95,7 +95,7 @@ export default function Chord({
     >
       <div className="title">
         <p>{shape.shape} Shape</p>
-        <p className="start-fret">Fret {startFret}</p>
+        {/* <p className="start-fret">Fret {startFret}</p> */}
       </div>
 
       {Array.from({ length: DISPLAY_FRETS }).map((_, fretOffset) => {
@@ -109,15 +109,7 @@ export default function Chord({
               const note = getNote(stringIndex, fret);
 
               return (
-                <div
-                  key={`${stringIndex}-${fret}`}
-                  className="cell"
-                  style={
-                    fret === 0
-                      ? { borderRight: "none", borderLeft: "none" }
-                      : undefined
-                  }
-                >
+                <div key={`${stringIndex}-${fret}`} className="cell">
                   {note && !note.isMuted && (
                     <>
                       {note.fret === 0 ? (

@@ -11,7 +11,7 @@ const DoubleStopOverlay = ({ pairs, containerWidth }: DoubleStopOverlayProps) =>
     style={{
       position: "absolute",
       top: 0,
-      left: 0,
+      left: -1,
       width: "100%",
       height: "100%",
       pointerEvents: "none",
@@ -43,7 +43,7 @@ const DoubleStopOverlay = ({ pairs, containerWidth }: DoubleStopOverlayProps) =>
           rx={capsuleThick / 2}
           ry={capsuleThick / 2}
           fill="rgba(155,89,182,0.1)"
-          stroke="rgba(155,89,182,0.65)"
+          stroke="rgba(168, 138, 180, 0.65)"
           strokeWidth={1.5}
           transform={`translate(${cx}, ${cy}) rotate(${angle})`}
         />
