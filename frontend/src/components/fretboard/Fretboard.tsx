@@ -27,17 +27,23 @@ import {
   getKeyPitch,
   STANDARD_TUNING,
   type NoteMapEntry,
+  playBend,
 } from "./fretboardUtils";
 import { pluckString, registerStringLine } from "./stringPluckAnimation";
-
+import { bendString, registerStringPath } from "./stringBendAnimation";
+import type { Lick } from "../../constants/licks/types";
 import "./Fretboard.scss";
+import type { LickTechnique } from "../../types/LickTechnique";
+import { usePlayScale } from "../../hooks/usePlayScale";
+import type { ActivePositions } from "../../pages/Home";
 
 interface FretboardProps {
-  cagedChord: string;
+  cagedChord: ShapeName;
   selectedShapes: Set<ShapeName>;
   showChordTones: boolean;
-  activePositions?: { string: number; fret: number }[] | null;
-  lickNotes?: ChordNote[] | null;
+  activePositions?: ActivePositions;
+  setActivePositions: (positions: ActivePositions) => void;
+  activeLick?: Lick | null;
 }
 
 const STRINGS = Array.from({ length: 6 }, (_, i) => {
@@ -55,20 +61,23 @@ const Fretboard = ({
   selectedShapes,
   showChordTones,
   activePositions,
-  lickNotes,
+  setActivePositions,
+  activeLick,
 }: FretboardProps) => {
   const { settings } = useSettings();
   const { currentBackingChord } = usePlayback();
   const fretboardRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState(0);
+  const noteRefs = useRef(new Map<string, HTMLElement>());
 
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [bendingString, setBendingString] = useState<number | null>(null);
   const { allShapesNoteMap, selectedShapesNoteMap } = useShapeNoteMaps(
     settings.key,
     settings.scale,
     selectedShapes,
   );
-  const lickNoteMap = useLickNoteMap(lickNotes);
+  const lickNoteMap = useLickNoteMap(activeLick?.notes || null);
 
   const {
     pairs: doubleStopPairs,
@@ -160,6 +169,53 @@ const Fretboard = ({
       ? new Map()
       : selectedShapesNoteMap;
 
+  const lickNotes = activeLick?.notes ?? null;
+
+  const bendMap = useMemo(() => {
+    const map = new Map<string, LickTechnique>();
+
+    if (!activeLick) return map;
+
+    Object.entries(activeLick.techniques ?? {}).forEach(
+      ([index, technique]) => {
+        const note = activeLick.notes[Number(index)];
+
+        if (note) {
+          map.set(`${note.string}-${note.fret}`, technique);
+        }
+      },
+    );
+
+    return map;
+  }, [activeLick]);
+
+  const handleBendAnimation = (
+    pos: { string: number; fret: number } | null,
+  ) => {
+    if (!pos) return;
+
+    setBendingString(pos.string);
+
+    const element = noteRefs.current.get(`${pos.string}-${pos.fret}`);
+
+    if (element) {
+      bendString(pos.string, element);
+    }
+
+    // reset after the bend animation duration
+    setTimeout(() => {
+      setBendingString(null);
+    }, 500);
+  };
+
+  usePlayScale({
+    cagedChord,
+    selectedShapes,
+    selectedLickId: activeLick?.id ?? null,
+    setActivePositions,
+    onBend: handleBendAnimation,
+  });
+
   return (
     <div className="fretboard-wrapper" id="tour-fretboard" ref={wrapperRef}>
       <FretNumbers
@@ -196,11 +252,39 @@ const Fretboard = ({
                   backgroundColor: HIGH_STRING_INDEXES.has(stringNumber)
                     ? "var(--high-string-color)"
                     : "var(--low-string-color)",
+                  opacity: bendingString === stringNumber ? 0 : 1,
                 }}
               />
+              <svg
+                className="string-bend-overlay"
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  zIndex: 1,
+                  pointerEvents: "none",
+                  overflow: "visible",
+                  opacity: bendingString === stringNumber ? 1 : 0,
+                }}
+              >
+                <path
+                  ref={(el) => registerStringPath(stringNumber, el)}
+                  stroke={
+                    HIGH_STRING_INDEXES.has(stringNumber)
+                      ? "var(--high-string-color)"
+                      : "var(--low-string-color)"
+                  }
+                  strokeWidth={STRING_THICKNESS[stringNumber]}
+                  fill="none"
+                />
+              </svg>
               {FRETS.map((fret) => {
                 const key = `${stringNumber}-${fret}`;
-                const activeNote = activeMap.get(key) as NoteMapEntry | undefined;
+                const activeNote = activeMap.get(key) as
+                  | NoteMapEntry
+                  | undefined;
                 const isActive = !!activeNote;
                 const lickNote = lickNoteMap.get(key);
                 const isLickNote = !!lickNote;
@@ -271,9 +355,40 @@ const Fretboard = ({
                             ? "note"
                             : "ghost-note"
                         }
-                        onClick={() => {
-                          playNote(stringNumber, fret);
+                        ref={(el) => {
+                          if (el) {
+                            noteRefs.current.set(key, el);
+                          }
+                        }}
+                        onClick={(e) => {
+                          const technique = bendMap.get(
+                            `${stringNumber}-${fret}`,
+                          );
+
+                          console.log(technique, "TECHNIQUE");
+
+                          if (
+                            technique?.technique === "bend" &&
+                            technique.bend
+                          ) {
+                            playBend(
+                              stringNumber,
+                              fret,
+                              technique.bend.amount,
+                              technique.bend.duration,
+                            );
+                          } else {
+                            playNote(stringNumber, fret);
+                          }
+
                           pluckString(stringNumber);
+
+                          if (technique?.technique === "bend") {
+                            bendString(
+                              stringNumber,
+                              e.currentTarget as HTMLElement,
+                            );
+                          }
                         }}
                         style={{
                           background: getNoteBackground(styleParams),

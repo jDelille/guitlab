@@ -10,7 +10,7 @@ import { usePlayScale } from "../hooks/usePlayScale";
 import { maybeStartTour } from "../tour/tour";
 import "../tour/tour.scss";
 
-type ActivePositions = { string: number; fret: number }[] | null;
+export type ActivePositions = { string: number; fret: number }[] | null;
 
 const Home = () => {
   const [cagedChord, setCagedChord] = useState<ShapeName>("C");
@@ -19,17 +19,18 @@ const Home = () => {
   );
   const [showChordTones] = useState<boolean>(false);
   const [activePositions, setActivePositions] = useState<ActivePositions>(null);
-  const [selectedLickId] = useState<string | null>(null);
+  const [selectedLickId] = useState<string | null>("e-major-blues-approach");
 
   const { settings, setSettings } = useSettings();
 
-  usePlayScale({ cagedChord, selectedShapes, selectedLickId, setActivePositions });
 
   useEffect(() => {
     maybeStartTour();
   }, []);
 
   const handleShapeToggle = (shapeName: ShapeName) => {
+    console.log("TOGGLE SHAPE:", shapeName);
+
     setCagedChord(shapeName);
     const next = new Set(selectedShapes);
     if (next.has(shapeName)) {
@@ -42,6 +43,10 @@ const Home = () => {
     setSettings((s: any) => ({ ...s, showAllCagedScales: next.size === 5 }));
   };
 
+  useEffect(() => {
+    console.log("CURRENT CAGED CHORD:", cagedChord);
+  }, [cagedChord]);
+
   return (
     <div className="page-content">
       <Controls />
@@ -49,16 +54,18 @@ const Home = () => {
         cagedChord={cagedChord}
         selectedShapes={selectedShapes}
         showChordTones={showChordTones}
+        setActivePositions={setActivePositions}
         activePositions={activePositions}
-        lickNotes={
+        activeLick={
           selectedLickId
             ? (getLicksForShape(
                 cagedChord,
                 settings.scale as Scales,
                 settings.key,
-              ).find((l) => l.id === selectedLickId)?.notes ?? null)
+              ).find((l) => l.id === selectedLickId) ?? null)
             : null
         }
+        
       />
       <Chords
         selectedShapes={selectedShapes}

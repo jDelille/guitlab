@@ -1,5 +1,6 @@
 import { useSettings, type Settings } from "../../../context/SettingsContext";
 import TriadHint from "./TriadHint";
+import LickControl from "../LickControl";
 import "./OverlayControls.scss";
 
 const CONTROLS: { label: string; short: string; key: keyof Settings }[] = [

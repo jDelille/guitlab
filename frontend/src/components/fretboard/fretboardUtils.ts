@@ -8,6 +8,10 @@ import { SHAPE_COLORS } from "../chords/constants";
 import { getInstrument } from "../../audio/soundfont";
 import GuitarConstants from "../../constants/GuitarConstants";
 import type { Scales } from "../../types/Scales";
+import {
+  createGuitarVoice,
+  midiToFrequency,
+} from "../../audio/createGuitarVoice";
 
 export const NOTES = GuitarConstants.notesSharp;
 export const STANDARD_TUNING = GuitarConstants.tuning[0];
@@ -46,6 +50,8 @@ export function getFretCenterX(fret: number, containerWidth: number): number {
   return NUT_WIDTH + (fret - 0.5) * fretWidth;
 }
 
+//
+
 /**
  * Matches the note dot's actual rendered center, not just the row's
  * geometric center - the note() mixin nudges dots up 1px via
@@ -61,9 +67,70 @@ export function getStringCenterY(stringIndex: number): number {
  * (the open string's pitch plus the fret offset) and sending it to the
  * loaded instrument.
  */
-export async function playNote(string: number, fret: number) {
-  const instrument = await getInstrument();
-  instrument.start({ note: MIDI_TUNING[string] + fret });
+export function playNote(string: number, fret: number) {
+  const ctx = getBendAudioContext();
+
+  if (ctx.state === "suspended") {
+    ctx.resume();
+  }
+
+  const midi = MIDI_TUNING[string] + fret;
+
+  const voice = createGuitarVoice(ctx, midi);
+
+  const now = ctx.currentTime;
+
+  voice.oscillator.stop(now + 2);
+  voice.harmonicOscillator.stop(now + 2);
+}
+
+let bendAudioCtx: AudioContext | null = null;
+const activeBendOscillators = new Map<number, OscillatorNode>();
+
+function getBendAudioContext(): AudioContext {
+  if (!bendAudioCtx) {
+    bendAudioCtx = new (
+      window.AudioContext || (window as any).webkitAudioContext
+    )();
+  }
+  return bendAudioCtx;
+}
+
+export function playBend(
+  string: number,
+  fret: number,
+  targetBendFrets: number = 2,
+  bendDurationMs: number = 300,
+): void {
+  const ctx = getBendAudioContext();
+
+  if (ctx.state === "suspended") {
+    ctx.resume();
+  }
+
+  activeBendOscillators.get(string)?.stop();
+
+  const startMidi = MIDI_TUNING[string] + fret;
+  const targetFreq = midiToFrequency(startMidi + targetBendFrets);
+
+  const now = ctx.currentTime;
+
+  const voice = createGuitarVoice(ctx, startMidi);
+
+  voice.oscillator.frequency.linearRampToValueAtTime(
+    targetFreq,
+    now + bendDurationMs / 1000,
+  );
+
+  voice.harmonicOscillator.frequency.linearRampToValueAtTime(
+    targetFreq * 2,
+    now + bendDurationMs / 1000,
+  );
+
+  voice.oscillator.stop(now + 2);
+  voice.harmonicOscillator.stop(now + 2);
+
+  activeBendOscillators.set(string, voice.oscillator);
 }
 
 export function getNoteName(string: number, fret: number): string {

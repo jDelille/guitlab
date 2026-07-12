@@ -7,6 +7,7 @@ import { getLicksForShape } from "../constants/licks";
 import { getDoubleStopsForKey } from "../constants/doubleStops";
 import { getTriadsForKey } from "../constants/triads";
 import { useSettings } from "../context/SettingsContext";
+import { bendString } from "../components/fretboard/stringBendAnimation";
 
 type ActivePositions = { string: number; fret: number }[] | null;
 
@@ -17,6 +18,7 @@ interface UsePlayScaleArgs {
   selectedShapes: Set<ShapeName>;
   selectedLickId: string | null;
   setActivePositions: (positions: ActivePositions) => void;
+  onBend?: (pos: { string: number; fret: number }) => void;
 }
 
 export function usePlayScale({
@@ -24,6 +26,7 @@ export function usePlayScale({
   selectedShapes,
   selectedLickId,
   setActivePositions,
+  onBend,
 }: UsePlayScaleArgs) {
   const { settings, setSettings } = useSettings();
 
@@ -81,8 +84,20 @@ export function usePlayScale({
           lickToPlayNotes(activeLick.notes),
           settings.playScaleBpm,
           settings.playScaleDirection,
-          (pos) => setActivePositions(pos ? [pos] : null),
+          (pos) => {
+            setActivePositions(
+              pos ? [{ string: pos.string, fret: pos.fret }] : null,
+            );
+
+            if (pos?.technique === "bend") {
+              onBend?.({
+                string: pos.string,
+                fret: pos.fret,
+              });
+            }
+          },
           onComplete,
+          activeLick.techniques,
         ).then((stop) => {
           if (cleaned) stop();
           else cancel = stop;

@@ -6,6 +6,7 @@ export interface PlayNote {
   midi: number;
   string: number;
   fret: number;
+  technique?: string;
 }
 
 export function chordNotesToMidi(notes: ChordNote[]) {
