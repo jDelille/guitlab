@@ -12,7 +12,7 @@ interface ChordProps {
   shape: ChordShape;
   selectedShapes: Set<ShapeName>;
   onToggle: (shape: ShapeName) => void;
-  chordQuality: "major" | "minor" | "dom7";
+  chordQuality: "major" | "minor" | "dom7" | "other";
 }
 
 export default function Chord({
@@ -28,9 +28,11 @@ export default function Chord({
   const dimColor = withAlpha(color, 0.55);
 
   const displayNotes =
-    chordQuality === "minor" ? shape.minorChord :
-    chordQuality === "dom7" ? shape.dom7Chord :
-    shape.notes;
+    chordQuality === "minor"
+      ? shape.minorChord
+      : chordQuality === "dom7"
+        ? shape.dom7Chord
+        : shape.notes;
 
   const fretted = displayNotes.filter(
     (n): n is ChordNote & { fret: number } => n.fret !== null,
@@ -57,7 +59,8 @@ export default function Chord({
 
   const isActive = selectedShapes.has(shape.shape);
 
-  const { showAllCagedScales, showDoubleStops, showScaleWithDoubleStops } = settings;
+  const { showAllCagedScales, showDoubleStops, showScaleWithDoubleStops } =
+    settings;
 
   const handleChordClick = (shapeName: ShapeName) => {
     if (showDoubleStops) {
@@ -65,7 +68,11 @@ export default function Chord({
         setSettings((s: any) => ({ ...s, showScaleWithDoubleStops: false }));
       } else {
         onToggle(shapeName);
-        setSettings((s: any) => ({ ...s, showScaleWithDoubleStops: true, showAllCagedScales: false }));
+        setSettings((s: any) => ({
+          ...s,
+          showScaleWithDoubleStops: true,
+          showAllCagedScales: false,
+        }));
       }
     } else {
       onToggle(shapeName);
@@ -77,20 +84,11 @@ export default function Chord({
       className="chord-grid"
       onClick={() => handleChordClick(shape.shape)}
       style={{
-        boxShadow:
-          showAllCagedScales || (isActive && (!showDoubleStops || showScaleWithDoubleStops))
-            ? `inset 0 0 0 2px ${color}`
-            : undefined,
-        border:
-          showAllCagedScales || (isActive && (!showDoubleStops || showScaleWithDoubleStops))
-            ? "1px solid transparent"
-            : undefined,
-        opacity:
-          showAllCagedScales
+        opacity: showAllCagedScales
+          ? 1
+          : isActive && (!showDoubleStops || showScaleWithDoubleStops)
             ? 1
-            : isActive && (!showDoubleStops || showScaleWithDoubleStops)
-              ? 1
-              : 0.4,
+            : 0.4,
       }}
     >
       <div className="title">

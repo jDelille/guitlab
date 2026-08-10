@@ -1,0 +1,19 @@
+@use "../../scss/mixins" as mix;
+
+.chord-library {
+  @include mix.contentWidth();
+  margin: 2rem auto;
+
+  .section-label {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .chord-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid lime;
+    height: 600px;
+    margin-top: 1rem;
+  }
+}

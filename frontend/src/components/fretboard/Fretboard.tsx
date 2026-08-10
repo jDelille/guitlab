@@ -35,7 +35,6 @@ import "./Fretboard.scss";
 interface FretboardProps {
   cagedChord: string;
   selectedShapes: Set<ShapeName>;
-  showChordTones: boolean;
   activePositions?: { string: number; fret: number }[] | null;
   lickNotes?: ChordNote[] | null;
 }
@@ -53,7 +52,6 @@ const HIGH_STRING_INDEXES = new Set([0, 1, 2]);
 const Fretboard = ({
   cagedChord,
   selectedShapes,
-  showChordTones,
   activePositions,
   lickNotes,
 }: FretboardProps) => {
@@ -279,7 +277,6 @@ const Fretboard = ({
                           background: getNoteBackground(styleParams),
                           outline: getNoteOutline({
                             ...styleParams,
-                            showChordTones,
                             hideScales,
                             triadOutlineColor: triadColors[0],
                             triadDimOutlineColor: triadDimColors[0],

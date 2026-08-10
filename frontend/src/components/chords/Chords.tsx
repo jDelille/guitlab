@@ -11,31 +11,92 @@ interface ChordsProps {
 
 const Chords = ({ selectedShapes, onShapeToggle }: ChordsProps) => {
   const { settings, setSettings } = useSettings();
-  const [chordQuality, setChordQuality] = useState<"major" | "minor" | "dom7">("major");
+  const [chordQuality, setChordQuality] = useState<
+    "major" | "minor" | "dom7" | "other"
+  >("major");
 
-  const SCALE_QUALITY_MAP: Record<string, { major: string; minor: string; dom7: string }> = {
-    arpeggio:        { major: "arpeggio",        minor: "minorArpeggio",   dom7: "dom7Arpeggio" },
-    majorPentatonic: { major: "majorPentatonic", minor: "minorPentatonic", dom7: "dom7Scale"    },
-    majorScale:      { major: "majorScale",      minor: "minorScale",      dom7: "dom7Scale"    },
-    minorArpeggio:   { major: "arpeggio",        minor: "minorArpeggio",   dom7: "dom7Arpeggio" },
-    minorPentatonic: { major: "majorPentatonic", minor: "minorPentatonic", dom7: "dom7Scale"    },
-    minorScale:      { major: "majorScale",      minor: "minorScale",      dom7: "dom7Scale"    },
-    dom7Chord:       { major: "arpeggio",        minor: "minorArpeggio",   dom7: "dom7Chord"    },
-    dom7Arpeggio:    { major: "arpeggio",        minor: "minorArpeggio",   dom7: "dom7Arpeggio" },
-    dom7Scale:       { major: "majorScale",      minor: "minorScale",      dom7: "dom7Scale"    },
+  const SCALE_QUALITY_MAP: Record<
+    string,
+    { major: string; minor: string; dom7: string; other: string }
+  > = {
+    arpeggio: {
+      major: "arpeggio",
+      minor: "minorArpeggio",
+      dom7: "dom7Arpeggio",
+      other: "other",
+    },
+    majorPentatonic: {
+      major: "majorPentatonic",
+      minor: "minorPentatonic",
+      dom7: "dom7Scale",
+      other: "other",
+    },
+    majorScale: {
+      major: "majorScale",
+      minor: "minorScale",
+      dom7: "dom7Scale",
+      other: "other",
+    },
+    minorArpeggio: {
+      major: "arpeggio",
+      minor: "minorArpeggio",
+      dom7: "dom7Arpeggio",
+      other: "other",
+    },
+    minorPentatonic: {
+      major: "majorPentatonic",
+      minor: "minorPentatonic",
+      dom7: "dom7Scale",
+      other: "other",
+    },
+    minorScale: {
+      major: "majorScale",
+      minor: "minorScale",
+      dom7: "dom7Scale",
+      other: "other",
+    },
+    dom7Chord: {
+      major: "arpeggio",
+      minor: "minorArpeggio",
+      dom7: "dom7Chord",
+      other: "other",
+    },
+    dom7Arpeggio: {
+      major: "arpeggio",
+      minor: "minorArpeggio",
+      dom7: "dom7Arpeggio",
+      other: "other",
+    },
+    dom7Scale: {
+      major: "majorScale",
+      minor: "minorScale",
+      dom7: "dom7Scale",
+      other: "other",
+    },
+    other: {
+      major: "arpeggio",
+      minor: "minorArpeggio",
+      dom7: "dom7Arpeggio",
+      other: "other",
+    },
   };
 
   useEffect(() => {
     if (settings.scale.startsWith("dom7")) {
       setChordQuality("dom7");
-    } else if (settings.scale.includes("minor") || settings.scale.includes("Minor")) {
+    } else if (
+      settings.scale.includes("minor") ||
+      settings.scale.includes("Minor")
+    ) {
       setChordQuality("minor");
     } else {
       setChordQuality("major");
     }
   }, [settings.scale]);
 
-  const handleQualityChange = (quality: "major" | "minor" | "dom7") => {
+  const handleQualityChange = (
+    quality: "major" | "minor" | "dom7" | "other",
+  ) => {
     setChordQuality(quality);
     const mapped = SCALE_QUALITY_MAP[settings.scale]?.[quality];
     if (mapped) {
@@ -62,7 +123,9 @@ const Chords = ({ selectedShapes, onShapeToggle }: ChordsProps) => {
     <div className="chords" id="tour-chords">
       <div className="chords-header">
         <p className="section-label">
-          {chordQuality === "dom7" ? "Dom7 Chords" : `${chordQuality === "major" ? "Major" : "Minor"} CAGED Chords`}
+          {chordQuality === "dom7"
+            ? "Dom7 Chords"
+            : `${chordQuality === "major" ? "Major" : "Minor"} CAGED Chords`}
         </p>
         <div className="quality-toggle">
           <button
@@ -83,10 +146,22 @@ const Chords = ({ selectedShapes, onShapeToggle }: ChordsProps) => {
           >
             Dom7
           </button>
+          {/* <button
+            className={chordQuality === "other" ? "active" : ""}
+            onClick={() => handleQualityChange("other")}
+          >
+            Other
+          </button> */}
         </div>
       </div>
-      <p className="chords-hint">Click a shape to select it · click again to deselect</p>
-      <div className="chord-row-scroll" ref={chordsRef} onMouseLeave={hideScrollbar}>
+      <p className="chords-hint">
+        Click a shape to select it · click again to deselect
+      </p>
+      <div
+        className="chord-row-scroll"
+        ref={chordsRef}
+        onMouseLeave={hideScrollbar}
+      >
         <div className="chord-row">
           {Object.values(shapes).map((shape) => (
             <div key={shape.shape} onMouseEnter={showScrollbar}>

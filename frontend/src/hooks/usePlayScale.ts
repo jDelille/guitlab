@@ -48,7 +48,9 @@ export function usePlayScale({
         setActivePositions,
         onComplete,
       ).then((stop) => {
-        if (cleaned) stop();
+        if (cleaned) {
+           stop();
+        }
         else cancel = stop;
       });
     } else if (settings.showTriads) {
@@ -84,9 +86,13 @@ export function usePlayScale({
           (pos) => setActivePositions(pos ? [pos] : null),
           onComplete,
         ).then((stop) => {
-          if (cleaned) stop();
+          if (cleaned) {
+            stop();
+          }
           else cancel = stop;
         });
+
+        
       } else {
         const shapesToPlay = settings.showAllCagedScales
           ? ALL_SHAPES
@@ -134,7 +140,9 @@ export function usePlayScale({
           (pos) => setActivePositions(pos ? [pos] : null),
           onComplete,
         ).then((stop) => {
-          if (cleaned) stop();
+          if (cleaned) {
+            stop();
+          }
           else cancel = stop;
         });
       }

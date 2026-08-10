@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import Fretboard from "../components/fretboard/Fretboard";
-import Chords from "../components/chords/Chords";
-import Controls from "../components/controls/Controls";
-import { type ShapeName } from "../constants/CagedChords";
-import type { Scales } from "../types/Scales";
 import { getLicksForShape } from "../constants/licks";
 import { useSettings } from "../context/SettingsContext";
 import { usePlayScale } from "../hooks/usePlayScale";
 import { maybeStartTour } from "../tour/tour";
+
+import Fretboard from "../components/fretboard/Fretboard";
+import Chords from "../components/chords/Chords";
+import Controls from "../components/controls/Controls";
+
+import { type ShapeName } from "../constants/CagedChords";
+import type { Scales } from "../types/Scales";
+
 import "../tour/tour.scss";
 
 type ActivePositions = { string: number; fret: number }[] | null;
@@ -17,13 +20,17 @@ const Home = () => {
   const [selectedShapes, setSelectedShapes] = useState<Set<ShapeName>>(
     new Set(["C"]),
   );
-  const [showChordTones] = useState<boolean>(false);
   const [activePositions, setActivePositions] = useState<ActivePositions>(null);
   const [selectedLickId] = useState<string | null>(null);
 
   const { settings, setSettings } = useSettings();
 
-  usePlayScale({ cagedChord, selectedShapes, selectedLickId, setActivePositions });
+  usePlayScale({
+    cagedChord,
+    selectedShapes,
+    selectedLickId,
+    setActivePositions,
+  });
 
   useEffect(() => {
     maybeStartTour();
@@ -33,7 +40,9 @@ const Home = () => {
     setCagedChord(shapeName);
     const next = new Set(selectedShapes);
     if (next.has(shapeName)) {
-      if (next.size === 1) return;
+      if (next.size === 1) {
+        return;
+      }
       next.delete(shapeName);
     } else {
       next.add(shapeName);
@@ -48,7 +57,6 @@ const Home = () => {
       <Fretboard
         cagedChord={cagedChord}
         selectedShapes={selectedShapes}
-        showChordTones={showChordTones}
         activePositions={activePositions}
         lickNotes={
           selectedLickId
@@ -64,6 +72,7 @@ const Home = () => {
         selectedShapes={selectedShapes}
         onShapeToggle={handleShapeToggle}
       />
+
     </div>
   );
 };

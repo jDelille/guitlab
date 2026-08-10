@@ -253,7 +253,6 @@ export function getNoteOutline(params: {
   isTriadPlaying: boolean;
   isActiveTriad: boolean;
   isActive: boolean;
-  showChordTones: boolean;
   noteData: any;
   hideScales: boolean;
   triadOutlineColor: string;
@@ -268,7 +267,6 @@ export function getNoteOutline(params: {
     isTriadPlaying,
     isActiveTriad,
     isActive,
-    showChordTones,
     noteData,
     hideScales,
     triadOutlineColor,
@@ -287,7 +285,7 @@ export function getNoteOutline(params: {
       ? `2px solid ${triadDimOutlineColor}`
       : `2px solid ${triadOutlineColor}`;
   }
-  if (isActive && showChordTones && noteData?.isChordTone && !hideScales) {
+  if (isActive && noteData?.isChordTone && !hideScales) {
     return "2px solid var(--text-primary)";
   }
   return "none";
